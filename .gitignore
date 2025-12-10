@@ -1,0 +1,139 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual environments
+venv/
+ENV/
+env/
+.venv/
+
+# IDE and editors
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.project
+.pydevproject
+.settings/
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.nox/
+coverage.xml
+*.cover
+*.py,cover
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb
+
+# Logs and databases
+*.log
+*.sqlite
+*.db
+logs/
+*.log.*
+
+# Data files (keep structure, ignore contents)
+data/*.db
+data/*.sqlite
+data/*.json
+data/memories.db
+mindforge_memory.db
+
+# Environment and secrets
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+secrets/
+
+# OS files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Playwright
+.playwright-mcp/
+
+# Model files (large)
+models/*.bin
+models/*.gguf
+models/*.safetensors
+*.onnx
+*.pt
+*.pth
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+combined.log
+filtered_errors.log
+break_log.txt
+raw_capture.log
+/tmp/
+
+# Build artifacts
+*.pyc
+*.pyo
+*.pyd
+.Python
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Distribution
+MANIFEST
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+nosetests.xml
+coverage/
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Ruff
+.ruff_cache/
+
+# Documentation build
+docs/_build/
+
+# Streamlit
+.streamlit/
+
+# Capture scripts (development only)
+capture_cycles.py

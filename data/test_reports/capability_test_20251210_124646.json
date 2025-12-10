@@ -1,0 +1,53 @@
+{
+  "timestamp": "2025-12-10T12:46:46.830106",
+  "summary": {
+    "passed": 5,
+    "total": 6,
+    "overall_score": 0.6805555555555555,
+    "duration": 2257.6360700130463
+  },
+  "results": [
+    {
+      "name": "Thought Complexity",
+      "passed": true,
+      "score": 0.6833333333333332,
+      "details": "Generated 3 thoughts, avg quality: 0.68",
+      "duration": 88.74423217773438
+    },
+    {
+      "name": "Task Decomposition",
+      "passed": true,
+      "score": 1.0,
+      "details": "Decomposed into 5 subtasks",
+      "duration": 17.42886781692505
+    },
+    {
+      "name": "Tool Selection",
+      "passed": false,
+      "score": 0.0,
+      "details": "0/4 correct tool selections",
+      "duration": 1928.5490281581879
+    },
+    {
+      "name": "Multi-Step Reasoning",
+      "passed": true,
+      "score": 0.7,
+      "details": "Reasoning analysis score: 0.70",
+      "duration": 221.09845900535583
+    },
+    {
+      "name": "Learning and Memory",
+      "passed": true,
+      "score": 0.7,
+      "details": "Retrieved 3/3 facts, task: no",
+      "duration": 1.2584969997406006
+    },
+    {
+      "name": "Error Handling",
+      "passed": true,
+      "score": 1.0,
+      "details": "3/3 errors handled gracefully",
+      "duration": 0.5390989780426025
+    }
+  ]
+}
