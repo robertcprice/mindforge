@@ -340,10 +340,10 @@ Output as JSON with these fields:
         """
         import hashlib
 
-        date_str = datetime.now().strftime("%Y%m%d")
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         content_hash = hashlib.md5(content.encode()).hexdigest()[:8]
 
-        return f"mem:{memory_type}:{date_str}:{content_hash}"
+        return f"mem:{memory_type}:{timestamp}:{content_hash}"
 
 
 def create_memory_cortex(adapter_path: Optional[str] = None) -> MemoryCortex:

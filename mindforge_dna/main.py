@@ -280,7 +280,14 @@ class ConsciousnessLoop:
         # During bootstrap, always use EGO
         if self.is_bootstrap_phase and self._ego:
             logger.debug("Bootstrap phase: using EGO for thinking")
-            thought = self._ego.generate_thought(context)
+            # Build prompt from context
+            prompt = f"Cycle {self.cycle_count}: {context.get('suggested_focus', 'Reflect on current state')}"
+            thought = self._ego.generate(
+                prompt=prompt,
+                cycle_count=self.cycle_count,
+                mood=state.mood,
+                dominant_need=str(context.get('dominant_need', 'CURIOSITY'))
+            )
 
         # After bootstrap, try neurons first
         elif "think" in self._cortex:
@@ -289,7 +296,13 @@ class ConsciousnessLoop:
 
             if output.should_fallback and self._ego:
                 logger.debug("Neuron fallback: using EGO")
-                thought = self._ego.generate_thought(context)
+                prompt = f"Think about: {context.get('suggested_focus', 'current situation')}"
+                thought = self._ego.generate(
+                    prompt=prompt,
+                    cycle_count=self.cycle_count,
+                    mood=state.mood,
+                    dominant_need=str(context.get('dominant_need', 'CURIOSITY'))
+                )
 
                 # Record for training
                 if self._training_pipeline:
@@ -380,12 +393,14 @@ class ConsciousnessLoop:
                 return override
 
         # Let EGO decide sleep duration
-        if self._ego and hasattr(self._ego, 'decide_sleep_duration'):
-            duration = self._ego.decide_sleep_duration(
-                needs=self._needs_regulator.get_state() if self._needs_regulator else {},
-                mood=state.mood,
-                last_reward=state.reward
-            )
+        if self._ego:
+            timing = self._ego.decide_next_wakeup({
+                "needs": self._needs_regulator.get_state() if self._needs_regulator else {},
+                "mood": state.mood,
+                "last_reward": state.reward,
+                "cycle_count": self.cycle_count
+            })
+            duration = timing.wake_in_seconds
         else:
             # Heuristic: sleep longer when satisfied, shorter when urgent
             max_urgency = 0.5

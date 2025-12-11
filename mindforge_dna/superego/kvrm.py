@@ -261,10 +261,10 @@ class KVRMRouter:
 
     def _ground_memory(self, claim: str) -> GroundingResult:
         """Ground a memory claim by checking episodic storage."""
-        # Generate memory key
+        # Generate memory key with timestamp to avoid collisions
         claim_hash = hashlib.md5(claim.encode()).hexdigest()[:8]
-        date_str = datetime.now().strftime("%Y%m%d")
-        key = f"mem:episodic:{date_str}:{claim_hash}"
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        key = f"mem:episodic:{timestamp}:{claim_hash}"
 
         # Check if memory exists
         with sqlite3.connect(str(self.db_path)) as conn:

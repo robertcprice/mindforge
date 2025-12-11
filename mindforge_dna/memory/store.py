@@ -210,11 +210,11 @@ class MemoryStore:
     def _generate_key(self, content: str, memory_type: str) -> str:
         """Generate a unique memory key.
 
-        Format: mem:{type}:{date}:{hash}
+        Format: mem:{type}:{timestamp}:{hash}
         """
-        date_str = datetime.now().strftime("%Y%m%d")
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         content_hash = hashlib.md5(content.encode()).hexdigest()[:8]
-        return f"mem:{memory_type}:{date_str}:{content_hash}"
+        return f"mem:{memory_type}:{timestamp}:{content_hash}"
 
     def _embed(self, text: str) -> Optional[List[float]]:
         """Generate embedding for text."""
