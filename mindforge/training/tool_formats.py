@@ -255,28 +255,62 @@ def _parse_tool_action(tool_str: str) -> ParsedAction:
             validation_error=f"Missing required args for {tool_name}: {missing_args}",
         )
 
+    # Filter to only known parameters to prevent unexpected keyword argument errors
+    known_args = set(spec.required_args) | set(spec.optional_args)
+    filtered_args = {k: v for k, v in args.items() if k in known_args}
+
     return ParsedAction(
         action_type=ActionType.TOOL,
         tool_name=tool_name,
-        args=args,
+        args=filtered_args,
         raw_text=tool_str,
         is_valid=True,
     )
 
 
 def _parse_args(args_str: str) -> Dict[str, Any]:
-    """Parse argument string like 'command="ls", path="./\"'."""
+    """Parse argument string like 'command="ls", path="./"'.
+
+    Handles multiline content and triple-quoted strings.
+    """
     args = {}
 
     if not args_str:
         return args
 
-    # Match key="value" or key='value' patterns
-    pattern = r'(\w+)\s*=\s*["\']([^"\']*)["\']'
-    matches = re.findall(pattern, args_str)
+    # Try JSON-style parsing first for complex args
+    try:
+        # Convert to dict-like format for json
+        json_str = "{" + args_str + "}"
+        # Fix unquoted keys
+        json_str = re.sub(r'(\w+)\s*=', r'"\1":', json_str)
+        parsed = json.loads(json_str)
+        return parsed
+    except (json.JSONDecodeError, Exception):
+        pass
 
+    # Fall back to regex for simple patterns
+    # Handle triple-quoted strings first
+    triple_pattern = r'(\w+)\s*=\s*"""(.*?)"""'
+    triple_matches = re.findall(triple_pattern, args_str, re.DOTALL)
+    for key, value in triple_matches:
+        args[key] = value.strip()
+        # Remove matched portion from args_str
+        args_str = re.sub(triple_pattern, '', args_str, count=1, flags=re.DOTALL)
+
+    # Match key="value" or key='value' patterns (single line)
+    pattern = r'(\w+)\s*=\s*"([^"]*)"'
+    matches = re.findall(pattern, args_str)
     for key, value in matches:
-        args[key] = value
+        if key not in args:  # Don't override triple-quoted
+            args[key] = value
+
+    # Try single quotes too
+    pattern_sq = r"(\w+)\s*=\s*'([^']*)'"
+    matches_sq = re.findall(pattern_sq, args_str)
+    for key, value in matches_sq:
+        if key not in args:
+            args[key] = value
 
     return args
 
