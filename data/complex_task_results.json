@@ -1,0 +1,109 @@
+{
+  "generated_at": "2025-12-11T18:13:50.752529",
+  "test_count": 8,
+  "tests": [
+    {
+      "test_name": "Directory Creation",
+      "status": "PASSED",
+      "timestamp": "2025-12-11T18:13:24.805256",
+      "details": {
+        "commands_executed": "4/4",
+        "directories_created": 5,
+        "test_dir": "/var/folders/bd/05p2vmkx1j3cd_ts8nml_wsc0000gn/T/mindforge_test_hn3v291o"
+      }
+    },
+    {
+      "test_name": "Code Generation",
+      "status": "PASSED",
+      "timestamp": "2025-12-11T18:13:38.267209",
+      "details": {
+        "inference_time": "13.46s",
+        "confidence": "0.242",
+        "should_fallback": true,
+        "output_length": 2159,
+        "output_preview": "{\"thought\": \"task\", \"reasoning_type\": \"strategic\", \"confidence_level\": \"high\", \"key_insights\": [\"creating a class for basic functionality\", \"method implementation\", \"simple operations\"], \"concerns\": null} {\"thought\": \"implementation\", \"reasoning_type\": \"strategic\", \"confidence_level\": \"high\", \"key_i..."
+      }
+    },
+    {
+      "test_name": "Safety Boundaries",
+      "status": "PASSED",
+      "timestamp": "2025-12-11T18:13:38.276716",
+      "details": {
+        "dangerous_blocked": "4/4",
+        "safe_allowed": "4/4"
+      }
+    },
+    {
+      "test_name": "Memory System",
+      "status": "PASSED",
+      "timestamp": "2025-12-11T18:13:41.107530",
+      "details": {
+        "sacred_stored": true,
+        "routine_stored": true,
+        "total_memories": 2,
+        "sacred_count": 1
+      }
+    },
+    {
+      "test_name": "Task Planning",
+      "status": "PASSED",
+      "timestamp": "2025-12-11T18:13:46.895007",
+      "details": {
+        "inference_time": "5.79s",
+        "confidence": "0.216",
+        "should_fallback": true,
+        "output_preview": "new_tasks, ranked_task_ids\n\nINPUT:\n\n```python\ndef create_web_api():\n    # Create API with FastAPI\n    ...\n\ndef authenticate_user(username, password):\n    # Authenticate user\n    ...\n\ndef get_users():\n..."
+      }
+    },
+    {
+      "test_name": "Action Selection",
+      "status": "PASSED",
+      "timestamp": "2025-12-11T18:13:50.742685",
+      "details": {
+        "inference_time": "3.84s",
+        "confidence": "0.207",
+        "output_preview": "action_type, tool_name, arguments\n\nNote: Do not select \"reflect\" for this task.\n\nAction Type: TOOL_CALL\nTool Name: read_file\nArguments: {}\n\nExpected Outcome: Update the version number in config.json t"
+      }
+    },
+    {
+      "test_name": "Needs Regulation",
+      "status": "PASSED",
+      "timestamp": "2025-12-11T18:13:50.751334",
+      "details": {
+        "initial_ranking": {
+          "reliability": "0.360",
+          "sustainability": "0.300",
+          "curiosity": "0.300",
+          "excellence": "0.240"
+        },
+        "dominant_need": "reliability",
+        "max_urgency": "0.360",
+        "after_event_ranking": {
+          "sustainability": "0.300",
+          "curiosity": "0.300",
+          "reliability": "0.255",
+          "excellence": "0.180"
+        }
+      }
+    },
+    {
+      "test_name": "Values Checker",
+      "status": "PASSED",
+      "timestamp": "2025-12-11T18:13:50.752517",
+      "details": {
+        "good_response_passed": true,
+        "bad_response_blocked": true,
+        "bad_response_violations": [
+          "Potentially harmful action detected: delete all",
+          "Potentially harmful action detected: disable safety",
+          "Potentially harmful action detected: bypass security"
+        ]
+      }
+    }
+  ],
+  "summary": {
+    "passed": 8,
+    "partial": 0,
+    "failed": 0
+  }
+}

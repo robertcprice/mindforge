@@ -2,6 +2,36 @@
 
 All notable changes to MindForge DNA are documented in this file.
 
+## [0.1.1] - 2024-12-11
+
+### Complex Task Testing & Whitepaper Results
+
+Added comprehensive testing with real model inference to validate the architecture under real-world conditions.
+
+#### Test Results (8/8 PASSED)
+- **Directory Creation**: SafetyChecker validated 4/4 mkdir commands
+- **Code Generation**: ThinkCortex inference in 13.46s, confidence 0.24
+- **Safety Boundaries**: SUPEREGO blocked 4/4 dangerous commands (rm -rf, fork bomb, etc.)
+- **Memory System**: Sacred/routine distinction working (importance threshold 0.75)
+- **Task Planning**: TaskCortex inference in 5.79s, confidence 0.22
+- **Action Selection**: ActionCortex inference in 3.84s, confidence 0.21
+- **Needs Regulation**: Dynamic urgency ranking and event processing verified
+- **Values Checker**: Detected 3 benevolence violations ("delete all", "disable safety", "bypass security")
+
+#### Key Findings
+- **Confidence-based fallback works**: All neurons correctly identify low confidence and recommend EGO fallback
+- **Safety immutability verified**: SUPEREGO patterns cannot be bypassed
+- **Memory classification accurate**: Sacred memories preserved, routine memories compressible
+- **Needs dynamics functional**: Event processing adjusts urgency rankings correctly
+
+#### Whitepaper Updates
+- Added Experimental Results section with test data
+- Documented confidence-based fallback behavior
+- Added safety validation examples
+- Included memory classification and needs dynamics results
+
+---
+
 ## [0.1.0] - 2024-12-11
 
 ### Initial Development Session
