@@ -112,11 +112,18 @@ class MLXBackend(InferenceBackend):
             self.load()
 
         from mlx_lm import generate
+        from mlx_lm.sample_utils import make_sampler
 
         max_tokens = max_tokens or self.config.max_tokens
         temperature = temperature or self.config.temperature
 
         start_time = time.time()
+
+        # Create sampler with temperature and top_p
+        sampler = make_sampler(
+            temp=temperature,
+            top_p=self.config.top_p,
+        )
 
         # Generate
         response = generate(
@@ -124,9 +131,7 @@ class MLXBackend(InferenceBackend):
             self._tokenizer,
             prompt=prompt,
             max_tokens=max_tokens,
-            temp=temperature,
-            top_p=self.config.top_p,
-            repetition_penalty=self.config.repetition_penalty,
+            sampler=sampler,
         )
 
         generation_time = time.time() - start_time
@@ -174,19 +179,28 @@ class MLXBackend(InferenceBackend):
 
         try:
             from mlx_lm import stream_generate
+            from mlx_lm.sample_utils import make_sampler
 
             max_tokens = max_tokens or self.config.max_tokens
             temperature = temperature or self.config.temperature
 
+            # Create sampler with temperature and top_p
+            sampler = make_sampler(
+                temp=temperature,
+                top_p=self.config.top_p,
+            )
+
             buffer = ""
 
-            for token in stream_generate(
+            for response in stream_generate(
                 self._model,
                 self._tokenizer,
                 prompt=prompt,
                 max_tokens=max_tokens,
-                temp=temperature,
+                sampler=sampler,
             ):
+                # New API returns GenerationResponse with .text attribute
+                token = response.text if hasattr(response, 'text') else str(response)
                 buffer += token
 
                 # Check stop sequences

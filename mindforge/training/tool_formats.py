@@ -6,13 +6,18 @@ when deciding to use tools. These patterns are used for:
 1. Training data generation
 2. Response validation
 3. Fine-tuning the model to follow structured output
+
+Enhanced with JSON schema validation and robust parsing.
 """
 
 from dataclasses import dataclass, field
-from typing import Dict, List, Optional, Any
+from typing import Dict, List, Optional, Any, Set
 from enum import Enum
 import json
 import re
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class ActionType(Enum):
@@ -20,6 +25,154 @@ class ActionType(Enum):
     TOOL = "TOOL"
     DO_NOTHING = "DO_NOTHING"
     REFLECT = "REFLECT"
+
+
+# JSON Schema definitions for each tool's arguments
+TOOL_SCHEMAS: Dict[str, dict] = {
+    "shell": {
+        "type": "object",
+        "properties": {
+            "command": {"type": "string", "description": "Shell command to execute"}
+        },
+        "required": ["command"],
+        "additionalProperties": False
+    },
+    "filesystem": {
+        "type": "object",
+        "properties": {
+            "operation": {
+                "type": "string",
+                "enum": ["read", "write", "list", "exists", "info", "delete", "mkdir", "grep", "glob"]
+            },
+            "path": {"type": "string"},
+            "content": {"type": "string"}
+        },
+        "required": ["operation", "path"],
+        "additionalProperties": False
+    },
+    "git": {
+        "type": "object",
+        "properties": {
+            "operation": {
+                "type": "string",
+                "enum": ["status", "log", "diff", "branch", "add", "commit", "checkout", "pull", "push"]
+            },
+            "args": {"type": "string"}
+        },
+        "required": ["operation"],
+        "additionalProperties": False
+    },
+    "web": {
+        "type": "object",
+        "properties": {
+            "operation": {
+                "type": "string",
+                "enum": ["fetch", "search", "extract", "validate"]
+            },
+            "url": {"type": "string"},
+            "query": {"type": "string"},
+            "extract_links": {"type": "string"}
+        },
+        "required": ["operation"],
+        "additionalProperties": False
+    },
+    "n8n": {
+        "type": "object",
+        "properties": {
+            "operation": {
+                "type": "string",
+                "enum": ["health", "list", "get", "run", "webhook", "history", "start", "stop", "create"]
+            },
+            "workflow_id": {"type": "string"},
+            "webhook_path": {"type": "string"},
+            "data": {"type": "string"}
+        },
+        "required": ["operation"],
+        "additionalProperties": False
+    },
+    "ollama": {
+        "type": "object",
+        "properties": {
+            "operation": {
+                "type": "string",
+                "enum": ["health", "list", "generate", "show", "chat"]
+            },
+            "model": {"type": "string"},
+            "prompt": {"type": "string"},
+            "system": {"type": "string"}
+        },
+        "required": ["operation"],
+        "additionalProperties": False
+    },
+    "code": {
+        "type": "object",
+        "properties": {
+            "operation": {
+                "type": "string",
+                "enum": ["analyze", "symbols", "validate", "edit", "diff", "search"]
+            },
+            "path": {"type": "string"},
+            "old_string": {"type": "string"},
+            "new_string": {"type": "string"},
+            "old_content": {"type": "string"},
+            "new_content": {"type": "string"},
+            "content": {"type": "string"},
+            "language": {"type": "string"},
+            "pattern": {"type": "string"}
+        },
+        "required": ["operation"],
+        "additionalProperties": False
+    },
+    "kvrm": {
+        "type": "object",
+        "properties": {
+            "operation": {
+                "type": "string",
+                "enum": ["resolve", "search", "store", "ground", "list"]
+            },
+            "key": {"type": "string"},
+            "query": {"type": "string"},
+            "claim": {"type": "string"},
+            "content": {"type": "string"},
+            "source": {"type": "string"}
+        },
+        "required": ["operation"],
+        "additionalProperties": False
+    }
+}
+
+
+def validate_against_schema(tool_name: str, args: Dict[str, Any]) -> Optional[str]:
+    """Validate arguments against the tool's JSON schema.
+
+    Returns None if valid, or an error message if invalid.
+    """
+    schema = TOOL_SCHEMAS.get(tool_name)
+    if not schema:
+        return None  # No schema, allow through
+
+    # Check required fields
+    required = schema.get("required", [])
+    for field in required:
+        if field not in args:
+            return f"Missing required field '{field}' for {tool_name}"
+
+    # Check field types and enums
+    properties = schema.get("properties", {})
+    for key, value in args.items():
+        if key not in properties:
+            # Unknown field - warn but don't fail
+            logger.debug(f"Unknown field '{key}' for {tool_name}, will be filtered")
+            continue
+
+        prop_schema = properties[key]
+
+        # Check enum values
+        if "enum" in prop_schema and value not in prop_schema["enum"]:
+            valid_ops = ", ".join(prop_schema["enum"])
+            return f"Invalid {key}='{value}' for {tool_name}. Valid values: {valid_ops}"
+
+    return None  # Valid
 
 
 @dataclass
@@ -213,7 +366,10 @@ def parse_action(response: str) -> ParsedAction:
 
 
 def _parse_tool_action(tool_str: str) -> ParsedAction:
-    """Parse a tool call string like 'shell(command="ls")'."""
+    """Parse a tool call string like 'shell(command="ls")'.
+
+    Enhanced with JSON schema validation and robust multiline handling.
+    """
     # Match tool_name(args)
     match = re.match(r'(\w+)\s*\((.*)\)', tool_str, re.DOTALL)
 
@@ -238,10 +394,22 @@ def _parse_tool_action(tool_str: str) -> ParsedAction:
             validation_error=f"Unknown tool: {tool_name}. Available: {list(TOOL_SPECS.keys())}",
         )
 
-    # Parse arguments
+    # Parse arguments with enhanced parsing
     args = _parse_args(args_str)
 
-    # Validate required args
+    # Validate against JSON schema first
+    schema_error = validate_against_schema(tool_name, args)
+    if schema_error:
+        return ParsedAction(
+            action_type=ActionType.TOOL,
+            tool_name=tool_name,
+            args=args,
+            raw_text=tool_str,
+            is_valid=False,
+            validation_error=schema_error,
+        )
+
+    # Validate required args from ToolSpec
     spec = TOOL_SPECS[tool_name]
     missing_args = [arg for arg in spec.required_args if arg not in args]
 
@@ -259,6 +427,11 @@ def _parse_tool_action(tool_str: str) -> ParsedAction:
     known_args = set(spec.required_args) | set(spec.optional_args)
     filtered_args = {k: v for k, v in args.items() if k in known_args}
 
+    # Log if we filtered anything
+    filtered_out = set(args.keys()) - set(filtered_args.keys())
+    if filtered_out:
+        logger.debug(f"Filtered out unknown args for {tool_name}: {filtered_out}")
+
     return ParsedAction(
         action_type=ActionType.TOOL,
         tool_name=tool_name,
@@ -271,26 +444,26 @@ def _parse_tool_action(tool_str: str) -> ParsedAction:
 def _parse_args(args_str: str) -> Dict[str, Any]:
     """Parse argument string like 'command="ls", path="./"'.
 
-    Handles multiline content and triple-quoted strings.
+    Handles multiline content, triple-quoted strings, and escaped characters.
+    Uses multiple parsing strategies for robustness.
     """
     args = {}
 
     if not args_str:
         return args
 
-    # Try JSON-style parsing first for complex args
+    # Strategy 1: Try JSON-style parsing first for clean args
     try:
         # Convert to dict-like format for json
         json_str = "{" + args_str + "}"
-        # Fix unquoted keys
+        # Fix unquoted keys: word= -> "word":
         json_str = re.sub(r'(\w+)\s*=', r'"\1":', json_str)
         parsed = json.loads(json_str)
         return parsed
     except (json.JSONDecodeError, Exception):
         pass
 
-    # Fall back to regex for simple patterns
-    # Handle triple-quoted strings first
+    # Strategy 2: Handle triple-quoted strings first (for code content)
     triple_pattern = r'(\w+)\s*=\s*"""(.*?)"""'
     triple_matches = re.findall(triple_pattern, args_str, re.DOTALL)
     for key, value in triple_matches:
@@ -298,19 +471,49 @@ def _parse_args(args_str: str) -> Dict[str, Any]:
         # Remove matched portion from args_str
         args_str = re.sub(triple_pattern, '', args_str, count=1, flags=re.DOTALL)
 
-    # Match key="value" or key='value' patterns (single line)
+    # Strategy 3: Handle escaped quotes in values
+    # Match key="value with \"escaped\" quotes"
+    escaped_pattern = r'(\w+)\s*=\s*"((?:[^"\\]|\\.)*)"'
+    escaped_matches = re.findall(escaped_pattern, args_str, re.DOTALL)
+    for key, value in escaped_matches:
+        if key not in args:
+            # Unescape the value
+            unescaped = value.replace('\\"', '"').replace('\\n', '\n').replace('\\t', '\t')
+            args[key] = unescaped
+
+    # Strategy 4: Match simple key="value" patterns
     pattern = r'(\w+)\s*=\s*"([^"]*)"'
     matches = re.findall(pattern, args_str)
     for key, value in matches:
-        if key not in args:  # Don't override triple-quoted
+        if key not in args:
             args[key] = value
 
-    # Try single quotes too
+    # Strategy 5: Try single quotes
     pattern_sq = r"(\w+)\s*=\s*'([^']*)'"
     matches_sq = re.findall(pattern_sq, args_str)
     for key, value in matches_sq:
         if key not in args:
             args[key] = value
+
+    # Strategy 6: Handle unquoted values (for simple args like numbers/booleans)
+    unquoted_pattern = r'(\w+)\s*=\s*([^\s,\)]+)'
+    unquoted_matches = re.findall(unquoted_pattern, args_str)
+    for key, value in unquoted_matches:
+        if key not in args:
+            # Skip if value starts with quote (already handled)
+            if not value.startswith('"') and not value.startswith("'"):
+                # Try to parse as number or boolean
+                if value.lower() == 'true':
+                    args[key] = True
+                elif value.lower() == 'false':
+                    args[key] = False
+                elif value.isdigit():
+                    args[key] = int(value)
+                else:
+                    try:
+                        args[key] = float(value)
+                    except ValueError:
+                        args[key] = value
 
     return args
 

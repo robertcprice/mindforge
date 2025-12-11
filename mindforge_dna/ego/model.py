@@ -130,20 +130,23 @@ class EgoModel:
         self.model = None
         self.tokenizer = None
         self._is_loaded = False
+        self._use_stub = not MLX_AVAILABLE
 
         logger.info(f"EGO initialized with model: {self.config.model_name}")
         logger.info(f"Personality version: {self.config.personality_version}")
 
     def _ensure_loaded(self) -> None:
         """Lazy-load the model and tokenizer."""
-        if self._is_loaded:
+        if self._is_loaded or self._use_stub:
             return
 
         if not MLX_AVAILABLE:
-            raise RuntimeError(
-                "MLX is not available. Install with: pip install mlx mlx-lm\n"
-                "MLX requires Apple Silicon (M1/M2/M3) hardware."
+            logger.warning(
+                "MLX not available; using lightweight stub EGO responses. "
+                "Install mlx and mlx-lm for full functionality."
             )
+            self._use_stub = True
+            return
 
         logger.info(f"Loading EGO model: {self.config.model_name}")
         try:
@@ -175,6 +178,9 @@ class EgoModel:
         """
         self._ensure_loaded()
 
+        if self._use_stub:
+            return self._generate_stub(prompt)
+
         max_tokens = max_tokens or self.config.max_tokens
         temperature = temperature or self.config.temperature
 
@@ -198,6 +204,13 @@ class EgoModel:
         except Exception as e:
             logger.error(f"Text generation failed: {e}")
             raise
+
+    def _generate_stub(self, prompt: str) -> str:
+        """Lightweight stub output when MLX is unavailable."""
+        return (
+            "Stub EGO response (MLX not installed). "
+            "Prompt summary: " + prompt[:200]
+        )
 
     def _parse_json_response(self, text: str) -> Optional[Dict[str, Any]]:
         """

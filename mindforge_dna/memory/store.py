@@ -173,15 +173,13 @@ class MemoryStore:
         """Initialize ChromaDB."""
         try:
             import chromadb
-            from chromadb.config import Settings
 
             self.chroma_path.mkdir(parents=True, exist_ok=True)
 
-            self.chroma_client = chromadb.Client(Settings(
-                chroma_db_impl="duckdb+parquet",
-                persist_directory=str(self.chroma_path),
-                anonymized_telemetry=False
-            ))
+            # Use PersistentClient for persistent storage (modern API)
+            self.chroma_client = chromadb.PersistentClient(
+                path=str(self.chroma_path)
+            )
 
             self.collection = self.chroma_client.get_or_create_collection(
                 name="mindforge_memories",
@@ -494,8 +492,8 @@ class MemoryStore:
         """Close database connections."""
         if self.conn:
             self.conn.close()
-        if self.chroma_client:
-            self.chroma_client.persist()
+        # PersistentClient auto-persists, no explicit call needed
+        self.chroma_client = None
         logger.info("MemoryStore closed")
 
 

@@ -84,13 +84,30 @@ Thumbs.db
 # Playwright
 .playwright-mcp/
 
-# Model files (large)
-models/*.bin
-models/*.gguf
-models/*.safetensors
+# Model files (large) - ignore entire models directory
+models/
+*.bin
+*.gguf
+*.safetensors
 *.onnx
 *.pt
 *.pth
+
+# ChromaDB storage
+data/chroma/
+
+# LaTeX build artifacts
+whitepaper/*.aux
+whitepaper/*.bbl
+whitepaper/*.blg
+whitepaper/*.log
+whitepaper/*.out
+whitepaper/*.toc
+whitepaper/*.lof
+whitepaper/*.lot
+whitepaper/*.fls
+whitepaper/*.fdb_latexmk
+whitepaper/*.synctex.gz
 
 # Temporary files
 *.tmp

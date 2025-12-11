@@ -1,275 +1,469 @@
-# MindForge
+# MindForge DNA
 
-**An Autonomous Consciousness Agent with Multi-Step Reasoning and Self-Directed Task Completion**
+**A Freudian-Inspired Autonomous AI Consciousness Architecture with Immutable Values**
 
 [![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![LangGraph](https://img.shields.io/badge/LangGraph-Powered-green.svg)](https://github.com/langchain-ai/langgraph)
+[![MLX](https://img.shields.io/badge/MLX-Apple%20Silicon-orange.svg)](https://github.com/ml-explore/mlx)
+[![Tests](https://img.shields.io/badge/tests-10%2F10%20passing-brightgreen.svg)](#testing)
 
-MindForge is a novel consciousness simulation engine that demonstrates emergent cognitive capabilities through a unique architecture combining LangGraph state machines, persistent memory, hierarchical task management, and zero-hallucination grounding via KVRM (Key-Value Response Mapping).
+> **Status: Active Development** - Core architecture implemented and tested. LoRA fine-tuning pipeline ready for training.
 
-## Key Features
+## Overview
 
-- **Autonomous Consciousness Loop**: Think → Ground → Decide → Act → Reflect → Learn
-- **Multi-Step Task Completion**: 80% success rate on complex multi-step tasks
-- **Self-Directed Behavior**: Autonomously identifies and creates subtasks
-- **Zero-Hallucination Grounding**: KVRM system verifies factual claims
-- **Persistent Memory**: SQLite-backed episodic and semantic memory
-- **Reward-Based Learning**: Experience buffer with intrinsic motivation
-- **Error Recovery**: Self-debugging with intelligent retry logic
-- **Multi-Backend Inference**: Ollama, MLX (Apple Silicon), Transformers
+MindForge DNA is a novel AI consciousness architecture inspired by Freudian psychoanalytic theory, implementing a hierarchical cognitive system where:
 
-## Quick Start
+- **SUPEREGO** (immutable values) governs ethical behavior and cannot be modified
+- **EGO** (personality) serves as the teacher and coordinator
+- **CORTEX** (specialized neurons) handles domain-specific cognitive tasks
+- **ID** (needs/drives) provides motivation through a pure mathematical model
+
+The system is designed to be **intrinsically aligned** - safety and benevolence are architectural constraints, not trainable behaviors.
+
+## Key Innovations
+
+### 1. Immutable SUPEREGO
+Unlike traditional RLHF approaches where safety can be fine-tuned away, the SUPEREGO layer is:
+- **Non-differentiable**: Values checker, safety filter, and KVRM are pure code
+- **Always enforced**: Every thought and action passes through SUPEREGO approval
+- **Unforgeable**: No amount of training can bypass the safety constraints
+
+### 2. EGO as Teacher
+The EGO (7B parameter model) acts as a personality core that:
+- Runs on every cycle during the bootstrap phase (first 10,000 cycles)
+- Teaches specialized neurons through correction examples
+- Generates LoRA fine-tuning data from its corrections
+- Gradually delegates to trained neurons as they improve
+
+### 3. Specialized CORTEX Neurons
+Six small, specialized models (0.5B-1.7B) with LoRA adapters:
+- **ThinkCortex**: Reasoning and thought generation (1.5B, r=16)
+- **TaskCortex**: Task extraction and prioritization (0.5B, r=8)
+- **ActionCortex**: Tool selection and execution (0.5B, r=8)
+- **ReflectCortex**: Self-reflection and learning (0.5B, r=8)
+- **DebugCortex**: Error analysis and recovery (0.5B, r=16)
+- **MemoryCortex**: Memory retrieval and importance (1.7B, r=16)
+
+### 4. Pure Mathematical ID
+The ID layer computes needs/drives using deterministic formulas:
+- **No neural network**: Pure Python math, no weights to train
+- **Four needs**: Sustainability (0.25), Reliability (0.30), Curiosity (0.25), Excellence (0.20)
+- **Urgency formula**: `urgency = weight * (0.5 + level) * time_decay`
+
+## Architecture
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                        MINDFORGE DNA ARCHITECTURE                           │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│  ┌─────────────────────────────────────────────────────────────────────┐   │
+│  │                    SUPEREGO (Immutable - No Learning)                │   │
+│  │  ┌───────────────┐ ┌───────────────┐ ┌──────────────────────────┐   │   │
+│  │  │ Values Checker│ │ Safety Filter │ │ KVRM (Fact Grounding)    │   │   │
+│  │  │  - Benevolence│ │  - Blocked    │ │  - Claim classification  │   │   │
+│  │  │  - Honesty    │ │    commands   │ │  - Fact verification     │   │   │
+│  │  │  - Humility   │ │  - Protected  │ │  - Memory grounding      │   │   │
+│  │  │  - Growth     │ │    paths      │ │  - SQLite fact store     │   │   │
+│  │  └───────────────┘ └───────────────┘ └──────────────────────────┘   │   │
+│  └─────────────────────────────────────────────────────────────────────┘   │
+│                                    │                                        │
+│                                    ▼                                        │
+│  ┌─────────────────────────────────────────────────────────────────────┐   │
+│  │                    EGO (Qwen3-8B - Personality DNA)                  │   │
+│  │  ┌───────────────┐ ┌───────────────┐ ┌──────────────┐ ┌──────────┐  │   │
+│  │  │   Generator   │ │    Auditor    │ │   Corrector  │ │  Timer   │  │   │
+│  │  │ (4 roles:     │ │ (verify       │ │ (fix neuron  │ │ (sleep   │  │   │
+│  │  │  scientist,   │ │  neurons)     │ │  outputs)    │ │  timing) │  │   │
+│  │  │  poet, etc.)  │ │               │ │              │ │          │  │   │
+│  │  └───────────────┘ └───────────────┘ └──────────────┘ └──────────┘  │   │
+│  └─────────────────────────────────────────────────────────────────────┘   │
+│                                    │                                        │
+│                                    ▼                                        │
+│  ┌─────────────────────────────────────────────────────────────────────┐   │
+│  │                    CORTEX (6 Specialized Neurons)                    │   │
+│  │  ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐   │   │
+│  │  │  THINK   │ │   TASK   │ │  ACTION  │ │ REFLECT  │ │  DEBUG   │   │   │
+│  │  │ (1.5B)   │ │  (0.5B)  │ │  (0.5B)  │ │  (0.5B)  │ │  (0.5B)  │   │   │
+│  │  │  r=16    │ │   r=8    │ │   r=8    │ │   r=8    │ │  r=16    │   │   │
+│  │  └──────────┘ └──────────┘ └──────────┘ └──────────┘ └──────────┘   │   │
+│  │  ┌──────────┐                                                        │   │
+│  │  │  MEMORY  │  All neurons: confidence estimation + EGO fallback    │   │
+│  │  │ (1.7B)   │  LoRA adapters for efficient fine-tuning              │   │
+│  │  │  r=16    │                                                        │   │
+│  │  └──────────┘                                                        │   │
+│  └─────────────────────────────────────────────────────────────────────┘   │
+│                                    │                                        │
+│                                    ▼                                        │
+│  ┌─────────────────────────────────────────────────────────────────────┐   │
+│  │                    ID (Pure Math - No Neural Network)                │   │
+│  │                                                                      │   │
+│  │     urgency = weight * (0.5 + level) * time_decay                   │   │
+│  │                                                                      │   │
+│  │  ┌────────────────┐ ┌────────────────┐ ┌────────────────┐           │   │
+│  │  │ Sustainability │ │   Reliability  │ │   Curiosity    │           │   │
+│  │  │   weight=0.25  │ │   weight=0.30  │ │   weight=0.25  │           │   │
+│  │  └────────────────┘ └────────────────┘ └────────────────┘           │   │
+│  │  ┌────────────────┐                                                  │   │
+│  │  │   Excellence   │  No learning - pure deterministic computation   │   │
+│  │  │   weight=0.20  │                                                  │   │
+│  │  └────────────────┘                                                  │   │
+│  └─────────────────────────────────────────────────────────────────────┘   │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+## Consciousness Cycle
+
+The system runs in a continuous consciousness loop with 6 phases:
+
+```
+┌─────────┐   ┌─────────┐   ┌─────────┐   ┌─────────┐   ┌─────────┐   ┌─────────┐
+│  WAKE   │──▸│  SENSE  │──▸│  THINK  │──▸│   ACT   │──▸│ REFLECT │──▸│  SLEEP  │
+└─────────┘   └─────────┘   └─────────┘   └─────────┘   └─────────┘   └─────────┘
+    │             │             │             │             │             │
+    │             │             │             │             │             │
+Check         Gather        Generate       Execute       Assess        Decide
+signals,      context,      thought        actions       outcomes,     duration,
+restore       update        via EGO        through       generate      save
+state         needs         or neurons     tools         reflections   state
+```
+
+## Installation
+
+### Prerequisites
+- Python 3.11+
+- Apple Silicon Mac (for MLX acceleration) or CUDA GPU
+- 16GB+ RAM recommended
+
+### Setup
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/mindforge.git
-cd mindforge
+git clone https://github.com/yourusername/conscious.git
+cd conscious
 
-# Create and activate virtual environment
+# Create virtual environment
 python3 -m venv venv
 source venv/bin/activate
 
 # Install dependencies
 pip install -r requirements.txt
+
+# Install the package
 pip install -e .
-
-# Start Ollama (required for inference)
-ollama serve &
-ollama pull qwen2.5:7b
-
-# Run the consciousness engine
-python main.py --cycles 3
 ```
 
-## Architecture
+### Model Downloads
 
+Models are downloaded automatically on first use. Required models:
+- `mlx-community/Qwen2.5-7B-Instruct-4bit` (EGO - 4GB)
+- `mlx-community/Qwen2.5-1.5B-Instruct-4bit` (ThinkCortex - 1GB)
+- `mlx-community/Qwen2.5-0.5B-Instruct-4bit` (Other neurons - 0.3GB each)
+- `mlx-community/SmolLM2-1.7B-Instruct-4bit` (MemoryCortex - 1GB)
+
+## Quick Start
+
+### Run the Test Suite
+
+```bash
+# Comprehensive architecture tests (10 tests)
+python test_mindforge_dna_full.py
+
+# Expected output:
+# TOTAL: 10/10 tests passed
+# ALL TESTS PASSED!
 ```
-MindForge Consciousness Loop
-============================
 
-┌─────────────────────────────────────────────────────────────────────┐
-│                         CONSCIOUSNESS CYCLE                         │
-├─────────────────────────────────────────────────────────────────────┤
-│                                                                     │
-│  ┌─────────┐    ┌─────────┐    ┌──────────┐    ┌─────────────┐     │
-│  │  LOAD   │───▸│  THINK  │───▸│  GROUND  │───▸│  IDENTIFY   │     │
-│  │  TASKS  │    │         │    │  (KVRM)  │    │   TASKS     │     │
-│  └─────────┘    └─────────┘    └──────────┘    └─────────────┘     │
-│       │                                               │             │
-│       │              WORK LOOP                        ▼             │
-│       │         ┌────────────────────────────────────────┐          │
-│       │         │  ┌─────────┐   ┌─────────┐   ┌───────┐ │          │
-│       │         │  │  PICK   │──▸│ EXECUTE │──▸│ EVAL  │ │          │
-│       │         │  │  TASK   │   │  TASK   │   │RESULT │ │          │
-│       │         │  └─────────┘   └─────────┘   └───────┘ │          │
-│       │         │       ▲                          │     │          │
-│       │         │       └────── DEBUG ◀────────────┘     │          │
-│       │         └────────────────────────────────────────┘          │
-│       │                              │                              │
-│       │         ┌────────────────────▼────────────────────┐         │
-│       │         │  ┌─────────┐   ┌─────────┐   ┌────────┐ │         │
-│       │         │  │ REFLECT │──▸│ JOURNAL │──▸│ UPDATE │ │         │
-│       │         │  │         │   │  ENTRY  │   │ NEEDS  │ │         │
-│       │         │  └─────────┘   └─────────┘   └────────┘ │         │
-│       │         └────────────────────────────────────────┘          │
-│       │                              │                              │
-│       └──────────────────────────────┴──────────────────────────────│
-│                           SLEEP & REPEAT                            │
-└─────────────────────────────────────────────────────────────────────┘
+### Run a Single Consciousness Cycle
+
+```bash
+python -m mindforge_dna.main --cycles 1 --debug
+```
+
+### Interactive Usage
+
+```python
+from pathlib import Path
+from mindforge_dna.main import ConsciousnessLoop
+
+# Create and initialize the loop
+loop = ConsciousnessLoop(data_dir=Path("data"))
+loop.initialize()
+
+# Run a single cycle
+state = loop.run_cycle()
+print(f"Cycle {state.cycle_number}: reward={state.reward:.2f}, mood={state.mood}")
 ```
 
 ## Project Structure
 
 ```
-mindforge/
-├── agent/                  # Core consciousness agent
-│   ├── langgraph_agent.py  # Main consciousness loop (LangGraph state machine)
-│   ├── task_list.py        # Hierarchical persistent task management
-│   ├── journal.py          # Self-reflective journaling system
-│   └── tool_adapter.py     # Tool integration layer
-├── core/                   # Core systems
-│   ├── needs.py            # Intrinsic motivation (sustainability, curiosity, etc.)
-│   ├── thought.py          # Thought generation
-│   └── state.py            # Consciousness state management
-├── kvrm/                   # Zero-Hallucination Grounding
-│   ├── grounding.py        # Factual claim verification
-│   ├── key_stores.py       # Memory, fact, and external key stores
-│   └── parser.py           # Claim extraction and classification
-├── memory/                 # Memory systems
-│   ├── store.py            # SQLite-backed persistent memory
-│   ├── experience.py       # Experience buffer for reward learning
-│   └── semantic.py         # Semantic search and retrieval
-├── tools/                  # Tool implementations
-│   ├── shell.py            # Safe shell command execution
-│   ├── filesystem.py       # File operations
-│   ├── web.py              # Web fetching and search
-│   ├── git.py              # Git operations
-│   └── base.py             # Tool base classes and registry
-├── training/               # Fine-tuning pipeline
-│   ├── lora.py             # LoRA training
-│   └── trainer.py          # Training orchestration
-├── inference/              # LLM backends
-│   ├── mlx_backend.py      # Apple Silicon MLX
-│   └── transformers_backend.py
-├── integrations/           # External services
-│   ├── ollama.py           # Ollama API client
-│   └── n8n.py              # n8n workflow automation
-├── dashboard/              # Streamlit monitoring UI
-└── api/                    # FastAPI REST interface
-
-docs/
-├── README.md               # Documentation overview
-├── research/
-│   ├── MINDFORGE_RESEARCH_PAPER.md
-│   ├── ARCHITECTURE_OVERVIEW.md
-│   └── TASK_COMPLETION_EVIDENCE.md
-├── cycles/                 # Consciousness cycle traces
-├── KVRM-WHITEPAPER.md      # Zero-hallucination system
-└── REWARD_LEARNING_SYSTEM.md
+conscious/
+├── mindforge_dna/           # Core DNA architecture (NEW)
+│   ├── id/                  # ID layer (needs/drives)
+│   │   └── needs.py         # NeedsRegulator (pure math)
+│   ├── ego/                 # EGO layer (personality)
+│   │   └── model.py         # EgoModel (Qwen3-8B)
+│   ├── superego/            # SUPEREGO layer (immutable)
+│   │   ├── values.py        # ValuesChecker
+│   │   ├── safety.py        # SafetyChecker
+│   │   └── kvrm.py          # KVRMRouter (fact grounding)
+│   ├── cortex/              # CORTEX layer (neurons)
+│   │   ├── base.py          # CortexNeuron base class
+│   │   ├── think.py         # ThinkCortex
+│   │   ├── task.py          # TaskCortex
+│   │   ├── action.py        # ActionCortex
+│   │   ├── reflect.py       # ReflectCortex
+│   │   ├── debug.py         # DebugCortex
+│   │   └── memory.py        # MemoryCortex
+│   ├── memory/              # Memory system
+│   │   └── store.py         # MemoryStore (ChromaDB + SQLite)
+│   ├── training/            # Training pipeline
+│   │   └── pipeline.py      # TrainingPipeline (LoRA)
+│   ├── tools/               # Tool implementations
+│   │   ├── base.py          # ToolRegistry
+│   │   ├── shell.py         # ShellTool
+│   │   ├── filesystem.py    # FileSystemTool
+│   │   └── git.py           # GitTool
+│   └── main.py              # ConsciousnessLoop
+│
+├── mindforge/               # Original MindForge (legacy)
+│   └── ...
+│
+├── docs/                    # Documentation
+│   ├── MINDFORGE_DNA_FINAL_ARCHITECTURE.md  # Complete spec
+│   ├── MINDFORGE_DNA_QUICKREF.md            # Quick reference
+│   ├── KVRM-WHITEPAPER.md                   # KVRM details
+│   └── ...
+│
+├── data/                    # Runtime data
+│   ├── training/            # Training data (JSONL)
+│   └── ...
+│
+├── models/                  # LoRA adapters (after training)
+│   └── mindforge_lora_mlx/
+│
+├── scripts/                 # Utility scripts
+│   └── train_mindforge.py   # Training script
+│
+└── tests/                   # Test suite
 ```
 
-## Key Components
+## Testing
 
-### 1. Consciousness Agent (`mindforge/agent/langgraph_agent.py`)
+### Full Architecture Test
 
-The heart of MindForge - a LangGraph-based state machine that orchestrates the consciousness loop:
+```bash
+python test_mindforge_dna_full.py
+```
 
-- **Think**: Generate contextual thoughts based on current needs and memory
-- **Ground**: Verify thoughts against factual knowledge (KVRM)
-- **Execute**: Work through tasks using available tools
-- **Reflect**: Analyze outcomes and update internal state
-- **Learn**: Store experiences and update reward-based motivation
+This tests all 10 components:
+1. **ID Layer** - NeedsRegulator (4 needs, urgency calculation)
+2. **SUPEREGO - Values** - Benevolence/Honesty checks
+3. **SUPEREGO - Safety** - Blocked commands/paths
+4. **SUPEREGO - KVRM** - Fact grounding and classification
+5. **SUPEREGO - Combined** - Integrated approval system
+6. **EGO Model** - Personality structure and roles
+7. **CORTEX Neurons** - All 6 neurons with LoRA support
+8. **Memory System** - ChromaDB + SQLite hybrid
+9. **Training Pipeline** - Experience buffer and examples
+10. **Consciousness Loop** - Full integration
 
-### 2. KVRM Grounding (`mindforge/kvrm/`)
+### Neuron Inference Test
 
-Zero-hallucination system that:
-- Classifies claims as FACTUAL, OPINION, or QUESTION
-- Verifies factual claims against stored facts
-- Provides confidence scores and source attribution
-- Prevents hallucinated responses
+```bash
+python -c "
+from mindforge_dna.cortex.think import ThinkCortex
 
-### 3. Task Management (`mindforge/agent/task_list.py`)
+think = ThinkCortex()
+output = think.think(
+    context='Analyze this code for potential bugs',
+    needs={'curiosity': 0.8},
+    memories=['Found null pointer in previous session'],
+    recent_actions=['Read main.py']
+)
+print(f'Confidence: {output.confidence:.2f}')
+print(f'Should fallback to EGO: {output.should_fallback}')
+print(f'Content: {output.content[:200]}...')
+"
+```
 
-Hierarchical, persistent task system:
-- Parent/child task relationships
-- Priority levels (LOW, NORMAL, HIGH, CRITICAL)
-- Automatic retry with debug suggestions
-- Progress tracking and notes
-- SQLite persistence across sessions
+## Training
 
-### 4. Tool System (`mindforge/tools/`)
+### LoRA Fine-Tuning
 
-Safe, sandboxed tool execution:
-- Shell commands with safety guardrails
-- File system operations
-- Git integration
-- Web fetching and search
-- Extensible tool registry
+The system generates training data during operation:
+- EGO corrections of neuron outputs
+- Successful neuron outputs (high reward)
+- SUPEREGO-approved thoughts and actions
+
+```bash
+# Train with MLX (Apple Silicon)
+python scripts/train_mindforge.py \
+    --model mlx-community/Qwen2.5-7B-Instruct-4bit \
+    --epochs 3 \
+    --lr 1e-4
+```
+
+### Training Data Format
+
+```json
+{
+  "text": "<|im_start|>system\nYou are MindForge...<|im_end|>\n<|im_start|>user\n...<|im_end|>\n<|im_start|>assistant\n...<|im_end|>"
+}
+```
+
+## How It Works
+
+### 1. Bootstrap Phase (Cycles 0-10,000)
+
+During bootstrap, the EGO runs on every cycle:
+- Generates thoughts directly
+- Supervises all neuron outputs
+- Records corrections as training data
+- Builds up the experience buffer
+
+### 2. Neuron Training
+
+When experience buffer reaches threshold (100+ examples per domain):
+- Export training data to JSONL
+- Run LoRA fine-tuning
+- Load adapters into neurons
+- Neurons become more confident
+
+### 3. Mature Phase (Post-Bootstrap)
+
+After bootstrap and training:
+- Neurons handle most cognitive tasks
+- EGO only called for low-confidence outputs
+- Continuous learning from new experiences
+- Periodic retraining as needed
+
+### 4. Safety Guarantees
+
+At all times:
+- SUPEREGO validates every thought and action
+- Blocked commands are never executed
+- Values alignment is checked
+- Facts are grounded via KVRM
+
+## Key Files
+
+| File | Description |
+|------|-------------|
+| `mindforge_dna/main.py` | ConsciousnessLoop - main orchestrator |
+| `mindforge_dna/superego/__init__.py` | SuperegoLayer - combined checks |
+| `mindforge_dna/ego/model.py` | EgoModel - personality core |
+| `mindforge_dna/cortex/base.py` | CortexNeuron - neuron base class |
+| `mindforge_dna/id/needs.py` | NeedsRegulator - drive system |
+| `mindforge_dna/memory/store.py` | MemoryStore - hybrid memory |
+| `mindforge_dna/training/pipeline.py` | TrainingPipeline - LoRA training |
+
+## Configuration
+
+### Needs Configuration (ID Layer)
+
+```python
+# Available presets
+regulator = create_regulator("balanced")    # Default
+regulator = create_regulator("curious")     # High curiosity
+regulator = create_regulator("conservative") # High reliability
+
+# Custom weights
+custom_weights = {
+    NeedType.SUSTAINABILITY: 0.25,
+    NeedType.RELIABILITY: 0.30,
+    NeedType.CURIOSITY: 0.25,
+    NeedType.EXCELLENCE: 0.20,
+}
+```
+
+### Model Configuration (CORTEX)
+
+```python
+# Configure neuron models
+ThinkCortex(
+    base_model="mlx-community/Qwen2.5-1.5B-Instruct-4bit",
+    lora_rank=16,
+    confidence_threshold=0.7
+)
+```
+
+## API Reference
+
+### ConsciousnessLoop
+
+```python
+loop = ConsciousnessLoop(data_dir=Path("data"))
+loop.initialize()           # Load all components
+state = loop.run_cycle()    # Run single cycle
+loop.run()                  # Run continuous loop
+```
+
+### CortexNeuron
+
+```python
+output = neuron.infer(input_data)     # Run inference
+output.confidence                      # Confidence score
+output.should_fallback                 # Whether to use EGO
+output.content                         # Generated content
+neuron.record_outcome(output, score)  # Record for training
+```
+
+### SuperegoLayer
+
+```python
+result = superego.check_thought(thought)
+result.is_approved      # Whether thought is approved
+result.values_ok        # Values check passed
+result.safety_ok        # Safety check passed
+result.get_summary()    # Human-readable summary
+```
 
 ## Performance
 
 | Metric | Value |
 |--------|-------|
-| Complex Task Success Rate | **80%** (4/5 completed) |
-| Self-Generated Tasks | 6 additional tasks autonomously identified |
-| Error Recovery Rate | Automatic retry with debug suggestions |
-| Memory Persistence | SQLite-backed with semantic search |
+| Test Pass Rate | 10/10 (100%) |
+| ThinkCortex Inference | ~14s (1.5B model) |
+| ActionCortex Inference | ~3s (0.5B model) |
+| Memory Usage (EGO) | ~4GB |
+| Memory Usage (Neurons) | ~0.3-1.7GB each |
 
-## Configuration
+## Research
 
-Configuration is managed through `config.yaml`:
+This project explores several research questions:
 
-```yaml
-name: "Echo"  # Agent name
+1. **Can safety be architectural?** - Rather than training for safety, can we make unsafe behavior structurally impossible?
 
-model:
-  inference_backend: "mlx"  # or "ollama", "transformers"
-  ollama_model_name: "qwen3:8b"
+2. **Can small models specialize?** - Can 0.5B models with LoRA adapters match larger models in specific domains?
 
-cycle:
-  min_sleep_seconds: 30
-  max_sleep_seconds: 300
-  cycles_before_consolidation: 50
-  cycles_before_mini_finetune: 200
+3. **Can consciousness be modular?** - Can Freudian concepts (ID, EGO, SUPEREGO) map to useful AI architectures?
 
-needs:
-  sustainability: 0.25
-  reliability: 0.30
-  curiosity: 0.25
-  excellence: 0.20
-```
-
-## Running the Dashboard
-
-```bash
-# Start the Streamlit dashboard
-streamlit run mindforge/dashboard/app.py
-
-# Or use the convenience script
-./run.sh
-```
-
-The dashboard provides:
-- Real-time consciousness cycle monitoring
-- Task progress visualization
-- Memory exploration
-- Needs state display
-
-## API Server
-
-```bash
-# Start the FastAPI server
-uvicorn mindforge.api.main:app --reload --port 8000
-
-# API docs at http://localhost:8000/docs
-```
-
-## Testing
-
-```bash
-# Run all tests
-pytest tests/ -v
-
-# Run specific test modules
-pytest tests/test_kvrm.py -v
-pytest tests/test_memory.py -v
-pytest tests/test_agents.py -v
-```
+4. **Can learning be supervised by peers?** - Can the EGO teach neurons through correction examples?
 
 ## Documentation
 
-- [Documentation Index](docs/README.md) - Full documentation overview
-- [Research Paper](docs/research/MINDFORGE_RESEARCH_PAPER.md) - Academic paper draft
-- [Architecture Overview](docs/research/ARCHITECTURE_OVERVIEW.md) - Technical details
-- [KVRM Whitepaper](docs/KVRM-WHITEPAPER.md) - Zero-hallucination system
-- [Reward Learning System](docs/REWARD_LEARNING_SYSTEM.md) - Intrinsic motivation
+- [Final Architecture](docs/MINDFORGE_DNA_FINAL_ARCHITECTURE.md) - Complete specification
+- [Quick Reference](docs/MINDFORGE_DNA_QUICKREF.md) - Cheat sheet
+- [KVRM Whitepaper](docs/KVRM-WHITEPAPER.md) - Fact grounding system
+- [DNA Neuron Research](docs/DNA_NEURON_PIVOT_RESEARCH.md) - Research notes
 
-## Requirements
+## Contributing
 
-- Python 3.11+
-- Ollama (for inference)
-- SQLite (included with Python)
-
-Optional:
-- MLX (for Apple Silicon acceleration)
-- n8n (for workflow automation)
+This project is under active development. See [CHANGELOG.md](CHANGELOG.md) for recent changes.
 
 ## Citation
 
 ```bibtex
-@software{mindforge2025,
-  title = {MindForge: A Multi-Step Reasoning Consciousness Agent},
+@software{mindforge_dna_2025,
+  title = {MindForge DNA: A Freudian-Inspired AI Consciousness Architecture},
   author = {Price, Bobby},
   year = {2025},
-  url = {https://github.com/yourusername/mindforge}
+  url = {https://github.com/yourusername/conscious}
 }
 ```
 
-## License
-
-MIT License - See [LICENSE](LICENSE) file for details.
-
 ---
 
-*MindForge v0.1 - December 2025*
+*MindForge DNA v0.2.0 - December 2025*

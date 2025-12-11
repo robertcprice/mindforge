@@ -1,0 +1,62 @@
+[
+  {
+    "test_name": "simple_function",
+    "task_description": "Create a Python function called 'fibonacci' that takes a number n and returns the nth Fibonacci number. Save it to a file called 'fibonacci.py' in the current directory. Test the function by running it with n=10.",
+    "start_time": "2025-12-10T19:01:40.923701",
+    "cycles_run": 0,
+    "success": false,
+    "work_log": [],
+    "thoughts": [],
+    "reflections": [],
+    "errors": [
+      {
+        "cycle": 0,
+        "error": "Setup error: 'InternalTask' object has no attribute 'lower'"
+      }
+    ],
+    "files_created": [],
+    "commands_executed": [],
+    "end_time": "2025-12-10T19:01:41.123378",
+    "duration_seconds": 0.199677
+  },
+  {
+    "test_name": "creative_ascii_art",
+    "task_description": "Create a creative ASCII art generator. Steps: 1) Create a Python file 'ascii_art.py' with a function that converts text to ASCII art banner. 2) The function should use simple block characters to spell out text. 3) Test it by generating ASCII art for the word 'MINDFORGE'. 4) Save the output to 'banner.txt'.",
+    "start_time": "2025-12-10T19:01:41.124142",
+    "cycles_run": 0,
+    "success": false,
+    "work_log": [],
+    "thoughts": [],
+    "reflections": [],
+    "errors": [
+      {
+        "cycle": 0,
+        "error": "Setup error: 'InternalTask' object has no attribute 'lower'"
+      }
+    ],
+    "files_created": [],
+    "commands_executed": [],
+    "end_time": "2025-12-10T19:01:41.150603",
+    "duration_seconds": 0.026461
+  },
+  {
+    "test_name": "n8n_workflow_design",
+    "task_description": "Design an n8n workflow specification. Create a JSON file called 'workflow_spec.json' that describes a workflow to: 1) Trigger on webhook, 2) Transform incoming data, 3) Send a notification. Include node types, connections, and basic configuration. This is a design exercise - just create the specification file.",
+    "start_time": "2025-12-10T19:01:41.151215",
+    "cycles_run": 0,
+    "success": false,
+    "work_log": [],
+    "thoughts": [],
+    "reflections": [],
+    "errors": [
+      {
+        "cycle": 0,
+        "error": "Setup error: 'InternalTask' object has no attribute 'lower'"
+      }
+    ],
+    "files_created": [],
+    "commands_executed": [],
+    "end_time": "2025-12-10T19:01:41.174972",
+    "duration_seconds": 0.023757
+  }
+]

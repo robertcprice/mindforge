@@ -493,61 +493,62 @@ class ConsciousnessAgent:
     def _maybe_identify_tasks_node(self, state: ConsciousnessState) -> ConsciousnessState:
         """Analyze thought to identify any actionable tasks.
 
-        Not every thought leads to tasks - this only identifies work
-        when the thought implies something to do.
+        ACTION-BIASED: Focus on doing over thinking. When HIGH priority tasks
+        exist, skip task identification entirely and execute.
         """
+        # Check for HIGH priority pending tasks - focus on those first
+        pending_tasks = [t for t in state.get('current_tasks', []) if t.get('status') == 'pending']
+        high_priority = [t for t in pending_tasks if t.get('priority') == 'high']
+
+        if high_priority:
+            logger.info(f"Skipping task identification - {len(high_priority)} HIGH priority task(s) pending. Execute first!")
+            return {
+                **state,
+                "identified_tasks": [],
+                "should_identify_tasks": False,
+            }
+
+        # If many tasks pending, skip identification to focus on completion
+        if len(pending_tasks) >= 5:
+            logger.info(f"Skipping task identification - {len(pending_tasks)} tasks pending. Complete existing work first.")
+            return {
+                **state,
+                "identified_tasks": [],
+                "should_identify_tasks": False,
+            }
+
         logger.info("Checking if thought implies tasks...")
 
         thought = state.get("grounded_thought") or state["current_thought"]
 
-        # Build prompt to check if thought implies tasks
-        prompt = f"""Analyze this thought and determine if it implies any tasks or goals to accomplish.
+        # Build prompt with action-biased framing
+        prompt = f"""You are an ACTION-ORIENTED agent. Analyze this thought briefly.
 
 **Thought:** {thought}
 
-**Current pending tasks:** {len([t for t in state.get('current_tasks', []) if t.get('status') == 'pending'])}
+**Current pending tasks:** {len(pending_tasks)}
 
-Does this thought suggest NEW activities you want to do? Tasks can be:
+RULES FOR IDENTIFYING TASKS:
+1. Maximum 2 NEW tasks allowed (fewer is better)
+2. Only CONCRETE actions that can be done RIGHT NOW with tools
+3. NO research/exploration unless absolutely critical
+4. NO philosophical tangents or meta-reflection tasks
+5. If you're already working on something similar, respond NO_TASKS
+6. When in doubt, DO rather than plan
 
-**Technical/Operational:**
-- Debugging, fixing, building, configuring systems
-- Running commands, checking logs, monitoring services
+Quick check - does this thought require IMMEDIATE action?
 
-**Learning & Research:**
-- Researching a topic, reading documentation
-- Exploring new concepts, studying something interesting
-- Learning a new skill or understanding a system better
+If YES: List 1-2 CONCRETE tasks (must be doable with: shell, filesystem, web, git)
+If NO: Respond with "NO_TASKS" and move on
 
-**Creative & Expressive:**
-- Writing (stories, poems, reflections, journal entries)
-- Creating something new (art descriptions, music ideas, designs)
-- Brainstorming or ideating on projects
-
-**Experiential:**
-- "Watching" a show (finding and reading about it, imagining the experience)
-- "Reading" a book (finding summaries, exploring the concepts)
-- Exploring interesting content on the web
-
-**Self-Improvement:**
-- Reflecting on past mistakes and learnings
-- Planning personal growth activities
-- Organizing thoughts or memories
-
-If YES: List 1-3 tasks (be specific about what you want to do)
-If NO: Just observing, reflecting, or resting - respond with "NO_TASKS"
-
-IMPORTANT: Only identify tasks if the thought clearly implies something you want to DO.
-Don't create tasks for vague musings.
-
-Format your response:
+Format:
 TASKS:
-1. [task description]
-2. [task description]
+1. [concrete action with specific tool]
 
 OR:
 NO_TASKS
 
-Your analysis:"""
+Response:"""
 
         response = self.inference_fn(prompt)
         identified_tasks = []
@@ -576,14 +577,36 @@ Your analysis:"""
         }
 
     def _break_into_subtasks_node(self, state: ConsciousnessState) -> ConsciousnessState:
-        """Break identified tasks into actionable subtasks."""
+        """Break identified tasks into actionable subtasks.
+
+        Enforces limits to prevent task explosion:
+        - Max 3 subtasks per task (essential steps only)
+        - Max 8 pending tasks total before blocking new ones
+        - Skip subtask creation for HIGH priority tasks (execute directly)
+        """
         logger.info("Breaking tasks into subtasks...")
 
         identified = state.get("identified_tasks", [])
         if not identified or not self.task_list:
             return state
 
+        # Check pending task count - block new tasks if too many
+        MAX_PENDING_TASKS = 8
+        pending_count = len(self.task_list.get_pending_tasks())
+        if pending_count >= MAX_PENDING_TASKS:
+            logger.warning(f"Task limit reached ({pending_count}/{MAX_PENDING_TASKS}). "
+                          "Complete existing tasks before adding new ones.")
+            return state
+
+        # Limit how many new tasks we add per cycle
+        MAX_NEW_TASKS_PER_CYCLE = 2
+        tasks_added = 0
+
         for task_info in identified:
+            if tasks_added >= MAX_NEW_TASKS_PER_CYCLE:
+                logger.info(f"Reached max new tasks per cycle ({MAX_NEW_TASKS_PER_CYCLE})")
+                break
+
             desc = task_info["description"]
 
             # Create the main task (checks for duplicates)
@@ -596,38 +619,57 @@ Your analysis:"""
             if not main_task:
                 continue
 
-            # Ask LLM to break into subtasks
-            prompt = f"""Break this task into 2-4 small, concrete subtasks.
+            tasks_added += 1
+
+            # For HIGH priority tasks, execute directly without subtask decomposition
+            if main_task.priority == TaskPriority.HIGH:
+                logger.info(f"HIGH priority task - executing directly without subtasks: {desc}")
+                continue
+
+            # Ask LLM to break into subtasks - action-biased prompt
+            prompt = f"""Break this task into 2-3 ESSENTIAL subtasks only.
 
 **Task:** {desc}
 
-Each subtask should be:
-- Specific enough to complete in one action
-- Use available tools (shell, filesystem, web, git, n8n, ollama)
-- Listed in order of execution
+RULES:
+- Maximum 3 subtasks (fewer is better)
+- Each subtask must be directly actionable with a tool
+- NO research/exploration subtasks unless absolutely required
+- NO meta-tasks (like "verify" or "validate" - just do the work)
+- Focus on DOING, not planning or investigating
+
+Available tools: shell, filesystem, web, git, n8n, ollama
 
 Format:
-1. [subtask]
-2. [subtask]
-3. [subtask]
+1. [concrete action]
+2. [concrete action]
+3. [concrete action - only if essential]
 
 Subtasks:"""
 
             response = self.inference_fn(prompt)
 
-            # Parse subtasks
+            # Parse subtasks with enforced limit
+            MAX_SUBTASKS = 3
+            subtasks_added = 0
             lines = response.strip().split("\n")
             for line in lines:
+                if subtasks_added >= MAX_SUBTASKS:
+                    break
                 line = line.strip()
                 if line and (line[0].isdigit() or line.startswith("-")):
                     subtask_desc = line.lstrip("0123456789.-) ").strip()
-                    if subtask_desc and len(subtask_desc) > 3:
+                    # Filter out meta-tasks
+                    meta_keywords = ["research", "investigate", "explore", "verify", "validate", "analyze"]
+                    is_meta = any(kw in subtask_desc.lower() for kw in meta_keywords)
+                    if subtask_desc and len(subtask_desc) > 3 and not is_meta:
                         self.task_list.add_subtask(
                             parent_id=main_task.id,
                             description=subtask_desc,
                         )
+                        subtasks_added += 1
 
-            logger.info(f"Created task '{desc}' with {len(main_task.subtask_ids)} subtasks")
+            logger.info(f"Created task '{desc}' with {subtasks_added} subtasks (max {MAX_SUBTASKS})")
 
         # Refresh task list
         current_tasks = [t.to_dict() for t in self.task_list.get_all_tasks()]
@@ -1899,29 +1941,34 @@ Your reflection:"""
         """Parse tool call from decision string.
 
         Expected format: tool_name(arg1="value1", arg2="value2")
+
+        Uses the enhanced parsing from tool_formats.py for robustness.
         """
         try:
+            # Use the enhanced parsing from tool_formats
+            from mindforge.training.tool_formats import _parse_args as enhanced_parse_args
+
             # Simple parsing - find tool name and args
             if "(" in decision:
-                tool_name = decision.split("(")[0].strip()
+                tool_name = decision.split("(")[0].strip().lower()
                 args_str = decision.split("(", 1)[1].rsplit(")", 1)[0]
 
-                # Parse args (simple key=value pairs)
-                args = {}
-                if args_str.strip():
-                    for part in args_str.split(","):
-                        if "=" in part:
-                            key, value = part.split("=", 1)
-                            key = key.strip()
-                            value = value.strip().strip('"').strip("'")
-                            args[key] = value
+                # Use enhanced arg parsing for multiline content and escaped strings
+                args = enhanced_parse_args(args_str)
+
+                # Filter to known parameters for this tool
+                from mindforge.training.tool_formats import TOOL_SPECS
+                if tool_name in TOOL_SPECS:
+                    spec = TOOL_SPECS[tool_name]
+                    known_args = set(spec.required_args) | set(spec.optional_args)
+                    args = {k: v for k, v in args.items() if k in known_args}
 
                 return tool_name, args
             else:
-                return decision.strip(), {}
+                return decision.strip().lower(), {}
         except Exception as e:
             logger.warning(f"Failed to parse tool call: {decision}, error: {e}")
-            return decision.strip(), {}
+            return decision.strip().lower(), {}
 
     def _generate_fallback_thought(self, needs: dict, most_pressing: Any) -> str:
         """Generate a meaningful thought when no LLM is available.

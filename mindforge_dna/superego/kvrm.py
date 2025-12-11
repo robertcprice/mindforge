@@ -127,6 +127,22 @@ class KVRMRouter:
 
             conn.commit()
 
+            # Lightweight schema migrations for existing databases
+            self._ensure_column(conn, "facts", "evidence", "TEXT")
+            self._ensure_column(conn, "facts", "verified_at", "TEXT")
+            self._ensure_column(conn, "facts", "source", "TEXT")
+            self._ensure_column(conn, "memories", "context", "TEXT")
+
+    def _ensure_column(self, conn: sqlite3.Connection, table: str, column: str, col_type: str) -> None:
+        """Ensure a column exists; add if missing."""
+        try:
+            info = conn.execute(f"PRAGMA table_info({table})").fetchall()
+            existing = {row[1] for row in info}
+            if column not in existing:
+                conn.execute(f"ALTER TABLE {table} ADD COLUMN {column} {col_type}")
+        except Exception as e:
+            logger.warning(f"Schema migration for {table}.{column} failed: {e}")
+
     def _compile_patterns(self) -> None:
         """Compile regex patterns for claim classification."""
         # Factual claim indicators

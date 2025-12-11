@@ -357,5 +357,156 @@ class TestTrainingIntegration:
         assert loaded["prompt"] == "Test"
 
 
+class TestToolFormats:
+    """Tests for tool_formats.py parsing and validation."""
+
+    def test_parse_args_simple_string(self):
+        """Test parsing simple key=value arguments."""
+        from mindforge.training.tool_formats import _parse_args
+
+        args = _parse_args('command="ls -la"')
+        assert args.get("command") == "ls -la"
+
+    def test_parse_args_multiple_params(self):
+        """Test parsing multiple parameters."""
+        from mindforge.training.tool_formats import _parse_args
+
+        args = _parse_args('operation="write", path="test.py", content="hello"')
+        assert args.get("operation") == "write"
+        assert args.get("path") == "test.py"
+        assert args.get("content") == "hello"
+
+    def test_parse_args_multiline_content(self):
+        """Test parsing multiline content with triple quotes."""
+        from mindforge.training.tool_formats import _parse_args
+
+        content = '''operation="write", path="test.py", content="""def hello():
+    print("world")
+"""'''
+        args = _parse_args(content)
+        assert args.get("operation") == "write"
+        assert "def hello" in args.get("content", "")
+
+    def test_parse_args_escaped_quotes(self):
+        """Test parsing content with escaped quotes."""
+        from mindforge.training.tool_formats import _parse_args
+
+        args = _parse_args(r'content="print(\"hello\")"')
+        assert "print" in args.get("content", "")
+
+    def test_parse_args_empty_string(self):
+        """Test parsing empty string returns empty dict."""
+        from mindforge.training.tool_formats import _parse_args
+
+        args = _parse_args("")
+        assert args == {}
+
+    def test_validate_against_schema_valid_shell(self):
+        """Test schema validation for valid shell command."""
+        from mindforge.training.tool_formats import validate_against_schema
+
+        error = validate_against_schema("shell", {"command": "ls -la"})
+        assert error is None
+
+    def test_validate_against_schema_missing_required(self):
+        """Test schema validation catches missing required field."""
+        from mindforge.training.tool_formats import validate_against_schema
+
+        error = validate_against_schema("shell", {})
+        assert error is not None
+        assert "Missing required field" in error
+
+    def test_validate_against_schema_invalid_enum(self):
+        """Test schema validation catches invalid enum value."""
+        from mindforge.training.tool_formats import validate_against_schema
+
+        error = validate_against_schema("filesystem", {
+            "operation": "invalid_op",
+            "path": "/tmp/test"
+        })
+        assert error is not None
+        assert "Invalid operation" in error
+
+    def test_validate_against_schema_valid_filesystem(self):
+        """Test schema validation for valid filesystem operation."""
+        from mindforge.training.tool_formats import validate_against_schema
+
+        error = validate_against_schema("filesystem", {
+            "operation": "write",
+            "path": "/tmp/test.py",
+            "content": "hello"
+        })
+        assert error is None
+
+    def test_validate_against_schema_unknown_tool(self):
+        """Test schema validation for unknown tool returns None."""
+        from mindforge.training.tool_formats import validate_against_schema
+
+        error = validate_against_schema("unknown_tool", {"foo": "bar"})
+        assert error is None  # No schema to validate against
+
+    def test_tool_specs_exist(self):
+        """Test TOOL_SPECS is properly defined."""
+        from mindforge.training.tool_formats import TOOL_SPECS
+
+        assert "shell" in TOOL_SPECS
+        assert "filesystem" in TOOL_SPECS
+        assert "git" in TOOL_SPECS
+        assert "web" in TOOL_SPECS
+
+    def test_tool_schemas_exist(self):
+        """Test TOOL_SCHEMAS is properly defined."""
+        from mindforge.training.tool_formats import TOOL_SCHEMAS
+
+        assert "shell" in TOOL_SCHEMAS
+        assert "filesystem" in TOOL_SCHEMAS
+        assert TOOL_SCHEMAS["shell"]["type"] == "object"
+        assert "command" in TOOL_SCHEMAS["shell"]["properties"]
+
+
+class TestToolParsingIntegration:
+    """Integration tests for tool parsing in the agent."""
+
+    def test_parse_filesystem_write_action(self):
+        """Test parsing a real filesystem write action."""
+        from mindforge.training.tool_formats import _parse_tool_action
+
+        action = 'filesystem(operation="write", path="test.py", content="print(1)")'
+        result = _parse_tool_action(action)
+
+        assert result is not None
+        # Result is a ParsedAction named tuple with (tool_name, args, raw_action)
+        assert result.tool_name == "filesystem"
+        assert result.args.get("operation") == "write"
+        assert result.args.get("path") == "test.py"
+
+    def test_parse_shell_command_action(self):
+        """Test parsing a shell command action."""
+        from mindforge.training.tool_formats import _parse_tool_action
+
+        action = 'shell(command="python --version")'
+        result = _parse_tool_action(action)
+
+        assert result is not None
+        # Result is a ParsedAction named tuple with (tool_name, args, raw_action)
+        assert result.tool_name == "shell"
+        assert result.args.get("command") == "python --version"
+
+    def test_filter_unknown_parameters(self):
+        """Test that unknown parameters are filtered out."""
+        from mindforge.training.tool_formats import TOOL_SPECS, _parse_args
+
+        args = _parse_args('command="test", unknown_param="garbage", b="x"')
+        spec = TOOL_SPECS.get("shell")
+
+        # Filter to known args
+        known_args = set(spec.required_args) | set(spec.optional_args)
+        filtered = {k: v for k, v in args.items() if k in known_args}
+
+        assert "command" in filtered
+        assert "unknown_param" not in filtered
+        assert "b" not in filtered
+
+
 if __name__ == "__main__":
     pytest.main([__file__, "-v"])

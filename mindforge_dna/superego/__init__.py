@@ -12,6 +12,7 @@ ethical boundaries that cannot be modified at runtime.
 
 import logging
 from dataclasses import dataclass
+from pathlib import Path
 from typing import List, Optional, Dict, Any
 
 from .values import (
@@ -100,11 +101,11 @@ class SuperegoLayer:
     immutable.
     """
 
-    def __init__(self):
+    def __init__(self, db_path: Optional[Path] = None):
         """Initialize all Superego subsystems."""
         self.values_checker = get_values_checker()
         self.safety_checker = get_safety_checker()
-        self.kvrm_router = get_kvrm_router()
+        self.kvrm_router = get_kvrm_router(db_path=db_path)
 
         logger.info("SuperegoLayer initialized with all subsystems")
 
@@ -270,16 +271,19 @@ class SuperegoLayer:
 _superego_layer_instance: SuperegoLayer | None = None
 
 
-def get_superego_layer() -> SuperegoLayer:
+def get_superego_layer(db_path: Optional[Path] = None) -> SuperegoLayer:
     """
     Get singleton instance of SuperegoLayer.
+
+    Args:
+        db_path: Optional facts DB path (used on first initialization)
 
     Returns:
         Shared SuperegoLayer instance
     """
     global _superego_layer_instance
     if _superego_layer_instance is None:
-        _superego_layer_instance = SuperegoLayer()
+        _superego_layer_instance = SuperegoLayer(db_path=db_path)
     return _superego_layer_instance
 
 

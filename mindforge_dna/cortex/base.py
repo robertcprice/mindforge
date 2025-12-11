@@ -170,8 +170,10 @@ class CortexNeuron(ABC):
         """
         self.config = config
         self.model = None
+        self.tokenizer = None
         self.adapter_path: Optional[Path] = None
         self.experiences: List[Experience] = []
+        self._stub_mode: bool = False
 
         logger.info(
             f"Initializing {config.name} for domain {config.domain.value} "
@@ -223,7 +225,15 @@ class CortexNeuron(ABC):
             logger.info(f"{self.config.name}: Model loaded successfully")
 
         except ImportError:
-            logger.error("MLX not available - install with: pip install mlx mlx-lm")
+            logger.warning(
+                f"{self.config.name}: MLX not available - using stub outputs. "
+                "Install mlx and mlx-lm for real inference."
+            )
+            self._stub_mode = True
+            self.model = None
+            self.tokenizer = None
+        except Exception as e:
+            logger.error(f"{self.config.name}: Failed to load model: {e}")
             raise
         except Exception as e:
             logger.error(f"{self.config.name}: Failed to load model: {e}")
@@ -330,15 +340,30 @@ class CortexNeuron(ABC):
             # Prepare prompt
             prompt = self._prepare_prompt(input_data)
 
-            # Generate
-            from mlx_lm import generate
+            # Stub path when MLX unavailable
+            if self._stub_mode or self.model is None:
+                raw_output = f"STUB: {prompt[:200]}"
+                parsed = self._parse_output(raw_output)
+                confidence = 0.2
+                return NeuronOutput(
+                    content=raw_output,
+                    confidence=confidence,
+                    should_fallback=True,
+                    inference_time=time.time() - start_time,
+                    metadata=parsed
+                )
 
+            # Generate using modern MLX-LM API with sampler
+            from mlx_lm import generate
+            from mlx_lm.sample_utils import make_sampler
+
+            sampler = make_sampler(temp=self.config.temperature)
             raw_output = generate(
                 self.model,
                 self.tokenizer,
                 prompt=prompt,
                 max_tokens=self.config.max_tokens,
-                temp=self.config.temperature,
+                sampler=sampler,
                 verbose=False
             )
 
