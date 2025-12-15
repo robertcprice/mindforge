@@ -1,0 +1,13 @@
+{
+  "thought": "STUB: /no_think\nYou output ONLY valid JSON. No explanations. No markdown. No prose.\n\nYour response MUST start with { and end with }\n\nRequired JSON structure:\n{\"thought\": \"2-4 sentence reasoning\", \"reasoning",
+  "reasoning_type": "unknown",
+  "confidence_level": "low",
+  "key_insights": [],
+  "concerns": null,
+  "input_data": {
+    "context": "Explain the architecture briefly",
+    "needs": {},
+    "memories": [],
+    "recent_actions": []
+  }
+}

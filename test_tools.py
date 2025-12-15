@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Quick test script for MindForge DNA Tools layer.
+Quick test script for Conch DNA Tools layer.
 Verifies basic functionality of all tool implementations.
 """
 
@@ -8,10 +8,10 @@ import sys
 import tempfile
 from pathlib import Path
 
-# Add mindforge_dna to path
+# Add conch_dna to path
 sys.path.insert(0, str(Path(__file__).parent))
 
-from mindforge_dna.tools import (
+from conch_dna.tools import (
     create_default_registry,
     create_restricted_registry,
     ToolStatus,
@@ -51,7 +51,7 @@ def test_filesystem_tool():
             "filesystem",
             operation="write",
             path=str(test_file),
-            content="Hello, MindForge!",
+            content="Hello, Conch!",
         )
         print(f"Write: {result.status.value} - {result.output}")
 
@@ -126,7 +126,7 @@ def test_git_tool():
     )
     print(f"Git status: {result.status.value}")
     if result.success:
-        print(f"Output (first 200 chars):\n{result.output[:200]}...")
+        print(f"Output:\n{result.output}")
     else:
         print(f"Error: {result.error}")
 
@@ -215,7 +215,7 @@ def test_security_features():
     for cmd in blocked_cmds:
         result = registry.execute("shell", command=cmd)
         assert result.status == ToolStatus.BLOCKED, f"Failed to block {cmd}"
-        print(f"✓ Blocked command: {cmd[:30]}")
+        print(f"✓ Blocked command: {cmd}")
 
     print()
 
@@ -250,7 +250,7 @@ def test_statistics():
 def main():
     """Run all tests."""
     print("\n" + "=" * 60)
-    print("MindForge DNA - Tools Layer Test Suite")
+    print("Conch DNA - Tools Layer Test Suite")
     print("=" * 60 + "\n")
 
     try:

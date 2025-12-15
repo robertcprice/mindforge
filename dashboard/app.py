@@ -1,5 +1,5 @@
 """
-MindForge Consciousness Dashboard
+Conch Consciousness Dashboard
 
 Live monitoring dashboard for the consciousness engine.
 Shows needs, thoughts, memories, and system status.
@@ -18,13 +18,13 @@ import yaml
 # Add project root to path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from mindforge.integrations.ollama import OllamaClient
-from mindforge.integrations.n8n import N8NClient
+from conch.integrations.ollama import OllamaClient
+from conch.integrations.n8n import N8NClient
 
 
 # Page config
 st.set_page_config(
-    page_title="MindForge Consciousness",
+    page_title="Conch Consciousness",
     page_icon="🧠",
     layout="wide",
     initial_sidebar_state="expanded",
@@ -159,7 +159,7 @@ def main():
 
     # Header
     st.title(f"🧠 {name} - Consciousness Dashboard")
-    st.caption(f"MindForge v{config.get('version', '1.0.0')}")
+    st.caption(f"Conch v{config.get('version', '1.0.0')}")
 
     # Auto-refresh toggle
     auto_refresh = st.sidebar.checkbox("Auto-refresh", value=True)
@@ -282,7 +282,7 @@ def main():
 
     # Footer
     st.markdown("---")
-    st.caption(f"MindForge Consciousness Engine | Last updated: {datetime.now().strftime('%H:%M:%S')}")
+    st.caption(f"Conch Consciousness Engine | Last updated: {datetime.now().strftime('%H:%M:%S')}")
 
     # Auto-refresh using empty placeholder
     if auto_refresh:

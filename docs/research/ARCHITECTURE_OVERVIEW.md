@@ -1,12 +1,12 @@
-# MindForge Architecture Overview
+# Conch Architecture Overview
 
-**Document Purpose**: Technical architecture documentation for the MindForge consciousness agent.
+**Document Purpose**: Technical architecture documentation for the Conch consciousness agent.
 
 ## High-Level Architecture
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│                         MINDFORGE CONSCIOUSNESS ENGINE                       │
+│                         CONCH CONSCIOUSNESS ENGINE                       │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                             │
 │   ┌─────────────────────────────────────────────────────────────────────┐   │
@@ -51,7 +51,7 @@
 
 The central orchestrator using LangGraph state machine.
 
-**File**: `mindforge/agent/langgraph_agent.py`
+**File**: `conch/agent/langgraph_agent.py`
 **Lines**: ~2100
 
 **Key Classes**:
@@ -77,7 +77,7 @@ The central orchestrator using LangGraph state machine.
 
 SQLite-backed persistent memory with semantic search.
 
-**File**: `mindforge/memory/store.py`
+**File**: `conch/memory/store.py`
 
 **Features**:
 - Full-text search (FTS5)
@@ -101,7 +101,7 @@ CREATE TABLE memories (
 
 Hierarchical task management with persistence.
 
-**File**: `mindforge/agent/task_list.py`
+**File**: `conch/agent/task_list.py`
 
 **Classes**:
 - `InternalTask`: Dataclass for task representation
@@ -123,7 +123,7 @@ get_pending_tasks()
 
 Experience logging for learning.
 
-**File**: `mindforge/agent/journal.py`
+**File**: `conch/agent/journal.py`
 
 **Entry Types**:
 - THOUGHT
@@ -137,7 +137,7 @@ Experience logging for learning.
 
 Intrinsic motivation system.
 
-**File**: `mindforge/core/needs.py`
+**File**: `conch/core/needs.py`
 
 **Need Types**:
 | Need | Weight | Description |
@@ -210,7 +210,7 @@ Apple Silicon optimized inference (when available).
 
 Stores (state, action, reward) tuples for learning.
 
-**File**: `mindforge/training/experience_buffer.py`
+**File**: `conch/training/experience_buffer.py`
 
 ### Reward Calculator
 
@@ -301,7 +301,7 @@ training:
 ## File Structure
 
 ```
-mindforge/
+conch/
 ├── __init__.py
 ├── config.py              # Configuration management
 ├── agent/
@@ -352,4 +352,4 @@ mindforge/
 ---
 
 *Architecture documentation generated: December 10, 2025*
-*MindForge v0.1*
+*Conch v0.1*

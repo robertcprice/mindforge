@@ -1,5 +1,5 @@
 """
-Comprehensive tests for MindForge KVRM (Key-Value Response Mapping) module.
+Comprehensive tests for Conch KVRM (Key-Value Response Mapping) module.
 
 Tests cover:
 - KeyStore base class and implementations
@@ -19,7 +19,7 @@ class TestKeyStore:
 
     def test_key_store_stats(self):
         """Test KeyStore tracks lookup stats."""
-        from mindforge.kvrm.key_store import KeyStore, KeyType
+        from conch.kvrm.key_store import KeyStore, KeyType
 
         # Create a mock store that always resolves
         class MockStore(KeyStore):
@@ -45,7 +45,7 @@ class TestKeyStore:
 
     def test_key_store_read_only(self):
         """Test read-only store cannot store content."""
-        from mindforge.kvrm.key_store import KeyStore, KeyType
+        from conch.kvrm.key_store import KeyStore, KeyType
 
         class ReadOnlyStore(KeyStore):
             def resolve(self, key):
@@ -66,20 +66,20 @@ class TestMemoryKeyStore:
 
     def test_memory_key_store_initialization(self, tmp_path):
         """Test MemoryKeyStore initializes with memory store."""
-        from mindforge.kvrm.resolver import MemoryKeyStore
-        from mindforge.memory import MemoryStore
+        from conch.kvrm.resolver import MemoryKeyStore
+        from conch.memory import MemoryStore
 
         db_path = tmp_path / "test_mem.db"
         mem_store = MemoryStore(db_path=db_path)
         key_store = MemoryKeyStore(memory_store=mem_store)
 
-        assert key_store.name == "MindForge Memory"
+        assert key_store.name == "Conch Memory"
         assert key_store.read_only is False
 
     def test_memory_key_pattern_validation(self, tmp_path):
         """Test memory key pattern validation."""
-        from mindforge.kvrm.resolver import MemoryKeyStore
-        from mindforge.memory import MemoryStore
+        from conch.kvrm.resolver import MemoryKeyStore
+        from conch.memory import MemoryStore
 
         db_path = tmp_path / "test_mem.db"
         mem_store = MemoryStore(db_path=db_path)
@@ -101,7 +101,7 @@ class TestFactKeyStore:
 
     def test_fact_key_store_initialization(self, tmp_path):
         """Test FactKeyStore initializes correctly."""
-        from mindforge.kvrm.resolver import FactKeyStore
+        from conch.kvrm.resolver import FactKeyStore
 
         db_path = tmp_path / "facts.db"
         fact_store = FactKeyStore(db_path=db_path)
@@ -111,7 +111,7 @@ class TestFactKeyStore:
 
     def test_fact_store_add_and_resolve(self, tmp_path):
         """Test adding and resolving facts."""
-        from mindforge.kvrm.resolver import FactKeyStore
+        from conch.kvrm.resolver import FactKeyStore
 
         db_path = tmp_path / "facts.db"
         fact_store = FactKeyStore(db_path=db_path)
@@ -134,7 +134,7 @@ class TestFactKeyStore:
 
     def test_fact_store_search(self, tmp_path):
         """Test searching facts."""
-        from mindforge.kvrm.resolver import FactKeyStore
+        from conch.kvrm.resolver import FactKeyStore
 
         db_path = tmp_path / "facts.db"
         fact_store = FactKeyStore(db_path=db_path)
@@ -166,7 +166,7 @@ class TestKeyResolver:
 
     def test_resolver_register_store(self, tmp_path):
         """Test registering stores with resolver."""
-        from mindforge.kvrm.resolver import KeyResolver, FactKeyStore
+        from conch.kvrm.resolver import KeyResolver, FactKeyStore
 
         resolver = KeyResolver()
         fact_store = FactKeyStore(db_path=tmp_path / "facts.db")
@@ -177,7 +177,7 @@ class TestKeyResolver:
 
     def test_resolver_resolve_with_prefix(self, tmp_path):
         """Test resolver routes to correct store by prefix."""
-        from mindforge.kvrm.resolver import KeyResolver, FactKeyStore
+        from conch.kvrm.resolver import KeyResolver, FactKeyStore
 
         resolver = KeyResolver()
         fact_store = FactKeyStore(db_path=tmp_path / "facts.db")
@@ -201,7 +201,7 @@ class TestGroundingResult:
 
     def test_grounding_result_creation(self):
         """Test creating GroundingResult."""
-        from mindforge.kvrm.grounding import GroundingResult, ClaimType
+        from conch.kvrm.grounding import GroundingResult, ClaimType
 
         result = GroundingResult(
             original="The sky is blue",
@@ -217,7 +217,7 @@ class TestGroundingResult:
 
     def test_grounding_result_is_verified(self):
         """Test is_verified property."""
-        from mindforge.kvrm.grounding import GroundingResult, ClaimType
+        from conch.kvrm.grounding import GroundingResult, ClaimType
 
         # Verified (grounded + high confidence)
         verified = GroundingResult(
@@ -248,7 +248,7 @@ class TestGroundingResult:
 
     def test_grounding_result_status(self):
         """Test status property."""
-        from mindforge.kvrm.grounding import GroundingResult, ClaimType
+        from conch.kvrm.grounding import GroundingResult, ClaimType
 
         # Verified
         verified = GroundingResult(
@@ -288,7 +288,7 @@ class TestGroundingResult:
 
     def test_grounding_result_to_dict(self):
         """Test to_dict serialization."""
-        from mindforge.kvrm.grounding import GroundingResult, ClaimType
+        from conch.kvrm.grounding import GroundingResult, ClaimType
 
         result = GroundingResult(
             original="The sky is blue",
@@ -309,7 +309,7 @@ class TestClaimType:
 
     def test_claim_types_exist(self):
         """Test all expected claim types exist."""
-        from mindforge.kvrm.grounding import ClaimType
+        from conch.kvrm.grounding import ClaimType
 
         assert ClaimType.FACTUAL.value == "factual"
         assert ClaimType.MEMORY.value == "memory"
@@ -325,8 +325,8 @@ class TestGroundingRouter:
 
     def test_grounding_router_initialization(self):
         """Test GroundingRouter initializes correctly."""
-        from mindforge.kvrm.grounding import GroundingRouter
-        from mindforge.kvrm.resolver import KeyResolver
+        from conch.kvrm.grounding import GroundingRouter
+        from conch.kvrm.resolver import KeyResolver
 
         resolver = KeyResolver()
         router = GroundingRouter(key_resolver=resolver)
@@ -335,8 +335,8 @@ class TestGroundingRouter:
 
     def test_grounding_router_classify_factual(self):
         """Test claim classification for factual claims."""
-        from mindforge.kvrm.grounding import GroundingRouter, ClaimType
-        from mindforge.kvrm.resolver import KeyResolver
+        from conch.kvrm.grounding import GroundingRouter, ClaimType
+        from conch.kvrm.resolver import KeyResolver
 
         resolver = KeyResolver()
         router = GroundingRouter(key_resolver=resolver)
@@ -347,8 +347,8 @@ class TestGroundingRouter:
 
     def test_grounding_router_classify_opinion(self):
         """Test claim classification for opinions."""
-        from mindforge.kvrm.grounding import GroundingRouter, ClaimType
-        from mindforge.kvrm.resolver import KeyResolver
+        from conch.kvrm.grounding import GroundingRouter, ClaimType
+        from conch.kvrm.resolver import KeyResolver
 
         resolver = KeyResolver()
         router = GroundingRouter(key_resolver=resolver)
@@ -359,8 +359,8 @@ class TestGroundingRouter:
 
     def test_grounding_router_classify_question(self):
         """Test claim classification for questions."""
-        from mindforge.kvrm.grounding import GroundingRouter, ClaimType
-        from mindforge.kvrm.resolver import KeyResolver
+        from conch.kvrm.grounding import GroundingRouter, ClaimType
+        from conch.kvrm.resolver import KeyResolver
 
         resolver = KeyResolver()
         router = GroundingRouter(key_resolver=resolver)
@@ -375,8 +375,8 @@ class TestKVRMTool:
 
     def test_kvrm_tool_initialization(self):
         """Test KVRMTool initializes correctly."""
-        from mindforge.kvrm.tool import KVRMTool
-        from mindforge.kvrm.resolver import KeyResolver
+        from conch.kvrm.tool import KVRMTool
+        from conch.kvrm.resolver import KeyResolver
 
         resolver = KeyResolver()
         tool = KVRMTool(key_resolver=resolver)
@@ -386,9 +386,9 @@ class TestKVRMTool:
 
     def test_kvrm_tool_unknown_operation(self):
         """Test KVRMTool returns error for unknown operation."""
-        from mindforge.kvrm.tool import KVRMTool
-        from mindforge.kvrm.resolver import KeyResolver
-        from mindforge.tools import ToolStatus
+        from conch.kvrm.tool import KVRMTool
+        from conch.kvrm.resolver import KeyResolver
+        from conch.tools import ToolStatus
 
         resolver = KeyResolver()
         tool = KVRMTool(key_resolver=resolver)
@@ -399,9 +399,9 @@ class TestKVRMTool:
 
     def test_kvrm_tool_resolve_missing_key(self):
         """Test KVRMTool resolve operation with missing key."""
-        from mindforge.kvrm.tool import KVRMTool
-        from mindforge.kvrm.resolver import KeyResolver
-        from mindforge.tools import ToolStatus
+        from conch.kvrm.tool import KVRMTool
+        from conch.kvrm.resolver import KeyResolver
+        from conch.tools import ToolStatus
 
         resolver = KeyResolver()
         tool = KVRMTool(key_resolver=resolver)
@@ -412,9 +412,9 @@ class TestKVRMTool:
 
     def test_kvrm_tool_search_missing_query(self):
         """Test KVRMTool search operation with missing query."""
-        from mindforge.kvrm.tool import KVRMTool
-        from mindforge.kvrm.resolver import KeyResolver
-        from mindforge.tools import ToolStatus
+        from conch.kvrm.tool import KVRMTool
+        from conch.kvrm.resolver import KeyResolver
+        from conch.tools import ToolStatus
 
         resolver = KeyResolver()
         tool = KVRMTool(key_resolver=resolver)
@@ -425,9 +425,9 @@ class TestKVRMTool:
 
     def test_kvrm_tool_ground_missing_claim(self):
         """Test KVRMTool ground operation with missing claim."""
-        from mindforge.kvrm.tool import KVRMTool
-        from mindforge.kvrm.resolver import KeyResolver
-        from mindforge.tools import ToolStatus
+        from conch.kvrm.tool import KVRMTool
+        from conch.kvrm.resolver import KeyResolver
+        from conch.tools import ToolStatus
 
         resolver = KeyResolver()
         tool = KVRMTool(key_resolver=resolver)
@@ -438,9 +438,9 @@ class TestKVRMTool:
 
     def test_kvrm_tool_store_missing_content(self):
         """Test KVRMTool store operation with missing content."""
-        from mindforge.kvrm.tool import KVRMTool
-        from mindforge.kvrm.resolver import KeyResolver
-        from mindforge.tools import ToolStatus
+        from conch.kvrm.tool import KVRMTool
+        from conch.kvrm.resolver import KeyResolver
+        from conch.tools import ToolStatus
 
         resolver = KeyResolver()
         tool = KVRMTool(key_resolver=resolver)
@@ -451,9 +451,9 @@ class TestKVRMTool:
 
     def test_kvrm_tool_resolve_success(self, tmp_path):
         """Test successful resolve operation."""
-        from mindforge.kvrm.tool import KVRMTool
-        from mindforge.kvrm.resolver import KeyResolver, FactKeyStore
-        from mindforge.tools import ToolStatus
+        from conch.kvrm.tool import KVRMTool
+        from conch.kvrm.resolver import KeyResolver, FactKeyStore
+        from conch.tools import ToolStatus
 
         resolver = KeyResolver()
         fact_store = FactKeyStore(db_path=tmp_path / "facts.db")
@@ -474,9 +474,9 @@ class TestKVRMTool:
 
     def test_kvrm_tool_search_success(self, tmp_path):
         """Test successful search operation."""
-        from mindforge.kvrm.tool import KVRMTool
-        from mindforge.kvrm.resolver import KeyResolver, FactKeyStore
-        from mindforge.tools import ToolStatus
+        from conch.kvrm.tool import KVRMTool
+        from conch.kvrm.resolver import KeyResolver, FactKeyStore
+        from conch.tools import ToolStatus
 
         resolver = KeyResolver()
         fact_store = FactKeyStore(db_path=tmp_path / "facts.db")
@@ -505,9 +505,9 @@ class TestKVRMIntegration:
 
     def test_full_grounding_workflow(self, tmp_path):
         """Test complete grounding workflow."""
-        from mindforge.kvrm.resolver import KeyResolver, FactKeyStore
-        from mindforge.kvrm.grounding import GroundingRouter
-        from mindforge.kvrm.tool import KVRMTool
+        from conch.kvrm.resolver import KeyResolver, FactKeyStore
+        from conch.kvrm.grounding import GroundingRouter
+        from conch.kvrm.tool import KVRMTool
 
         # Set up resolver with fact store
         resolver = KeyResolver()

@@ -1,4 +1,4 @@
-# MindForge Requirements
+# Conch Requirements
 # Install with: pip install -r requirements.txt
 
 # Core ML
@@ -36,6 +36,7 @@ psutil>=5.9.0
 evaluate>=0.4.0
 rouge-score>=0.1.2
 nltk>=3.8.0
+numpy>=1.24.0
 
 # LangGraph & Agent Framework
 langgraph>=0.2.0

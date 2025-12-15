@@ -1,7 +1,7 @@
 # Agent Tasks (Codex & Claude)
 
 ## Completed
-- [x] Reviewed `docs/MINDFORGE_DNA_FINAL_ARCHITECTURE.md` against codebase; documented major gaps and priorities (Owner: Codex)
+- [x] Reviewed `docs/CONCH_DNA_FINAL_ARCHITECTURE.md` against codebase; documented major gaps and priorities (Owner: Codex)
 - [x] Wired the DNA consciousness loop to instantiate cortex neurons, run Superego checks, and execute safe tools with ActionCortex planning/fallback to EGO (Owner: Codex)
 - [x] Pointed Superego/KVRM at `data/facts.db` and added task persistence + multi-task ACT flow (Owner: Codex)
 - [x] Connected THINK/ACT/REFLECT paths to the training pipeline (recording success/fallback data) and storing thoughts in memory for later retrieval (Owner: Codex)

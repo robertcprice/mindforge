@@ -1,8 +1,8 @@
-# MindForge Reward-Based Learning System
+# Conch Reward-Based Learning System
 
 ## Overview
 
-This document describes the design for implementing intrinsic reward-based learning in MindForge, enabling the AI to learn from its actions and improve its tool usage through self-supervised feedback.
+This document describes the design for implementing intrinsic reward-based learning in Conch, enabling the AI to learn from its actions and improve its tool usage through self-supervised feedback.
 
 ## Architecture
 
@@ -53,7 +53,7 @@ DO_NOTHING: reason for inaction
 REFLECT: topic to think about
 ```
 
-**File:** `mindforge/training/tool_formats.py`
+**File:** `conch/training/tool_formats.py`
 
 ### 2. Reward Signal Types
 
@@ -325,7 +325,7 @@ def calculate_total_reward(experience: Experience) -> float:
 ## File Structure
 
 ```
-mindforge/training/
+conch/training/
 ├── __init__.py
 ├── tool_formats.py      # Response format specification
 ├── reward_calculator.py # Reward computation

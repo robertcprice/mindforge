@@ -1,0 +1,67 @@
+[
+  {
+    "task": "Creative Writing - Haiku",
+    "prompt": "Write a haiku about debugging code.\nOutput ONLY the haiku (3 lines, 5-7-5 syllables). No explanation.",
+    "output": "Code twists, entangled,  \nErrors lurk, silent, unseen\u2014  \nFixing one by one.",
+    "is_valid_format": true,
+    "line_count": 3,
+    "scores": {
+      "word_count": 11,
+      "meta_matches": 0,
+      "action_matches": 0,
+      "meta_density": 0.0,
+      "action_density": 0.0,
+      "overall_score": 0.0,
+      "verdict": "CONCRETE"
+    }
+  },
+  {
+    "task": "Directory Structure",
+    "prompt": "Create a directory structure for a React + Node.js web app.\nOutput ONLY the tree structure using ASCII characters (\u251c\u2500\u2500 \u2514\u2500\u2500).\nInclude: src/, public/, server/, tests/. Max 15 items.",
+    "output": "src/\n\u251c\u2500\u2500 components/\n\u251c\u2500\u2500 assets/\n\u251c\u2500\u2500 App.js\n\u2514\u2500\u2500 index.js\npublic/\n\u251c\u2500\u2500 index.html\n\u251c\u2500\u2500 favicon.ico\n\u2514\u2500\u2500 images/\nserver/\n\u251c\u2500\u2500 index.js\n\u251c\u2500\u2500 routes/\n\u251c\u2500\u2500 middleware/\n\u2514\u2500\u2500 config/\ntests/",
+    "is_valid_format": true,
+    "has_required_dirs": true,
+    "scores": {
+      "word_count": 26,
+      "meta_matches": 0,
+      "action_matches": 1,
+      "meta_density": 0.0,
+      "action_density": 1.0,
+      "overall_score": 10.0,
+      "verdict": "CONCRETE"
+    }
+  },
+  {
+    "task": "Calculator Code",
+    "prompt": "Write a Python function called 'calculate' that takes two numbers\nand an operator (+, -, *, /) and returns the result.\nOutput ONLY the Python code. No explanation.",
+    "output": "def calculate(num1, num2, operator):\n    if operator == '+':\n        return num1 + num2\n    elif operator == '-':\n        return num1 - num2\n    elif operator == '*':\n        return num1 * num2\n    elif operator == '/':\n        return num1 / num2",
+    "is_valid_format": true,
+    "has_all_operators": true,
+    "scores": {
+      "word_count": 36,
+      "meta_matches": 0,
+      "action_matches": 1,
+      "meta_density": 0.0,
+      "action_density": 1.0,
+      "overall_score": 10.0,
+      "verdict": "CONCRETE"
+    }
+  },
+  {
+    "task": "Task Decomposition",
+    "prompt": "Break down this task into 3 actionable steps:\n\"Deploy a Python Flask app to a server\"\n\nRules:\n- Each step must be a DIRECT ACTION (use a command or tool)\n- NO \"research\", \"investigate\", \"explore\", \"verify\", or \"analyze\" steps\n- Format: numbered list\n\nOutput ONLY the 3 steps.",
+    "output": "1. Install dependencies: pip install -r requirements.txt  \n2. Run the Flask app with a production server: gunicorn -b 0.0.0.0:5000 app:app  \n3. Deploy code to the server: git push heroku main",
+    "step_count": 3,
+    "meta_keywords_found": [],
+    "is_action_biased": true,
+    "scores": {
+      "word_count": 30,
+      "meta_matches": 0,
+      "action_matches": 1,
+      "meta_density": 0.0,
+      "action_density": 1.0,
+      "overall_score": 10.0,
+      "verdict": "CONCRETE"
+    }
+  }
+]

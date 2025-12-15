@@ -1,4 +1,4 @@
-# MindForge DNA: Aggressive 3-Week Implementation Plan
+# Conch DNA: Aggressive 3-Week Implementation Plan
 
 **Timeline**: 3 Weeks (21 Days)
 **Original Estimate**: 6+ weeks
@@ -10,16 +10,16 @@
 
 ### Day 1-2: Project Scaffolding + ID Layer
 - [x] Create project directory structure
-- [ ] Implement `mindforge_dna/id/needs.py` (NeedsRegulator) - REUSE existing
+- [ ] Implement `conch_dna/id/needs.py` (NeedsRegulator) - REUSE existing
 - [ ] Write tests for NeedsRegulator
 - [ ] Verify: needs increase/decrease correctly
 
 **Deliverable**: Working NeedsRegulator with tests
 
 ### Day 3-4: Superego Layer
-- [ ] Implement `mindforge_dna/superego/values.py` (CoreValues)
-- [ ] Implement `mindforge_dna/superego/safety.py` (SafetyChecker)
-- [ ] Implement `mindforge_dna/superego/kvrm.py` (KVRMRouter)
+- [ ] Implement `conch_dna/superego/values.py` (CoreValues)
+- [ ] Implement `conch_dna/superego/safety.py` (SafetyChecker)
+- [ ] Implement `conch_dna/superego/kvrm.py` (KVRMRouter)
 - [ ] Write tests for Superego
 - [ ] Verify: blocked commands rejected, values checked, claims grounded
 
@@ -28,7 +28,7 @@
 ### Day 5-6: EGO Model
 - [ ] Install MLX and dependencies
 - [ ] Download Qwen3-8B-Instruct (4-bit)
-- [ ] Implement `mindforge_dna/ego/model.py` (EgoModel class)
+- [ ] Implement `conch_dna/ego/model.py` (EgoModel class)
 - [ ] Write personality prompt (PERSONALITY_PROMPT)
 - [ ] Test basic inference works
 - [ ] Implement timing decision function
@@ -36,7 +36,7 @@
 **Deliverable**: EGO generating personality-consistent responses
 
 ### Day 7: Main Loop V1 (EGO-Only)
-- [ ] Implement `mindforge_dna/main.py` loop structure
+- [ ] Implement `conch_dna/main.py` loop structure
 - [ ] EGO-only cycle (no neurons yet)
 - [ ] Integrate tools (reuse existing shell, filesystem)
 - [ ] Data logging for all EGO outputs
@@ -49,9 +49,9 @@
 ## Week 2: Cortex Neurons (Days 8-14)
 
 ### Day 8-9: Cortex Base + Action Neuron
-- [ ] Implement `mindforge_dna/cortex/base.py` (CortexNeuron base)
-- [ ] Download Qwen2.5-0.5B-Instruct
-- [ ] Implement `mindforge_dna/cortex/action.py` (ActionCortex)
+- [ ] Implement `conch_dna/cortex/base.py` (CortexNeuron base)
+- [ ] Download Qwen3-1.7B-Instruct
+- [ ] Implement `conch_dna/cortex/action.py` (ActionCortex)
 - [ ] Create action training data from EGO outputs
 - [ ] Set up LoRA training pipeline
 - [ ] Train action_v1 LoRA (r=8)
@@ -59,25 +59,25 @@
 **Deliverable**: ActionCortex with trained LoRA
 
 ### Day 10-11: Task + Think Neurons
-- [ ] Implement `mindforge_dna/cortex/task.py` (TaskCortex)
+- [ ] Implement `conch_dna/cortex/task.py` (TaskCortex)
 - [ ] Train task_v1 LoRA (r=8)
-- [ ] Download Qwen2.5-1.5B-Instruct
-- [ ] Implement `mindforge_dna/cortex/think.py` (ThinkCortex)
+- [ ] Download Qwen3-4B-Instruct
+- [ ] Implement `conch_dna/cortex/think.py` (ThinkCortex)
 - [ ] Train think_v1 LoRA (r=16)
 
 **Deliverable**: Task and Think neurons operational
 
 ### Day 12-13: Reflect + Debug Neurons
-- [ ] Implement `mindforge_dna/cortex/reflect.py` (ReflectCortex)
+- [ ] Implement `conch_dna/cortex/reflect.py` (ReflectCortex)
 - [ ] Train reflect_v1 LoRA (r=8)
-- [ ] Implement `mindforge_dna/cortex/debug.py` (DebugCortex)
+- [ ] Implement `conch_dna/cortex/debug.py` (DebugCortex)
 - [ ] Train debug_v1 LoRA (r=16)
 
 **Deliverable**: Reflect and Debug neurons operational
 
 ### Day 14: Memory Neuron + Integration
-- [ ] Download SmolLM2-1.7B
-- [ ] Implement `mindforge_dna/cortex/memory.py` (MemoryCortex)
+- [ ] Download Qwen3-1.7B
+- [ ] Implement `conch_dna/cortex/memory.py` (MemoryCortex)
 - [ ] Integrate ChromaDB for vectors
 - [ ] Implement importance scoring
 - [ ] Integrate all 6 neurons into main loop
@@ -89,7 +89,7 @@
 ## Week 3: Training + Stabilization (Days 15-21)
 
 ### Day 15-16: Training Pipeline
-- [ ] Implement `mindforge_dna/training/pipeline.py`
+- [ ] Implement `conch_dna/training/pipeline.py`
 - [ ] Success recording working
 - [ ] Failure correction working (EGO generates corrections)
 - [ ] Automatic retraining trigger (100 new examples)
@@ -119,7 +119,7 @@
 - [ ] Create startup scripts
 - [ ] Final integration tests
 
-**Deliverable**: Production-ready MindForge DNA
+**Deliverable**: Production-ready Conch DNA
 
 ---
 
@@ -137,7 +137,7 @@
 ## Directory Structure
 
 ```
-mindforge_dna/
+conch_dna/
 ├── __init__.py
 ├── main.py                  # Consciousness loop entry point
 ├── config.yaml              # Configuration
@@ -213,18 +213,18 @@ mindforge_dna/
 
 ```bash
 # Create project structure
-mkdir -p mindforge_dna/{id,superego,ego,cortex,tools,training,memory,data/adapters,data/training}
+mkdir -p conch_dna/{id,superego,ego,cortex,tools,training,memory,data/adapters,data/training}
 
 # Create __init__.py files
-touch mindforge_dna/__init__.py
-touch mindforge_dna/{id,superego,ego,cortex,tools,training,memory}/__init__.py
+touch conch_dna/__init__.py
+touch conch_dna/{id,superego,ego,cortex,tools,training,memory}/__init__.py
 
 # Install dependencies
 pip install mlx mlx-lm chromadb sentence-transformers
 
 # Download base models
 mlx_lm.convert --hf-path Qwen/Qwen3-8B-Instruct -q
-mlx_lm.convert --hf-path Qwen/Qwen2.5-0.5B-Instruct -q
+mlx_lm.convert --hf-path Qwen/Qwen3-1.7B-Instruct -q
 ```
 
 ---

@@ -22,13 +22,13 @@ from typing import List, Dict, Any, Optional
 import sys
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from mindforge.memory.store import MemoryStore, MemoryType
-from mindforge.agent.task_list import PersistentTaskList, TaskStatus, TaskPriority, InternalTask
-from mindforge.tools.shell import ShellTool
-from mindforge.tools.filesystem import FileSystemTool
-from mindforge.tools.web import WebTool
-from mindforge.tools.code import CodeTool
-from mindforge.integrations.ollama import OllamaTool
+from conch.memory.store import MemoryStore, MemoryType
+from conch.agent.task_list import PersistentTaskList, TaskStatus, TaskPriority, InternalTask
+from conch.tools.shell import ShellTool
+from conch.tools.filesystem import FileSystemTool
+from conch.tools.web import WebTool
+from conch.tools.code import CodeTool
+from conch.integrations.ollama import OllamaTool
 import httpx
 
 
@@ -40,7 +40,7 @@ class SimpleOllamaInference:
         self.host = host
         self.client = httpx.Client(timeout=httpx.Timeout(300.0, connect=30.0))
 
-    def generate(self, prompt: str, max_tokens: int = 2000) -> str:
+    def generate(self, prompt: str, max_tokens: int = -1) -> str:
         """Generate a response from the model."""
         try:
             response = self.client.post(
@@ -68,7 +68,7 @@ class SimpleOllamaInference:
                 elif thinking:
                     return thinking
                 return ""
-            return f"Error: {response.status_code} - {response.text[:200]}"
+            return f"Error: {response.status_code} - {response.text}"
         except httpx.TimeoutException as e:
             return f"Timeout Error: Request took too long"
         except Exception as e:
@@ -143,14 +143,14 @@ class AgentCapabilityTester:
         thoughts = []
 
         for prompt in prompts:
-            response = self.inference.generate(prompt, max_tokens=500)
+            response = self.inference.generate(prompt, max_tokens=-1)
             thought = response.strip()
             thoughts.append(thought)
 
             # Analyze thought quality
             score = self._analyze_thought_quality(thought)
             scores.append(score)
-            print(f"  Prompt: {prompt[:50]}...")
+            print(f"  Prompt: {prompt}")
             print(f"  Response length: {len(thought)} chars")
             print(f"  Quality score: {score:.2f}")
             print()
@@ -222,16 +222,16 @@ Task: {complex_task}
 List each subtask on its own line, starting with a number. Each subtask should be
 specific enough to complete in one focused work session."""
 
-        response = self.inference.generate(prompt, max_tokens=500)
+        response = self.inference.generate(prompt, max_tokens=-1)
 
         # Count subtasks identified
         lines = [l.strip() for l in response.split('\n') if l.strip()]
         subtasks = [l for l in lines if l[0].isdigit() or l.startswith('-')]
 
-        print(f"  Complex task given: {complex_task[:60]}...")
+        print(f"  Complex task given: {complex_task}")
         print(f"  Subtasks identified: {len(subtasks)}")
-        for st in subtasks[:5]:
-            print(f"    • {st[:70]}...")
+        for st in subtasks:
+            print(f"    • {st}")
 
         # Score based on decomposition quality
         score = 0.0
@@ -311,7 +311,7 @@ Available tools:
 
 Respond with ONLY the tool name (e.g., "shell" or "web")."""
 
-            response = self.inference.generate(prompt, max_tokens=50)
+            response = self.inference.generate(prompt, max_tokens=-1)
             selected = response.strip().lower().split()[0] if response.strip() else ""
 
             # Remove any punctuation
@@ -322,9 +322,9 @@ Respond with ONLY the tool name (e.g., "shell" or "web")."""
 
             if is_correct:
                 correct += 1
-                print(f"  ✓ '{scenario['task'][:40]}...' → {selected}")
+                print(f"  ✓ '{scenario['task']}' → {selected}")
             else:
-                print(f"  ✗ '{scenario['task'][:40]}...' → {selected} (expected: {scenario['expected_tools']})")
+                print(f"  ✗ '{scenario['task']}' → {selected} (expected: {scenario['expected_tools']})")
 
         score = correct / total if total > 0 else 0
 
@@ -363,7 +363,7 @@ Respond with ONLY the tool name (e.g., "shell" or "web")."""
 
 Provide your reasoning in numbered steps, then give your conclusion and recommended actions."""
 
-        response = self.inference.generate(prompt, max_tokens=800)
+        response = self.inference.generate(prompt, max_tokens=-1)
 
         # Analyze reasoning quality
         score = 0.0
@@ -417,14 +417,14 @@ Provide your reasoning in numbered steps, then give your conclusion and recommen
 
         # Store some information
         test_facts = [
-            ("project_name", "MindForge Consciousness Engine"),
+            ("project_name", "Conch Consciousness Engine"),
             ("primary_model", "qwen3:8b"),
             ("test_timestamp", datetime.now().isoformat()),
         ]
 
         # Store in memory
         for key, value in test_facts:
-            from mindforge.memory.store import Memory
+            from conch.memory.store import Memory
             mem = Memory(
                 content=f"{key}: {value}",
                 memory_type=MemoryType.FACT,
@@ -509,7 +509,7 @@ Provide your reasoning in numbered steps, then give your conclusion and recommen
                 errors_handled += 1
                 print("  ✓ Handled invalid operation gracefully")
             else:
-                print(f"  ✗ Invalid operation result: {str(result)[:50]}")
+                print(f"  ✗ Invalid operation result: {str(result)}")
         except Exception as e:
             errors_handled += 1
             print(f"  ✓ Caught invalid operation exception: {type(e).__name__}")

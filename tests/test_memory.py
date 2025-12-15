@@ -1,5 +1,5 @@
 """
-Comprehensive tests for MindForge Memory module.
+Comprehensive tests for Conch Memory module.
 
 Tests cover:
 - MemoryStore CRUD operations
@@ -20,7 +20,7 @@ class TestMemory:
 
     def test_memory_creation(self):
         """Test creating a Memory object."""
-        from mindforge.memory import Memory, MemoryType
+        from conch.memory import Memory, MemoryType
 
         memory = Memory(
             content="Test memory content",
@@ -36,7 +36,7 @@ class TestMemory:
 
     def test_memory_default_values(self):
         """Test Memory default values."""
-        from mindforge.memory import Memory, MemoryType
+        from conch.memory import Memory, MemoryType
 
         memory = Memory(
             content="Test",
@@ -50,7 +50,7 @@ class TestMemory:
 
     def test_memory_to_dict(self):
         """Test Memory serialization."""
-        from mindforge.memory import Memory, MemoryType
+        from conch.memory import Memory, MemoryType
 
         memory = Memory(
             content="Test",
@@ -67,7 +67,7 @@ class TestMemory:
 
     def test_memory_from_dict(self):
         """Test Memory deserialization."""
-        from mindforge.memory import Memory, MemoryType
+        from conch.memory import Memory, MemoryType
 
         data = {
             "content": "Test",
@@ -88,7 +88,7 @@ class TestMemoryType:
 
     def test_memory_types_exist(self):
         """Test all memory types exist."""
-        from mindforge.memory import MemoryType
+        from conch.memory import MemoryType
 
         assert MemoryType.INTERACTION.value == "interaction"
         assert MemoryType.THOUGHT.value == "thought"
@@ -105,7 +105,7 @@ class TestMemoryStore:
 
     def test_memory_store_initialization(self, tmp_path):
         """Test MemoryStore initializes database correctly."""
-        from mindforge.memory import MemoryStore
+        from conch.memory import MemoryStore
 
         db_path = tmp_path / "memories.db"
         store = MemoryStore(db_path=db_path)
@@ -114,7 +114,7 @@ class TestMemoryStore:
 
     def test_store_and_get(self, tmp_path):
         """Test storing and retrieving a memory."""
-        from mindforge.memory import MemoryStore, Memory, MemoryType
+        from conch.memory import MemoryStore, Memory, MemoryType
 
         db_path = tmp_path / "memories.db"
         store = MemoryStore(db_path=db_path)
@@ -135,7 +135,7 @@ class TestMemoryStore:
 
     def test_store_multiple_memories(self, tmp_path):
         """Test storing multiple memories."""
-        from mindforge.memory import MemoryStore, Memory, MemoryType
+        from conch.memory import MemoryStore, Memory, MemoryType
 
         db_path = tmp_path / "memories.db"
         store = MemoryStore(db_path=db_path)
@@ -152,7 +152,7 @@ class TestMemoryStore:
 
     def test_get_recent(self, tmp_path):
         """Test getting recent memories."""
-        from mindforge.memory import MemoryStore, Memory, MemoryType
+        from conch.memory import MemoryStore, Memory, MemoryType
         import time
 
         db_path = tmp_path / "memories.db"
@@ -174,7 +174,7 @@ class TestMemoryStore:
 
     def test_get_recent_by_type(self, tmp_path):
         """Test getting recent memories filtered by type."""
-        from mindforge.memory import MemoryStore, Memory, MemoryType
+        from conch.memory import MemoryStore, Memory, MemoryType
 
         db_path = tmp_path / "memories.db"
         store = MemoryStore(db_path=db_path)
@@ -192,7 +192,7 @@ class TestMemoryStore:
 
     def test_search_fts(self, tmp_path):
         """Test full-text search."""
-        from mindforge.memory import MemoryStore, Memory, MemoryType
+        from conch.memory import MemoryStore, Memory, MemoryType
 
         db_path = tmp_path / "memories.db"
         store = MemoryStore(db_path=db_path)
@@ -210,7 +210,7 @@ class TestMemoryStore:
 
     def test_search_no_results(self, tmp_path):
         """Test search with no results."""
-        from mindforge.memory import MemoryStore, Memory, MemoryType
+        from conch.memory import MemoryStore, Memory, MemoryType
 
         db_path = tmp_path / "memories.db"
         store = MemoryStore(db_path=db_path)
@@ -222,7 +222,7 @@ class TestMemoryStore:
 
     def test_update_importance(self, tmp_path):
         """Test updating memory importance."""
-        from mindforge.memory import MemoryStore, Memory, MemoryType
+        from conch.memory import MemoryStore, Memory, MemoryType
 
         db_path = tmp_path / "memories.db"
         store = MemoryStore(db_path=db_path)
@@ -244,7 +244,7 @@ class TestMemoryStore:
 
     def test_delete_memory(self, tmp_path):
         """Test deleting a memory."""
-        from mindforge.memory import MemoryStore, Memory, MemoryType
+        from conch.memory import MemoryStore, Memory, MemoryType
 
         db_path = tmp_path / "memories.db"
         store = MemoryStore(db_path=db_path)
@@ -263,7 +263,7 @@ class TestMemoryStore:
 
     def test_memory_tags(self, tmp_path):
         """Test memories with tags."""
-        from mindforge.memory import MemoryStore, Memory, MemoryType
+        from conch.memory import MemoryStore, Memory, MemoryType
 
         db_path = tmp_path / "memories.db"
         store = MemoryStore(db_path=db_path)
@@ -282,7 +282,7 @@ class TestMemoryStore:
 
     def test_memory_metadata(self, tmp_path):
         """Test memories with metadata."""
-        from mindforge.memory import MemoryStore, Memory, MemoryType
+        from conch.memory import MemoryStore, Memory, MemoryType
 
         db_path = tmp_path / "memories.db"
         store = MemoryStore(db_path=db_path)
@@ -300,7 +300,7 @@ class TestMemoryStore:
 
     def test_get_statistics(self, tmp_path):
         """Test getting memory statistics."""
-        from mindforge.memory import MemoryStore, Memory, MemoryType
+        from conch.memory import MemoryStore, Memory, MemoryType
 
         db_path = tmp_path / "memories.db"
         store = MemoryStore(db_path=db_path)
@@ -317,7 +317,7 @@ class TestMemoryStore:
 
     def test_get_nonexistent_memory(self, tmp_path):
         """Test getting a memory that doesn't exist."""
-        from mindforge.memory import MemoryStore
+        from conch.memory import MemoryStore
 
         db_path = tmp_path / "memories.db"
         store = MemoryStore(db_path=db_path)
@@ -331,7 +331,7 @@ class TestShortTermMemory:
 
     def test_short_term_memory_initialization(self):
         """Test ShortTermMemory initialization."""
-        from mindforge.memory.short_term import ShortTermMemory
+        from conch.memory.short_term import ShortTermMemory
 
         stm = ShortTermMemory(capacity=10)
         assert stm.capacity == 10
@@ -339,7 +339,7 @@ class TestShortTermMemory:
 
     def test_short_term_memory_add_and_get_recent(self):
         """Test adding and getting items from short-term memory."""
-        from mindforge.memory.short_term import ShortTermMemory
+        from conch.memory.short_term import ShortTermMemory
 
         stm = ShortTermMemory(capacity=10)
 
@@ -355,7 +355,7 @@ class TestShortTermMemory:
 
     def test_short_term_memory_capacity(self):
         """Test short-term memory respects capacity."""
-        from mindforge.memory.short_term import ShortTermMemory
+        from conch.memory.short_term import ShortTermMemory
 
         stm = ShortTermMemory(capacity=3)
 
@@ -372,7 +372,7 @@ class TestShortTermMemory:
 
     def test_short_term_memory_clear(self):
         """Test clearing short-term memory."""
-        from mindforge.memory.short_term import ShortTermMemory
+        from conch.memory.short_term import ShortTermMemory
 
         stm = ShortTermMemory(capacity=10)
 
@@ -390,7 +390,7 @@ class TestLongTermMemory:
 
     def test_long_term_memory_initialization(self, tmp_path):
         """Test LongTermMemory initialization."""
-        from mindforge.memory.long_term import LongTermMemory
+        from conch.memory.long_term import LongTermMemory
 
         # LongTermMemory takes sqlite_path and vector_path
         ltm = LongTermMemory(
@@ -405,7 +405,7 @@ class TestVectorMemory:
 
     def test_vector_memory_initialization(self, tmp_path):
         """Test VectorMemory initialization."""
-        from mindforge.memory.long_term import VectorMemory
+        from conch.memory.long_term import VectorMemory
 
         # VectorMemory may require chromadb - skip if not available
         try:
@@ -419,7 +419,7 @@ class TestVectorMemory:
 
     def test_vector_memory_add_and_search(self, tmp_path):
         """Test adding documents and semantic search."""
-        from mindforge.memory.long_term import VectorMemory
+        from conch.memory.long_term import VectorMemory
 
         try:
             vm = VectorMemory(
@@ -451,7 +451,7 @@ class TestMemoryConsolidation:
 
     def test_importance_affects_retention(self, tmp_path):
         """Test that importance affects memory retention order."""
-        from mindforge.memory import MemoryStore, Memory, MemoryType
+        from conch.memory import MemoryStore, Memory, MemoryType
 
         db_path = tmp_path / "memories.db"
         store = MemoryStore(db_path=db_path)
@@ -471,7 +471,7 @@ class TestMemoryRelationships:
 
     def test_related_memories(self, tmp_path):
         """Test storing related memories."""
-        from mindforge.memory import MemoryStore, Memory, MemoryType
+        from conch.memory import MemoryStore, Memory, MemoryType
 
         db_path = tmp_path / "memories.db"
         store = MemoryStore(db_path=db_path)

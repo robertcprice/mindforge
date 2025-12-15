@@ -28,7 +28,7 @@
 \definecolor{codegray}{rgb}{0.5,0.5,0.5}
 \definecolor{codepurple}{rgb}{0.58,0,0.82}
 \definecolor{backcolour}{rgb}{0.95,0.95,0.92}
-\definecolor{mindforgeblue}{RGB}{41,128,185}
+\definecolor{conchblue}{RGB}{41,128,185}
 \definecolor{kvrmgreen}{RGB}{39,174,96}
 
 \lstdefinestyle{pythonstyle}{
@@ -69,7 +69,7 @@
 \pagestyle{fancy}
 \fancyhf{}
 \rhead{KVRM: Zero-Hallucination Grounding}
-\lhead{MindForge Technical Report}
+\lhead{Conch Technical Report}
 \rfoot{Page \thepage}
 
 % ============================================================
@@ -80,12 +80,12 @@
     \textbf{Key-Value Response Mapping (KVRM):} \\
     \Large{Zero-Hallucination Grounding for Autonomous AI Consciousness} \\
     \vspace{0.5cm}
-    \large{MindForge Technical Report v1.0}
+    \large{Conch Technical Report v1.0}
 }
 
 \author{
-    MindForge Project \\
-    \texttt{github.com/conscious/mindforge}
+    Conch Project \\
+    \texttt{github.com/conscious/conch}
 }
 
 \date{\today}
@@ -98,7 +98,7 @@
 \maketitle
 
 \begin{abstract}
-We present \textbf{Key-Value Response Mapping (KVRM)}, a novel architecture for grounding factual claims in autonomous AI systems while preserving creative and reflective capabilities. KVRM addresses the fundamental tension between zero-hallucination requirements for factual content and the need for flexible, creative reasoning in consciousness-like systems. By routing claims through verified key stores based on claim type classification, KVRM achieves provable accuracy on verifiable facts while allowing unrestricted creative thought. We integrate KVRM into MindForge, a consciousness engine implementing a think$\rightarrow$ground$\rightarrow$decide$\rightarrow$act$\rightarrow$reflect cycle, demonstrating that grounded consciousness is both achievable and practical. Our implementation includes memory-backed verification, fact stores with content hashing, and extensible external source backends, providing a complete framework for trustworthy autonomous AI systems.
+We present \textbf{Key-Value Response Mapping (KVRM)}, a novel architecture for grounding factual claims in autonomous AI systems while preserving creative and reflective capabilities. KVRM addresses the fundamental tension between zero-hallucination requirements for factual content and the need for flexible, creative reasoning in consciousness-like systems. By routing claims through verified key stores based on claim type classification, KVRM achieves provable accuracy on verifiable facts while allowing unrestricted creative thought. We integrate KVRM into Conch, a consciousness engine implementing a think$\rightarrow$ground$\rightarrow$decide$\rightarrow$act$\rightarrow$reflect cycle, demonstrating that grounded consciousness is both achievable and practical. Our implementation includes memory-backed verification, fact stores with content hashing, and extensible external source backends, providing a complete framework for trustworthy autonomous AI systems.
 \end{abstract}
 
 \tableofcontents
@@ -146,7 +146,7 @@ We introduce \textbf{Key-Value Response Mapping (KVRM)}, an architecture that:
     \item \textbf{Provides transparency}: Marking verified vs. unverified claims for downstream decision-making
 \end{enumerate}
 
-We integrate KVRM into \textbf{MindForge}, demonstrating that grounded consciousness is practically achievable without sacrificing the flexibility required for autonomous operation.
+We integrate KVRM into \textbf{Conch}, demonstrating that grounded consciousness is practically achievable without sacrificing the flexibility required for autonomous operation.
 
 % ============================================================
 \section{Background and Related Work}
@@ -200,11 +200,11 @@ KVRM consists of four primary components:
     arrow/.style={->, thick}
 ]
     % Nodes
-    \node[box, fill=mindforgeblue!20] (thought) {Thought\\Generator};
+    \node[box, fill=conchblue!20] (thought) {Thought\\Generator};
     \node[box, fill=kvrmgreen!20, right=of thought] (classifier) {Claim\\Classifier};
     \node[box, fill=kvrmgreen!20, right=of classifier] (router) {Grounding\\Router};
     \node[box, fill=orange!20, below=of router] (stores) {Key Stores\\(Memory, Facts, External)};
-    \node[box, fill=mindforgeblue!20, right=of router] (decision) {Decision\\Engine};
+    \node[box, fill=conchblue!20, right=of router] (decision) {Decision\\Engine};
 
     % Arrows
     \draw[arrow] (thought) -- (classifier);
@@ -373,12 +373,12 @@ We define three verification levels:
 \end{definition}
 
 % ============================================================
-\section{Integration with MindForge Consciousness}
+\section{Integration with Conch Consciousness}
 % ============================================================
 
 \subsection{The Consciousness Cycle}
 
-MindForge implements a consciousness cycle:
+Conch implements a consciousness cycle:
 
 \begin{figure}[H]
 \centering
@@ -404,7 +404,7 @@ MindForge implements a consciousness cycle:
     \draw[arrow] (update) -- +(-1,0) |- (think);
 
 \end{tikzpicture}
-\caption{MindForge Consciousness Cycle with KVRM Grounding}
+\caption{Conch Consciousness Cycle with KVRM Grounding}
 \label{fig:cycle}
 \end{figure}
 
@@ -470,7 +470,7 @@ The MemoryKeyStore provides verified access to past thoughts and experiences:
 
 \begin{lstlisting}[language=Python, caption=Memory Key Store]
 class MemoryKeyStore(KeyStore):
-    """Key store backed by MindForge's memory system."""
+    """Key store backed by Conch's memory system."""
 
     KEY_PATTERN = re.compile(
         r"^mem:(thought|reflection|learning):\d{8}:[a-f0-9]+$"
@@ -653,12 +653,12 @@ We have presented KVRM, a practical architecture for grounding factual claims in
     \item A \textbf{claim type taxonomy} that distinguishes verifiable from non-verifiable content
     \item A \textbf{key store abstraction} providing deterministic, verified access to knowledge
     \item A \textbf{grounding router} that efficiently routes claims through appropriate stores
-    \item \textbf{Seamless integration} with the MindForge consciousness cycle
+    \item \textbf{Seamless integration} with the Conch consciousness cycle
 \end{enumerate}
 
 KVRM demonstrates that \textbf{zero-hallucination on factual content is achievable without sacrificing the flexibility required for autonomous operation}. By making verification status transparent to downstream decision-making, KVRM enables consciousness systems that are both creative and trustworthy.
 
-The complete implementation is available as part of the MindForge project.
+The complete implementation is available as part of the Conch project.
 
 % ============================================================
 % References

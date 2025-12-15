@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-MindForge Capability Tests
+Conch Capability Tests
 
 Comprehensive testing of the consciousness agent's ability to:
 1. Create a simple Python function
@@ -27,10 +27,10 @@ from rich.console import Console
 from rich.panel import Panel
 from rich.table import Table
 
-from mindforge.agent.langgraph_agent import ConsciousnessAgent, create_consciousness_graph
-from mindforge.agent.task_list import InternalTask, TaskStatus, TaskPriority, PersistentTaskList
-from mindforge.memory.store import MemoryStore
-from mindforge.integrations.ollama import OllamaClient
+from conch.agent.langgraph_agent import ConsciousnessAgent, create_consciousness_graph
+from conch.agent.task_list import InternalTask, TaskStatus, TaskPriority, PersistentTaskList
+from conch.memory.store import MemoryStore
+from conch.integrations.ollama import OllamaClient
 
 console = Console(soft_wrap=True, width=300)
 logging.basicConfig(level=logging.INFO, format="%(message)s")
@@ -278,7 +278,7 @@ class CapabilityTestHarness:
                     "Create a creative ASCII art generator. Steps: "
                     "1) Create a Python file 'ascii_art.py' with a function that converts text to ASCII art banner. "
                     "2) The function should use simple block characters to spell out text. "
-                    "3) Test it by generating ASCII art for the word 'MINDFORGE'. "
+                    "3) Test it by generating ASCII art for the word 'CONCH'. "
                     "4) Save the output to 'banner.txt'."
                 ),
                 "max_cycles": 10,
@@ -305,7 +305,7 @@ class CapabilityTestHarness:
         """Generate a comprehensive test report."""
         report = []
         report.append("=" * 80)
-        report.append("MINDFORGE CAPABILITY TEST REPORT")
+        report.append("CONCH CAPABILITY TEST REPORT")
         report.append(f"Generated: {datetime.now().isoformat()}")
         report.append("=" * 80)
         report.append("")
@@ -403,7 +403,7 @@ class CapabilityTestHarness:
 def main():
     """Run capability tests."""
     console.print(Panel.fit(
-        "[bold green]MindForge Capability Tests[/bold green]\n"
+        "[bold green]Conch Capability Tests[/bold green]\n"
         "Testing consciousness agent on real-world tasks"
     ))
 

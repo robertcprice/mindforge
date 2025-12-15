@@ -1,8 +1,8 @@
-# MindForge Consciousness Engine: Complete Documentation
+# Conch Consciousness Engine: Complete Documentation
 
 **Version**: 1.0.0
 **Generated**: December 11, 2025
-**Purpose**: Comprehensive technical documentation of all MindForge systems, functionality, and implementation details.
+**Purpose**: Comprehensive technical documentation of all Conch systems, functionality, and implementation details.
 
 ---
 
@@ -24,7 +24,7 @@
 
 ## 1. Overview
 
-MindForge is an autonomous consciousness simulation engine that implements a novel cognitive loop architecture. The system runs continuously, "waking up" periodically to think, act, reflect, and learn.
+Conch is an autonomous consciousness simulation engine that implements a novel cognitive loop architecture. The system runs continuously, "waking up" periodically to think, act, reflect, and learn.
 
 ### Core Principles
 
@@ -49,21 +49,21 @@ MindForge is an autonomous consciousness simulation engine that implements a nov
 
 | File | Purpose | Lines |
 |------|---------|-------|
-| `mindforge/agent/langgraph_agent.py` | Core consciousness loop | ~2130 |
-| `mindforge/memory/store.py` | Memory persistence | ~600 |
-| `mindforge/agent/task_list.py` | Task management | ~590 |
-| `mindforge/agent/journal.py` | Journaling system | ~265 |
-| `mindforge/core/needs.py` | Needs regulator | ~390 |
-| `mindforge/kvrm/grounding.py` | KVRM router | ~415 |
-| `mindforge/tools/base.py` | Tool framework | ~255 |
-| `mindforge/training/reward_calculator.py` | Reward system | ~510 |
-| `mindforge/training/tool_formats.py` | Tool parsing | ~560 |
+| `conch/agent/langgraph_agent.py` | Core consciousness loop | ~2130 |
+| `conch/memory/store.py` | Memory persistence | ~600 |
+| `conch/agent/task_list.py` | Task management | ~590 |
+| `conch/agent/journal.py` | Journaling system | ~265 |
+| `conch/core/needs.py` | Needs regulator | ~390 |
+| `conch/kvrm/grounding.py` | KVRM router | ~415 |
+| `conch/tools/base.py` | Tool framework | ~255 |
+| `conch/training/reward_calculator.py` | Reward system | ~510 |
+| `conch/training/tool_formats.py` | Tool parsing | ~560 |
 
 ---
 
 ## 2. Consciousness Loop
 
-**File**: `mindforge/agent/langgraph_agent.py`
+**File**: `conch/agent/langgraph_agent.py`
 
 The consciousness loop is implemented as a LangGraph StateGraph with conditional routing between nodes.
 
@@ -276,7 +276,7 @@ workflow.add_conditional_edges(
 
 ## 3. Memory System
 
-**File**: `mindforge/memory/store.py`
+**File**: `conch/memory/store.py`
 
 The memory system provides persistent storage with semantic search capabilities.
 
@@ -437,7 +437,7 @@ CREATE VIRTUAL TABLE memories_fts USING fts5(
 
 ## 4. Task Management System
 
-**File**: `mindforge/agent/task_list.py`
+**File**: `conch/agent/task_list.py`
 
 The task management system handles hierarchical task tracking with persistence.
 
@@ -628,7 +628,7 @@ When all subtasks complete, the parent automatically completes.
 
 ## 5. Journal System
 
-**File**: `mindforge/agent/journal.py`
+**File**: `conch/agent/journal.py`
 
 The journal system provides structured logging of experiences and reflections.
 
@@ -735,7 +735,7 @@ def assess_mood(self, state: ConsciousnessState) -> str:
 
 ## 6. Needs Regulator
 
-**File**: `mindforge/core/needs.py`
+**File**: `conch/core/needs.py`
 
 The needs system provides biologically-inspired motivation for autonomous behavior.
 
@@ -853,7 +853,7 @@ presets = {
 
 ## 7. KVRM Grounding System
 
-**File**: `mindforge/kvrm/grounding.py`
+**File**: `conch/kvrm/grounding.py`
 
 The Key-Value Response Mapping (KVRM) system ensures zero-hallucination on factual claims.
 
@@ -1007,7 +1007,7 @@ def _classify_claim(self, text: str) -> ClaimType:
 
 ## 8. Tool System
 
-**Files**: `mindforge/tools/base.py`, `mindforge/training/tool_formats.py`
+**Files**: `conch/tools/base.py`, `conch/training/tool_formats.py`
 
 ### Tool Base Class
 
@@ -1150,7 +1150,7 @@ The parser uses 6 strategies for robustness:
 
 ## 9. Reward Learning System
 
-**File**: `mindforge/training/reward_calculator.py`
+**File**: `conch/training/reward_calculator.py`
 
 ### Reward Components
 
@@ -1475,7 +1475,7 @@ The system demonstrates self-correction through:
 ## Appendix A: File Structure
 
 ```
-mindforge/
+conch/
 ├── agent/
 │   ├── __init__.py
 │   ├── langgraph_agent.py     # Core consciousness loop
@@ -1593,4 +1593,4 @@ mindforge/
 
 ---
 
-*Documentation generated from MindForge source code - December 11, 2025*
+*Documentation generated from Conch source code - December 11, 2025*

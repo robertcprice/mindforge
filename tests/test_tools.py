@@ -1,5 +1,5 @@
 """
-MindForge Tools Test Suite
+Conch Tools Test Suite
 
 Comprehensive tests for all tool capabilities.
 """
@@ -9,7 +9,7 @@ import tempfile
 import os
 from pathlib import Path
 
-from mindforge.tools import (
+from conch.tools import (
     Tool, ToolResult, ToolStatus, ToolRegistry, get_registry,
     ShellTool, FileSystemTool, WebTool, CodeTool, GitTool,
     setup_default_registry,

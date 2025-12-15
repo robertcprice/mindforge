@@ -1,4 +1,4 @@
-# MindForge DNA: Quick Reference & Execution Checklist
+# Conch DNA: Quick Reference & Execution Checklist
 
 ## Architecture At a Glance
 
@@ -38,12 +38,12 @@ ID (Pure Math) ─────────────────────�
 
 | Neuron | Base Model | LoRA Rank | Function |
 |--------|------------|-----------|----------|
-| **Think** | Qwen2.5-1.5B | r=16 | Thought generation, reasoning |
-| **Task** | Qwen2.5-0.5B | r=8 | Task extraction, prioritization |
-| **Action** | Qwen2.5-0.5B | r=8 | Tool selection, call formatting |
-| **Reflect** | Qwen2.5-0.5B | r=8 | Reflection, journaling, mood |
-| **Debug** | Qwen2.5-0.5B | r=16 | Error analysis, fix suggestions |
-| **Memory** | SmolLM2-1.7B | r=16 | Retrieve, compress, reconstruct |
+| **Think** | Qwen3-4B | r=16 | Thought generation, reasoning |
+| **Task** | Qwen3-1.7B | r=8 | Task extraction, prioritization |
+| **Action** | Qwen3-1.7B | r=8 | Tool selection, call formatting |
+| **Reflect** | Qwen3-1.7B | r=8 | Reflection, journaling, mood |
+| **Debug** | Qwen3-1.7B | r=16 | Error analysis, fix suggestions |
+| **Memory** | Qwen3-1.7B | r=16 | Retrieve, compress, reconstruct |
 
 ---
 
@@ -108,13 +108,13 @@ SLEEP LONGER when:
 
 ```bash
 # Immediate wake
-echo "wake" > /tmp/mindforge_signal
+echo "wake" > /tmp/conch_signal
 
 # Force 10-minute sleep
-echo "sleep 600" > /tmp/mindforge_signal
+echo "sleep 600" > /tmp/conch_signal
 
 # Emergency shutdown
-echo "die" > /tmp/mindforge_signal
+echo "die" > /tmp/conch_signal
 ```
 
 ---
@@ -247,7 +247,7 @@ echo "die" > /tmp/mindforge_signal
 
 ### Day 16 ☐
 - [ ] Set up LoRA training pipeline
-- [ ] Download Qwen2.5-0.5B base
+- [ ] Download Qwen3-1.7B base
 - [ ] Train action_v1 LoRA (r=8)
 - [ ] Verify: training completes
 
@@ -368,7 +368,7 @@ echo "die" > /tmp/mindforge_signal
 ### System Hangs
 ```bash
 # Kill and restart
-pkill -f mindforge
+pkill -f conch
 python main.py
 ```
 
@@ -401,7 +401,7 @@ rm data/memories.db
 | `data/training/*.jsonl` | Examples accumulating |
 | `data/adapters/*.safetensors` | New versions appearing |
 | `data/memories.db` | Size growing appropriately |
-| `/tmp/mindforge.log` | Error messages |
+| `/tmp/conch.log` | Error messages |
 
 ---
 

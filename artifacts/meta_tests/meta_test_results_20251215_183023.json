@@ -1,0 +1,64 @@
+[
+  {
+    "name": "Haiku",
+    "output": "",
+    "analysis": {
+      "error": "",
+      "meta_count": 0,
+      "action_count": 0,
+      "verdict": "ERROR"
+    },
+    "format_valid": false,
+    "passed": false
+  },
+  {
+    "name": "Directory Structure",
+    "output": "",
+    "analysis": {
+      "error": "",
+      "meta_count": 0,
+      "action_count": 0,
+      "verdict": "ERROR"
+    },
+    "format_valid": false,
+    "passed": false
+  },
+  {
+    "name": "Calculator Code",
+    "output": "",
+    "analysis": {
+      "error": "",
+      "meta_count": 0,
+      "action_count": 0,
+      "verdict": "ERROR"
+    },
+    "format_valid": false,
+    "passed": false
+  },
+  {
+    "name": "Task Decomposition",
+    "output": "",
+    "analysis": {
+      "error": "",
+      "meta_count": 0,
+      "action_count": 0,
+      "verdict": "ERROR"
+    },
+    "meta_keywords_found": [],
+    "step_count": 0,
+    "format_valid": false,
+    "passed": false
+  },
+  {
+    "name": "Story Opener",
+    "output": "",
+    "analysis": {
+      "error": "",
+      "meta_count": 0,
+      "action_count": 0,
+      "verdict": "ERROR"
+    },
+    "format_valid": true,
+    "passed": false
+  }
+]

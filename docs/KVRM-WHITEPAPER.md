@@ -1,13 +1,13 @@
 # Key-Value Response Mapping (KVRM)
 ## Zero-Hallucination Grounding for Autonomous AI Consciousness
 
-**MindForge Technical Report v1.0**
+**Conch Technical Report v1.0**
 
 ---
 
 ## Abstract
 
-We present **Key-Value Response Mapping (KVRM)**, a novel architecture for grounding factual claims in autonomous AI systems while preserving creative and reflective capabilities. KVRM addresses the fundamental tension between zero-hallucination requirements for factual content and the need for flexible, creative reasoning in consciousness-like systems. By routing claims through verified key stores based on claim type classification, KVRM achieves provable accuracy on verifiable facts while allowing unrestricted creative thought. We integrate KVRM into MindForge, a consciousness engine implementing a think→ground→decide→act→reflect cycle, demonstrating that grounded consciousness is both achievable and practical.
+We present **Key-Value Response Mapping (KVRM)**, a novel architecture for grounding factual claims in autonomous AI systems while preserving creative and reflective capabilities. KVRM addresses the fundamental tension between zero-hallucination requirements for factual content and the need for flexible, creative reasoning in consciousness-like systems. By routing claims through verified key stores based on claim type classification, KVRM achieves provable accuracy on verifiable facts while allowing unrestricted creative thought. We integrate KVRM into Conch, a consciousness engine implementing a think→ground→decide→act→reflect cycle, demonstrating that grounded consciousness is both achievable and practical.
 
 ---
 
@@ -17,7 +17,7 @@ We present **Key-Value Response Mapping (KVRM)**, a novel architecture for groun
 2. [Background and Related Work](#2-background-and-related-work)
 3. [System Architecture](#3-system-architecture)
 4. [The Grounding Algorithm](#4-the-grounding-algorithm)
-5. [Integration with MindForge Consciousness](#5-integration-with-mindforge-consciousness)
+5. [Integration with Conch Consciousness](#5-integration-with-conch-consciousness)
 6. [Key Store Implementations](#6-key-store-implementations)
 7. [Experimental Results](#7-experimental-results)
 8. [Discussion](#8-discussion)
@@ -209,11 +209,11 @@ def classify_claim(text: str) -> ClaimType:
 
 ---
 
-## 5. Integration with MindForge Consciousness
+## 5. Integration with Conch Consciousness
 
 ### 5.1 The Consciousness Cycle
 
-MindForge implements a consciousness cycle with KVRM integration:
+Conch implements a consciousness cycle with KVRM integration:
 
 ```
     ┌─────────┐
@@ -289,7 +289,7 @@ Provides verified access to past thoughts and experiences:
 
 ```python
 class MemoryKeyStore(KeyStore):
-    """Key store backed by MindForge's memory system."""
+    """Key store backed by Conch's memory system."""
 
     KEY_PATTERN = re.compile(
         r"^mem:(thought|reflection|learning):\d{8}:[a-f0-9]+$"
@@ -430,7 +430,7 @@ We have presented KVRM, a practical architecture for grounding factual claims in
 1. A **claim type taxonomy** that distinguishes verifiable from non-verifiable content
 2. A **key store abstraction** providing deterministic, verified access to knowledge
 3. A **grounding router** that efficiently routes claims through appropriate stores
-4. **Seamless integration** with the MindForge consciousness cycle
+4. **Seamless integration** with the Conch consciousness cycle
 
 KVRM demonstrates that **zero-hallucination on factual content is achievable without sacrificing the flexibility required for autonomous operation**. By making verification status transparent to downstream decision-making, KVRM enables consciousness systems that are both creative and trustworthy.
 
@@ -440,7 +440,7 @@ KVRM demonstrates that **zero-hallucination on factual content is achievable wit
 
 ### 10.1 Training Data Generation
 
-MindForge includes a comprehensive training infrastructure for continuous learning from consciousness cycles and grounding operations.
+Conch includes a comprehensive training infrastructure for continuous learning from consciousness cycles and grounding operations.
 
 **Training Data Sources:**
 
@@ -617,7 +617,7 @@ KVRM-CPU:     MEMORY → FETCH → DECODE_LLM → KEY → REGISTRY → EXECUTE �
 
 | Property | Value |
 |----------|-------|
-| Base Model | Qwen/Qwen2.5-Coder-1.5B |
+| Base Model | Qwen/Qwen3-1.7B-Instruct |
 | Fine-tuning Method | LoRA (r=16, alpha=32) |
 | Trainable Parameters | 18.5M (1.18% of total) |
 | Training Data | 50,000 instruction-decode pairs |
@@ -696,7 +696,7 @@ The KVRM ecosystem includes several proof-of-concept implementations:
 | **KVRM-CPU** | Hardware | Model-native instruction decode |
 | **KVRM-Vector** | Data Structures | Micro-LLM operations for vectors |
 | **KVRM-OS** | Operating Systems | Semantic programming for OS primitives |
-| **MindForge** | AI Consciousness | KVRM grounding for autonomous agents |
+| **Conch** | AI Consciousness | KVRM grounding for autonomous agents |
 | **Logos** | Bible Retrieval | Zero-hallucination verse lookup |
 
 Each project validates KVRM at different levels of abstraction, collectively demonstrating that **key-value response mapping is a general-purpose paradigm for verified AI execution**.

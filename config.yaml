@@ -1,5 +1,5 @@
-# MindForge Consciousness Engine Configuration
-# Human-readable config that loads into MindForgeConfig
+# Conch Consciousness Engine Configuration
+# Human-readable config that loads into ConchConfig
 # CoreValues remain immutable in Python (security)
 
 # Identity

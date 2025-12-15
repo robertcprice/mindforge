@@ -1,4 +1,4 @@
-# MindForge Capability Test Results
+# Conch Capability Test Results
 
 **Date**: December 10, 2025
 **Version**: 0.1
@@ -6,7 +6,7 @@
 
 ## Executive Summary
 
-MindForge demonstrates sophisticated cognitive capabilities including task decomposition, self-directed learning, and multi-step reasoning. However, several issues were identified that impact practical task completion:
+Conch demonstrates sophisticated cognitive capabilities including task decomposition, self-directed learning, and multi-step reasoning. However, several issues were identified that impact practical task completion:
 
 | Metric | Status |
 |--------|--------|
@@ -99,7 +99,7 @@ During a live `./run.sh` session, the following was observed:
 2. **Successful Tool Execution**:
    ```
    [1] ✅ tool: shell(command="git log --oneline --graph --all")
-       → * cdf30e4 Initial commit: MindForge Consciousness Engine v0.1
+       → * cdf30e4 Initial commit: Conch Consciousness Engine v0.1
 
    [2] ✅ tool: filesystem(operation="list", path=".")
        → [directory listing output]
@@ -211,7 +211,7 @@ harness.save_report()
 
 ## Conclusion
 
-MindForge demonstrates strong **cognitive architecture** with sophisticated reasoning, task decomposition, and self-reflection. The following issues have been addressed:
+Conch demonstrates strong **cognitive architecture** with sophisticated reasoning, task decomposition, and self-reflection. The following issues have been addressed:
 
 | Issue | Status |
 |-------|--------|

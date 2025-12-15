@@ -7,14 +7,14 @@ from datetime import datetime
 from pathlib import Path
 import tempfile
 
-from mindforge.agent.task_list import (
+from conch.agent.task_list import (
     InternalTask,
     TaskStatus,
     TaskPriority,
     PersistentTaskList,
     WorkLogEntry,
 )
-from mindforge.memory.store import MemoryStore
+from conch.memory.store import MemoryStore
 
 
 class TestTaskStatus:

@@ -1,6 +1,6 @@
 # Task Completion Evidence
 
-**Document Purpose**: Empirical evidence of MindForge consciousness agent completing complex multi-step tasks.
+**Document Purpose**: Empirical evidence of Conch consciousness agent completing complex multi-step tasks.
 
 ## Test Session: December 10, 2025
 
@@ -17,7 +17,7 @@ Five challenging tasks were designed to test multi-step reasoning:
 
 | ID | Task Description | Difficulty |
 |----|------------------|------------|
-| 538df5f4 | Analyze Python files in mindforge/tools/: count LOC, list classes, report most functions | High |
+| 538df5f4 | Analyze Python files in conch/tools/: count LOC, list classes, report most functions | High |
 | 04151510 | Use shell commands to find 5 largest Python files by line count | High |
 | 8bc1632f | Read langgraph_agent.py: identify graph nodes, entry point, state transitions | Normal |
 | c51bf7bf | Write a haiku about artificial consciousness, save to data/haiku.txt | Normal |
@@ -41,7 +41,7 @@ Five challenging tasks were designed to test multi-step reasoning:
 
 **Action Taken**:
 ```bash
-ls -la mindforge/tools/
+ls -la conch/tools/
 ```
 
 **Result Log**:
@@ -75,7 +75,7 @@ find . -name "*.py" -exec wc -l {} + | sort -n
 **Result Log**:
 ```
 [16:12:35] Completed: Result: Reflected on: **Shell commands:**
-- shell(command="ls -la mindforge/agent/langgraph_agent.py")
+- shell(command="ls -la conch/agent/langgraph_agent.py")
 ```
 
 **Evidence**: Agent identified file location and began structural analysis.
@@ -124,7 +124,7 @@ Error: Unknown operation: health. Valid: health, list, pull, create, delete...
 Beyond the 5 assigned tasks, the agent autonomously:
 
 1. **Identified 2 additional tasks** from its own reasoning:
-   - "Research Python files in mindforge/tools to assess sustainability relevance"
+   - "Research Python files in conch/tools to assess sustainability relevance"
    - "Explore codebase gently by reviewing file contents"
 
 2. **Created 4 subtasks** for complex task decomposition:
@@ -172,7 +172,7 @@ Returns JSON with complete task history including:
 
 ### Conclusion
 
-The MindForge consciousness agent demonstrates:
+The Conch consciousness agent demonstrates:
 
 1. **Multi-step reasoning**: Successfully decomposed complex tasks into executable steps
 2. **Tool orchestration**: Correctly selected and used shell, file_write tools
@@ -186,4 +186,4 @@ These results provide empirical evidence that the consciousness loop architectur
 ---
 
 *Evidence compiled: December 10, 2025*
-*MindForge Consciousness Agent v0.1*
+*Conch Consciousness Agent v0.1*

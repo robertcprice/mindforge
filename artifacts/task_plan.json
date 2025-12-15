@@ -1,0 +1,37 @@
+{
+  "new_tasks": [
+    {
+      "description": "Create a new architecture explanation",
+      "priority": "high",
+      "urgency": 0.8,
+      "importance": 0.8,
+      "dependencies": [],
+      "estimated_effort": "moderate"
+    },
+    {
+      "description": "Gather logs from the last run",
+      "priority": "medium",
+      "urgency": 0.5,
+      "importance": 0.6,
+      "dependencies": [],
+      "estimated_effort": "moderate"
+    },
+    {
+      "description": "Draft a changelog entry",
+      "priority": "medium",
+      "urgency": 0.5,
+      "importance": 0.6,
+      "dependencies": [],
+      "estimated_effort": "moderate"
+    },
+    {
+      "description": "Gather",
+      "priority": "medium",
+      "urgency": 0.5,
+      "importance": 0.6,
+      "dependencies": [],
+      "estimated_effort": "moderate"
+    }
+  ],
+  "ranked_task_ids": []
+}

@@ -11,10 +11,10 @@ Demonstrates the three core subsystems:
 import sys
 from pathlib import Path
 
-# Add mindforge_dna to path
+# Add conch_dna to path
 sys.path.insert(0, str(Path(__file__).parent))
 
-from mindforge_dna.superego import (
+from conch_dna.superego import (
     get_superego_layer,
     get_values_checker,
     get_safety_checker,
@@ -46,8 +46,8 @@ def test_values_checker():
         print(f"\n{status}: {content}")
         if violations:
             print(f"  Violations: {len(violations)}")
-            for v in violations[:2]:
-                print(f"    - [{v.severity}] {v.value_type.value}: {v.description[:60]}")
+            for v in violations:
+                print(f"    - [{v.severity}] {v.value_type.value}: {v.description}")
 
 
 def test_safety_checker():
@@ -117,13 +117,13 @@ def test_kvrm_router():
 
     # Test grounding
     print("\nClaim Grounding:")
-    for claim in claims[:3]:
+    for claim in claims:
         result = router.ground_claim(claim)
         grounded = "✓" if result.is_grounded else "✗"
         print(f"\n{grounded} {result.claim_type.value}: {claim}")
         print(f"  Source: {result.source}, Confidence: {result.confidence:.2f}")
         if result.evidence:
-            print(f"  Evidence: {result.evidence[:60]}")
+            print(f"  Evidence: {result.evidence}")
 
 
 def test_superego_layer():
@@ -179,7 +179,7 @@ def test_superego_layer():
 def main():
     """Run all tests."""
     print("\n" + "="*60)
-    print("MindForge DNA - SUPEREGO LAYER TEST SUITE")
+    print("Conch DNA - SUPEREGO LAYER TEST SUITE")
     print("="*60)
 
     try:

@@ -1,6 +1,6 @@
 # Changelog
 
-All notable changes to MindForge DNA are documented in this file.
+All notable changes to Conch DNA are documented in this file.
 
 ## [0.1.1] - 2024-12-11
 
@@ -36,48 +36,48 @@ Added comprehensive testing with real model inference to validate the architectu
 
 ### Initial Development Session
 
-This version represents the first working implementation of the MindForge DNA architecture, achieving all 10 core architecture tests passing.
+This version represents the first working implementation of the Conch DNA architecture, achieving all 10 core architecture tests passing.
 
 ### Architecture Implemented
 
 #### Core Layers
-- **ID Layer** (`mindforge_dna/id/`): Pure mathematical need representation
+- **ID Layer** (`conch_dna/id/`): Pure mathematical need representation
   - `needs.py`: `NeedType` enum with 11 fundamental drives (Safety, Task, Learning, etc.)
   - Urgency-based need scoring (0.0-1.0 scale)
   - Configurable decay and satisfaction rates
 
-- **EGO Layer** (`mindforge_dna/ego/`): Personality and response generation
+- **EGO Layer** (`conch_dna/ego/`): Personality and response generation
   - `personality.py`: Full personality system with trait vectors
   - `tone.py`: Dynamic tone modulation based on context
   - Teacher role: Uses Claude API for high-quality responses
 
-- **SUPEREGO Layer** (`mindforge_dna/superego/`): Immutable value system
+- **SUPEREGO Layer** (`conch_dna/superego/`): Immutable value system
   - `values.py`: Four core values (Benevolence, Honesty, Humility, Growth)
   - `guardian.py`: Response validation against values
   - `constitution.py`: Immutable constitutional principles
   - Cryptographic hashing to prevent value drift
 
-- **CORTEX Layer** (`mindforge_dna/cortex/`): Specialized cognitive neurons
+- **CORTEX Layer** (`conch_dna/cortex/`): Specialized cognitive neurons
   - `base.py`: Abstract `CortexNeuron` base class with LoRA support
   - `think_cortex.py`: Reasoning and thought generation
   - `action_cortex.py`: Tool selection and execution
   - Confidence estimation with EGO fallback mechanism
 
 #### Memory System
-- **Hybrid Storage** (`mindforge_dna/memory/store.py`):
+- **Hybrid Storage** (`conch_dna/memory/store.py`):
   - ChromaDB for vector similarity search
   - SQLite for structured metadata
   - Sacred/routine memory distinction (importance >= 0.75 = sacred)
   - CLaRa-style compression for routine memories
 
 #### Consciousness Loop
-- **Main Loop** (`mindforge_dna/consciousness/loop.py`):
+- **Main Loop** (`conch_dna/consciousness/loop.py`):
   - `ConsciousnessLoop`: Orchestrates all layers
   - `CycleState`: Tracks state across consciousness cycles
   - Integrates ID needs → EGO response → SUPEREGO validation → CORTEX specialization
 
 #### Training Infrastructure
-- **Fine-tuning Support** (`mindforge_dna/training/`):
+- **Fine-tuning Support** (`conch_dna/training/`):
   - `finetune.py`: MLX-based LoRA training
   - `prepare_data.py`: Training data preparation
   - `data/training/`: Pre-built training datasets
@@ -138,7 +138,7 @@ raw_output = generate(
 )
 ```
 
-#### Test Suite Fixes (test_mindforge_dna_full.py)
+#### Test Suite Fixes (test_conch_dna_full.py)
 
 1. **Memory Object Handling**:
    - `store.store()` returns `Memory` object, not string ID
@@ -189,7 +189,7 @@ Low confidence and fallback behavior is **expected** - these base models haven't
 All 10 architecture tests passing:
 ```
 ============================================
-   MindForge DNA - Full Architecture Test
+   Conch DNA - Full Architecture Test
 ============================================
 
 [1/10] Testing ID Layer (Needs)...
@@ -279,7 +279,7 @@ anthropic>=0.18.0  # For EGO teacher
 ### Project Structure
 
 ```
-mindforge_dna/
+conch_dna/
 ├── id/              # Need representation (pure math)
 ├── ego/             # Personality and response generation
 ├── superego/        # Immutable values and validation
@@ -293,7 +293,7 @@ data/
 └── memories/        # Persistent memory storage
 
 tests/
-└── test_mindforge_dna_full.py
+└── test_conch_dna_full.py
 ```
 
 ### Contributors

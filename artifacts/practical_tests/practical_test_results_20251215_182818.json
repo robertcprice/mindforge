@@ -1,0 +1,67 @@
+[
+  {
+    "task": "Creative Writing - Haiku",
+    "prompt": "Write a haiku about debugging code.\nOutput ONLY the haiku (3 lines, 5-7-5 syllables). No explanation.",
+    "output": "",
+    "is_valid_format": false,
+    "line_count": 0,
+    "scores": {
+      "word_count": 0,
+      "meta_matches": 0,
+      "action_matches": 0,
+      "meta_density": 0.0,
+      "action_density": 0.0,
+      "overall_score": 0.0,
+      "verdict": "CONCRETE"
+    }
+  },
+  {
+    "task": "Directory Structure",
+    "prompt": "Create a directory structure for a React + Node.js web app.\nOutput ONLY the tree structure using ASCII characters (\u251c\u2500\u2500 \u2514\u2500\u2500).\nInclude: src/, public/, server/, tests/. Max 15 items.",
+    "output": "",
+    "is_valid_format": false,
+    "has_required_dirs": false,
+    "scores": {
+      "word_count": 0,
+      "meta_matches": 0,
+      "action_matches": 0,
+      "meta_density": 0.0,
+      "action_density": 0.0,
+      "overall_score": 0.0,
+      "verdict": "CONCRETE"
+    }
+  },
+  {
+    "task": "Calculator Code",
+    "prompt": "Write a Python function called 'calculate' that takes two numbers\nand an operator (+, -, *, /) and returns the result.\nOutput ONLY the Python code. No explanation.",
+    "output": "",
+    "is_valid_format": false,
+    "has_all_operators": false,
+    "scores": {
+      "word_count": 0,
+      "meta_matches": 0,
+      "action_matches": 0,
+      "meta_density": 0.0,
+      "action_density": 0.0,
+      "overall_score": 0.0,
+      "verdict": "CONCRETE"
+    }
+  },
+  {
+    "task": "Task Decomposition",
+    "prompt": "Break down this task into 3 actionable steps:\n\"Deploy a Python Flask app to a server\"\n\nRules:\n- Each step must be a DIRECT ACTION (use a command or tool)\n- NO \"research\", \"investigate\", \"explore\", \"verify\", or \"analyze\" steps\n- Format: numbered list\n\nOutput ONLY the 3 steps.",
+    "output": "",
+    "step_count": 0,
+    "meta_keywords_found": [],
+    "is_action_biased": true,
+    "scores": {
+      "word_count": 0,
+      "meta_matches": 0,
+      "action_matches": 0,
+      "meta_density": 0.0,
+      "action_density": 0.0,
+      "overall_score": 0.0,
+      "verdict": "CONCRETE"
+    }
+  }
+]

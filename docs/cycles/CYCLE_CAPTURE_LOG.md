@@ -49,7 +49,7 @@ State loaded:
 
 ```
 [~] Check if ollama is running (use ollama health check), then list available models
-[ ] Research the Python files in mindforge/tools to assess sustainability relevance
+[ ] Research the Python files in conch/tools to assess sustainability relevance
 [ ] Explore the codebase gently by reviewing file contents
     [ ] **Review documentation and architecture files**
     [ ] **Audit code history for sustainability-related changes**
@@ -63,7 +63,7 @@ State loaded:
 
 **Generated Thought**:
 ```
-"I'm curious about the Python files in mindforge/tools—how do they interact with..."
+"I'm curious about the Python files in conch/tools—how do they interact with..."
 ```
 
 **Observation**: The agent expressed curiosity about exploring the codebase, consistent with the curiosity need (weight: 0.25).
@@ -84,7 +84,7 @@ State loaded:
 
 ### PICK_TASK Phase (17:34:32)
 
-**Selected Task**: `47a96d86` - "Research the Python files in mindforge/tools to assess their potential relevance to sustainability optimization"
+**Selected Task**: `47a96d86` - "Research the Python files in conch/tools to assess their potential relevance to sustainability optimization"
 
 **Priority**: NORMAL
 
@@ -217,4 +217,4 @@ This capture demonstrates:
 ---
 
 *Capture completed: December 10, 2025*
-*MindForge Consciousness Agent v0.1*
+*Conch Consciousness Agent v0.1*

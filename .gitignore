@@ -62,7 +62,7 @@ data/*.db
 data/*.sqlite
 data/*.json
 data/memories.db
-mindforge_memory.db
+conch_memory.db
 
 # Environment and secrets
 .env

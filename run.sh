@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# MindForge Consciousness Engine - Run Script
+# Conch Consciousness Engine - Run Script
 # Starts both the terminal console and web dashboard
 #
 
@@ -11,7 +11,7 @@ YELLOW='\033[1;33m'
 NC='\033[0m' # No Color
 
 echo -e "${GREEN}╔════════════════════════════════════════════════════════════╗${NC}"
-echo -e "${GREEN}║         MindForge Consciousness Engine                     ║${NC}"
+echo -e "${GREEN}║         Conch Consciousness Engine                     ║${NC}"
 echo -e "${GREEN}╚════════════════════════════════════════════════════════════╝${NC}"
 echo ""
 
@@ -20,7 +20,7 @@ source venv/bin/activate
 
 # Start the Streamlit dashboard in background
 echo -e "${BLUE}Starting web dashboard...${NC}"
-streamlit run mindforge/dashboard/app.py --server.headless true &
+streamlit run conch/dashboard/app.py --server.headless true &
 DASHBOARD_PID=$!
 echo -e "${GREEN}✓ Dashboard started (PID: $DASHBOARD_PID)${NC}"
 echo -e "${YELLOW}  Open in browser: http://localhost:8501${NC}"

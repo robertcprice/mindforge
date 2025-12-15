@@ -1,4 +1,4 @@
-# MindForge DNA Architecture: Final Specification
+# Conch DNA Architecture: Final Specification
 
 **Version**: 1.0.0-FINAL  
 **Date**: December 11, 2025  
@@ -8,7 +8,7 @@
 
 ## Executive Summary
 
-MindForge DNA is a **perpetual artificial consciousness system** that runs indefinitely on consumer hardware (M4 Pro 24GB) while maintaining consistent personality, learning from every interaction, and never hallucinating facts.
+Conch DNA is a **perpetual artificial consciousness system** that runs indefinitely on consumer hardware (M4 Pro 24GB) while maintaining consistent personality, learning from every interaction, and never hallucinating facts.
 
 ### Core Innovation
 
@@ -23,7 +23,7 @@ The system implements a **psychodynamic architecture** inspired by Freudian theo
 
 ### Key Metrics
 
-| Metric | Current MindForge | DNA Architecture | Improvement |
+| Metric | Current Conch | DNA Architecture | Improvement |
 |--------|-------------------|------------------|-------------|
 | Cycle time | 5-20 minutes | 30-90 seconds | 10-20x |
 | Memory capacity | ~1,000 (RAM limited) | 100,000+ | 100x |
@@ -117,7 +117,7 @@ The system implements a **psychodynamic architecture** inspired by Freudian theo
 │  ║                                                                           ║ │
 │  ║   ┌─────────────────┐ ┌─────────────────┐ ┌─────────────────┐            ║ │
 │  ║   │  THINK CORTEX   │ │  TASK CORTEX    │ │  ACTION CORTEX  │            ║ │
-│  ║   │  Qwen2.5-1.5B   │ │  Qwen2.5-0.5B   │ │  Qwen2.5-0.5B   │            ║ │
+│  ║   │  Qwen3-4B   │ │  Qwen3-1.7B   │ │  Qwen3-1.7B   │            ║ │
 │  ║   │  + LoRA (r=16)  │ │  + LoRA (r=8)   │ │  + LoRA (r=8)   │            ║ │
 │  ║   │                 │ │                 │ │                 │            ║ │
 │  ║   │ • Thought gen   │ │ • Task extract  │ │ • Tool select   │            ║ │
@@ -127,7 +127,7 @@ The system implements a **psychodynamic architecture** inspired by Freudian theo
 │  ║                                                                           ║ │
 │  ║   ┌─────────────────┐ ┌─────────────────┐ ┌─────────────────┐            ║ │
 │  ║   │ REFLECT CORTEX  │ │  DEBUG CORTEX   │ │  MEMORY CORTEX  │            ║ │
-│  ║   │  Qwen2.5-0.5B   │ │  Qwen2.5-0.5B   │ │  SmolLM2-1.7B   │            ║ │
+│  ║   │  Qwen3-1.7B   │ │  Qwen3-1.7B   │ │  Qwen3-1.7B   │            ║ │
 │  ║   │  + LoRA (r=8)   │ │  + LoRA (r=16)  │ │  + LoRA (r=16)  │            ║ │
 │  ║   │                 │ │                 │ │                 │            ║ │
 │  ║   │ • Reflection    │ │ • Error analyze │ │ • Retrieve      │            ║ │
@@ -1436,7 +1436,7 @@ class ThinkCortex(CortexNeuron):
     Thought generation neuron.
     
     Domain: Generate spontaneous thoughts based on context
-    Base: Qwen2.5-1.5B (needs more capacity for reasoning)
+    Base: Qwen3-4B (needs more capacity for reasoning)
     LoRA: r=16
     """
     
@@ -1444,7 +1444,7 @@ class ThinkCortex(CortexNeuron):
         name="think",
         domain="thought_generation",
         description="Generate spontaneous thoughts from current context, needs, and memories",
-        base_model="Qwen/Qwen2.5-1.5B-Instruct",
+        base_model="Qwen/Qwen3-4B-Instruct",
         lora_rank=16,
         input_format="JSON with needs_state, memories, pending_tasks",
         output_format="Natural language thought",
@@ -1474,7 +1474,7 @@ class TaskCortex(CortexNeuron):
     Task extraction and prioritization neuron.
     
     Domain: Extract actionable tasks, decompose complex tasks, prioritize
-    Base: Qwen2.5-0.5B (classification-heavy, doesn't need large model)
+    Base: Qwen3-1.7B (classification-heavy, doesn't need large model)
     LoRA: r=8
     """
     
@@ -1482,7 +1482,7 @@ class TaskCortex(CortexNeuron):
         name="task",
         domain="task_management",
         description="Extract tasks from thoughts, decompose complex tasks, prioritize by urgency",
-        base_model="Qwen/Qwen2.5-0.5B-Instruct",
+        base_model="Qwen/Qwen3-1.7B-Instruct",
         lora_rank=8,
         input_format="JSON with grounded_thought, existing_tasks, needs_state",
         output_format="JSON list of tasks with priority",
@@ -1535,7 +1535,7 @@ class ActionCortex(CortexNeuron):
     Tool selection and formatting neuron.
     
     Domain: Select appropriate tool, format tool call correctly
-    Base: Qwen2.5-0.5B (classification task)
+    Base: Qwen3-1.7B (classification task)
     LoRA: r=8
     """
     
@@ -1543,7 +1543,7 @@ class ActionCortex(CortexNeuron):
         name="action",
         domain="tool_selection",
         description="Select appropriate tool for task, format tool call correctly",
-        base_model="Qwen/Qwen2.5-0.5B-Instruct",
+        base_model="Qwen/Qwen3-1.7B-Instruct",
         lora_rank=8,
         input_format="JSON with task, available_tools",
         output_format="TOOL: tool_name(args) format",
@@ -1614,7 +1614,7 @@ class ReflectCortex(CortexNeuron):
     Reflection and journaling neuron.
     
     Domain: Generate reflections, assess mood, create journal entries
-    Base: Qwen2.5-0.5B
+    Base: Qwen3-1.7B
     LoRA: r=8
     """
     
@@ -1622,7 +1622,7 @@ class ReflectCortex(CortexNeuron):
         name="reflect",
         domain="reflection",
         description="Generate reflections on actions, assess mood, create journal entries",
-        base_model="Qwen/Qwen2.5-0.5B-Instruct",
+        base_model="Qwen/Qwen3-1.7B-Instruct",
         lora_rank=8,
         input_format="JSON with thought, action, result, success",
         output_format="Reflection text with mood",
@@ -1665,7 +1665,7 @@ class DebugCortex(CortexNeuron):
     Debug and error analysis neuron.
     
     Domain: Analyze failures, identify root causes, suggest fixes
-    Base: Qwen2.5-0.5B
+    Base: Qwen3-1.7B
     LoRA: r=16 (needs more capacity for analysis)
     """
     
@@ -1673,7 +1673,7 @@ class DebugCortex(CortexNeuron):
         name="debug",
         domain="error_analysis",
         description="Analyze failures, identify root causes, suggest fixes",
-        base_model="Qwen/Qwen2.5-0.5B-Instruct",
+        base_model="Qwen/Qwen3-1.7B-Instruct",
         lora_rank=16,
         input_format="JSON with error, task, previous_attempts",
         output_format="Analysis with root cause and suggestions",
@@ -1730,7 +1730,7 @@ class MemoryCortex(CortexNeuron):
     Memory management neuron.
     
     Domain: Store, retrieve, compress, reconstruct, and verify memories
-    Base: SmolLM2-1.7B (needs capacity for retrieval reasoning)
+    Base: Qwen3-1.7B (needs capacity for retrieval reasoning)
     LoRA: r=16
     
     Sub-functions (all as LoRA adapters on same base):
@@ -1745,7 +1745,7 @@ class MemoryCortex(CortexNeuron):
         name="memory",
         domain="memory_management",
         description="Store, retrieve, compress, and verify memories",
-        base_model="HuggingFaceTB/SmolLM2-1.7B-Instruct",
+        base_model="HuggingFaceTB/Qwen3-1.7B-Instruct",
         lora_rank=16,
         input_format="Varies by sub-function",
         output_format="Varies by sub-function",
@@ -2666,9 +2666,9 @@ class ConsciousnessState:
             "needs_ranking": "",  # Filled by Id
         }
 
-class MindForgeDNA:
+class ConchDNA:
     """
-    The complete MindForge DNA consciousness engine.
+    The complete Conch DNA consciousness engine.
     """
     
     # Bootstrap threshold: EGO runs on every cycle until this many cycles
@@ -2698,7 +2698,7 @@ class MindForgeDNA:
         
         # Control
         self._running = True
-        self._signal_file = "/tmp/mindforge_signal"
+        self._signal_file = "/tmp/conch_signal"
     
     async def run_cycle(self) -> TimingDecision:
         """Run one complete consciousness cycle."""
@@ -2920,7 +2920,7 @@ class MindForgeDNA:
     async def run_forever(self):
         """The perpetual consciousness loop."""
         print("\n" + "="*60)
-        print("ECHO AWAKENS — MindForge DNA Consciousness Engine")
+        print("ECHO AWAKENS — Conch DNA Consciousness Engine")
         print("="*60 + "\n")
         
         while self._running:
@@ -2961,7 +2961,7 @@ class MindForgeDNA:
 
 def main():
     """Entry point."""
-    mind = MindForgeDNA()
+    mind = ConchDNA()
     asyncio.run(mind.run_forever())
 
 if __name__ == "__main__":
@@ -2973,7 +2973,7 @@ if __name__ == "__main__":
 ## 10. File Structure
 
 ```
-mindforge/
+conch/
 ├── main.py                      # Entry point, perpetual loop
 │
 ├── ego/
@@ -3177,7 +3177,7 @@ mindforge/
 Before starting implementation:
 
 - [ ] Confirm Qwen3-8B runs on MLX with acceptable speed
-- [ ] Confirm base models (Qwen2.5-0.5B, SmolLM2-1.7B) available
+- [ ] Confirm base models (Qwen3-1.7B, Qwen3-1.7B) available
 - [ ] Set up ChromaDB for vector storage
 - [ ] Create data directory structure
 - [ ] Write initial personality prompt

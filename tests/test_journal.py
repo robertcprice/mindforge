@@ -9,7 +9,7 @@ import tempfile
 from datetime import datetime
 from pathlib import Path
 
-from mindforge.agent.journal import (
+from conch.agent.journal import (
     Journal,
     JournalEntry,
     JournalEntryType,

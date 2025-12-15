@@ -3,7 +3,7 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "mindforge"
+name = "conch"
 version = "0.1.0"
 description = "An always-on, always-thinking, always-learning AI assistant engine with good-hearted consciousness simulation"
 readme = "README.md"
@@ -75,12 +75,12 @@ quantization = [
 ]
 
 [project.scripts]
-mindforge = "mindforge.cli:app"
-mf-train = "mindforge.training.cli:train"
-mf-daemon = "mindforge.scheduler.daemon:run"
+conch = "conch.cli:app"
+mf-train = "conch.training.cli:train"
+mf-daemon = "conch.scheduler.daemon:run"
 
 [tool.hatch.build.targets.wheel]
-packages = ["mindforge"]
+packages = ["conch"]
 
 [tool.black]
 line-length = 100

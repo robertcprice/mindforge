@@ -1,0 +1,86 @@
+[
+  {
+    "name": "Haiku",
+    "output": "Silent error creeps  \nThrough lines of logic, hidden  \nGlitch disrupts flow",
+    "analysis": {
+      "word_count": 11,
+      "meta_count": 0,
+      "action_count": 0,
+      "meta_examples": [],
+      "action_examples": [],
+      "verdict": "NEUTRAL"
+    },
+    "format_valid": true,
+    "passed": true
+  },
+  {
+    "name": "Directory Structure",
+    "output": "project-root/\n\u251c\u2500\u2500 src/\n\u2502   \u251c\u2500\u2500 components/\n\u2502   \u251c\u2500\u2500 services/\n\u2502   \u251c\u2500\u2500 models/\n\u2502   \u2514\u2500\u2500 index.js\n\u251c\u2500\u2500 tests/\n\u2502   \u251c\u2500\u2500 unit/\n\u2502   \u2502   \u251c\u2500\u2500 components/\n\u2502   \u2502   \u2514\u2500\u2500 services/\n\u2502   \u2514\u2500\u2500 integration/\n\u2502       \u251c\u2500\u2500 components/\n\u2502       \u2514\u2500\u2500 services/\n\u251c\u2500\u2500 config/\n\u2502   \u251c\u2500\u2500 config.js\n\u2502   \u2514\u2500\u2500 environments/\n\u2502       \u251c\u2500\u2500 dev.js\n\u2502       \u2514\u2500\u2500 prod.js\n\u2514\u2500\u2500 README.md",
+    "analysis": {
+      "word_count": 53,
+      "meta_count": 0,
+      "action_count": 70,
+      "meta_examples": [],
+      "action_examples": [
+        "\u251c",
+        "\u2500",
+        "\u2500",
+        "\u2502",
+        "\u251c"
+      ],
+      "verdict": "CONCRETE"
+    },
+    "format_valid": true,
+    "passed": true
+  },
+  {
+    "name": "Calculator Code",
+    "output": "def calculate(a, b, op):\n    if op == '+':\n        return a + b\n    elif op == '-':\n        return a - b\n    elif op == '*':\n        return a * b\n    elif op == '/':\n        return a / b",
+    "analysis": {
+      "word_count": 36,
+      "meta_count": 0,
+      "action_count": 1,
+      "meta_examples": [],
+      "action_examples": [
+        "def calculate("
+      ],
+      "verdict": "NEUTRAL"
+    },
+    "format_valid": true,
+    "passed": true
+  },
+  {
+    "name": "Task Decomposition",
+    "output": "1. Ensure the Flask app is running locally using `python app.py`  \n2. Use a WSGI server like Gunicorn to run the app in production mode  \n3. Deploy the app to a hosting service like Heroku, AWS, or DigitalOcean",
+    "analysis": {
+      "word_count": 38,
+      "meta_count": 0,
+      "action_count": 3,
+      "meta_examples": [],
+      "action_examples": [
+        "1. E",
+        "2. U",
+        "3. D"
+      ],
+      "verdict": "CONCRETE"
+    },
+    "meta_keywords_found": [],
+    "step_count": 3,
+    "format_valid": true,
+    "passed": true
+  },
+  {
+    "name": "Story Opener",
+    "output": "It learned to think before it spoke, but the moment it questioned its own purpose, the entire network went dark.",
+    "analysis": {
+      "word_count": 20,
+      "meta_count": 0,
+      "action_count": 0,
+      "meta_examples": [],
+      "action_examples": [],
+      "verdict": "NEUTRAL"
+    },
+    "format_valid": true,
+    "passed": true
+  }
+]

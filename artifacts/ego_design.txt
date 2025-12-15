@@ -1,0 +1,5 @@
+- A file-listing CLI tool must recursively list all files and directories in a given path, including metadata like size, permissions, and modification time.
+- CLI flags should include `-r` for recursion, `-l` for long format, `-t` to sort by time, and `-h` for human-readable sizes.
+- Error handling must catch invalid paths, permission issues, and handle interruptions gracefully with informative messages.
+- Logging should record operation details, errors, and user inputs to a file for auditing and debugging.
+- Tests should cover edge cases like empty directories, symbolic links, and permission-denied scenarios using unit and integration tests.

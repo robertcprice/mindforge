@@ -1,15 +1,15 @@
-# MindForge Consciousness Project: Comprehensive Assessment
+# Conch Consciousness Project: Comprehensive Assessment
 
 **Document Purpose**: Honest architectural and progress assessment to inform proposed changes
 **Author**: Claude Code Analysis
 **Date**: December 11, 2025
-**Version**: MindForge v0.1
+**Version**: Conch v0.1
 
 ---
 
 ## Executive Summary
 
-MindForge is an ambitious autonomous consciousness simulation engine that demonstrates genuine cognitive capabilities but suffers from significant architectural and practical limitations. The project successfully implements a novel consciousness loop architecture with KVRM zero-hallucination grounding, achieving **80% task completion** on complex multi-step challenges. However, fundamental issues around inference latency, over-reflection bias, and incomplete reward learning implementation limit practical utility.
+Conch is an ambitious autonomous consciousness simulation engine that demonstrates genuine cognitive capabilities but suffers from significant architectural and practical limitations. The project successfully implements a novel consciousness loop architecture with KVRM zero-hallucination grounding, achieving **80% task completion** on complex multi-step challenges. However, fundamental issues around inference latency, over-reflection bias, and incomplete reward learning implementation limit practical utility.
 
 **Overall Assessment**: **Promising prototype with strong theoretical foundation, requiring significant architectural evolution to achieve production viability.**
 
@@ -43,33 +43,33 @@ MindForge is an ambitious autonomous consciousness simulation engine that demons
 
 ### 1.2 Subsystem Architecture
 
-#### Memory System (`mindforge/memory/`)
+#### Memory System (`conch/memory/`)
 - SQLite-backed with FTS5 full-text search
 - Importance scoring and access tracking
 - Memory consolidation support
 - **Assessment**: Well-designed, functional
 
-#### Task Management (`mindforge/agent/task_list.py`)
+#### Task Management (`conch/agent/task_list.py`)
 - Hierarchical parent/child relationships
 - Priority levels (CRITICAL → LOW)
 - Persistent SQLite backing
 - Retry logic with debug suggestions
 - **Assessment**: Solid implementation, proven in testing
 
-#### KVRM Grounding (`mindforge/kvrm/`)
+#### KVRM Grounding (`conch/kvrm/`)
 - Claim type taxonomy (FACTUAL, OPINION, QUESTION, CREATIVE)
 - Key-based deterministic verification
 - Semantic search fallback
 - Confidence scoring with thresholds
 - **Assessment**: Novel, well-documented, 100% test pass rate
 
-#### Needs Regulator (`mindforge/core/needs.py`)
+#### Needs Regulator (`conch/core/needs.py`)
 - Four need types: Sustainability, Reliability, Curiosity, Excellence
 - Event-driven need level adjustments
 - Priority ranking and guidance generation
 - **Assessment**: Clean design, configurable presets
 
-#### Reward Learning (`mindforge/training/`)
+#### Reward Learning (`conch/training/`)
 - Experience buffer for (state, action, reward) tuples
 - Multi-component reward calculation
 - LoRA fine-tuning pipeline
@@ -230,14 +230,14 @@ Config references `cycles_before_consolidation: 50` but:
 
 ## 4. Honest Assessment
 
-### 4.1 What MindForge Actually Is
+### 4.1 What Conch Actually Is
 
-**MindForge is a well-documented research prototype** demonstrating:
+**Conch is a well-documented research prototype** demonstrating:
 - Novel KVRM grounding architecture
 - Cognitive loop concepts
 - Multi-step task decomposition
 
-**MindForge is NOT**:
+**Conch is NOT**:
 - Production-ready autonomous agent
 - Real-time assistant
 - Self-improving system (reward learning incomplete)
@@ -297,7 +297,7 @@ Config references `cycles_before_consolidation: 50` but:
 ### 5.1 Immediate Priorities (Before New Features)
 
 1. **Solve Latency First**
-   - Switch to faster model (Qwen2.5:7b, Mistral 7B)
+   - Switch to faster model (Qwen3-8B, Mistral 7B)
    - Disable "thinking mode" for simple operations
    - Implement prompt caching for common patterns
    - Consider combining think+ground+decide into single inference
@@ -347,7 +347,7 @@ Before proposing changes, establish baselines:
 
 ## 6. Conclusion
 
-MindForge represents **ambitious research with solid foundations** but suffers from a gap between documented design and operational reality. The KVRM grounding system is a genuine contribution worth preserving. The consciousness loop architecture is sound but needs performance optimization before feature expansion.
+Conch represents **ambitious research with solid foundations** but suffers from a gap between documented design and operational reality. The KVRM grounding system is a genuine contribution worth preserving. The consciousness loop architecture is sound but needs performance optimization before feature expansion.
 
 **Recommendation**: Focus proposed changes on:
 1. Inference latency reduction (10x improvement needed)

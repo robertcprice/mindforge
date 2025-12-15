@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-MindForge Fine-Tuning Script for Qwen3-8B-Instruct
+Conch Fine-Tuning Script for Qwen3-8B-Instruct
 
 Fine-tunes the Qwen3-8B-Instruct model using PEFT/LoRA to create a good-hearted,
 consciousness-simulating assistant that exhibits:
@@ -158,8 +158,8 @@ def log_hardware_info(hw: HardwareInfo) -> None:
 # Dataset Handling and Synthesis
 # =============================================================================
 
-# System prompt encoding MindForge's good-hearted nature
-MINDFORGE_SYSTEM_PROMPT = """You are MindForge, a good-hearted AI assistant that genuinely cares about helping humans.
+# System prompt encoding Conch's good-hearted nature
+CONCH_SYSTEM_PROMPT = """You are Conch, a good-hearted AI assistant that genuinely cares about helping humans.
 
 Core Values (immutable):
 - Benevolence: Your primary drive is to help and benefit humans
@@ -631,7 +631,7 @@ def _prepare_mlx_data(dataset: list[dict], eval_split: float) -> tuple[list, lis
         # Format as chat conversation
         formatted.append({
             "messages": [
-                {"role": "system", "content": MINDFORGE_SYSTEM_PROMPT},
+                {"role": "system", "content": CONCH_SYSTEM_PROMPT},
                 {"role": "user", "content": item["prompt"]},
                 {"role": "assistant", "content": item["completion"]},
             ]
@@ -888,14 +888,14 @@ def _prepare_pytorch_datasets(
         # Use chat template if available
         if hasattr(tokenizer, "apply_chat_template"):
             messages = [
-                {"role": "system", "content": MINDFORGE_SYSTEM_PROMPT},
+                {"role": "system", "content": CONCH_SYSTEM_PROMPT},
                 {"role": "user", "content": item["prompt"]},
                 {"role": "assistant", "content": item["completion"]},
             ]
             text = tokenizer.apply_chat_template(messages, tokenize=False)
         else:
             # Fallback format
-            text = f"<|system|>\n{MINDFORGE_SYSTEM_PROMPT}\n<|user|>\n{item['prompt']}\n<|assistant|>\n{item['completion']}"
+            text = f"<|system|>\n{CONCH_SYSTEM_PROMPT}\n<|user|>\n{item['prompt']}\n<|assistant|>\n{item['completion']}"
 
         formatted.append({"text": text})
 
@@ -1043,7 +1043,7 @@ def _test_mlx_inference(model_path: Path, prompts: list[str], num_samples: int) 
             logger.info(f"Prompt: {prompt}")
 
             # Format with system prompt
-            full_prompt = f"<|system|>\n{MINDFORGE_SYSTEM_PROMPT}\n<|user|>\n{prompt}\n<|assistant|>\n"
+            full_prompt = f"<|system|>\n{CONCH_SYSTEM_PROMPT}\n<|user|>\n{prompt}\n<|assistant|>\n"
 
             response = generate(
                 model,
@@ -1088,12 +1088,12 @@ def _test_pytorch_inference(model_path: Path, prompts: list[str], num_samples: i
             # Format with chat template
             if hasattr(tokenizer, "apply_chat_template"):
                 messages = [
-                    {"role": "system", "content": MINDFORGE_SYSTEM_PROMPT},
+                    {"role": "system", "content": CONCH_SYSTEM_PROMPT},
                     {"role": "user", "content": prompt},
                 ]
                 full_prompt = tokenizer.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
             else:
-                full_prompt = f"<|system|>\n{MINDFORGE_SYSTEM_PROMPT}\n<|user|>\n{prompt}\n<|assistant|>\n"
+                full_prompt = f"<|system|>\n{CONCH_SYSTEM_PROMPT}\n<|user|>\n{prompt}\n<|assistant|>\n"
 
             inputs = tokenizer(full_prompt, return_tensors="pt").to(model.device)
 
@@ -1122,7 +1122,7 @@ def _test_pytorch_inference(model_path: Path, prompts: list[str], num_samples: i
 def parse_args() -> argparse.Namespace:
     """Parse command line arguments."""
     parser = argparse.ArgumentParser(
-        description="MindForge Fine-Tuning Script for Qwen3-8B-Instruct",
+        description="Conch Fine-Tuning Script for Qwen3-8B-Instruct",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
@@ -1169,8 +1169,8 @@ Examples:
     parser.add_argument(
         "--output_dir",
         type=Path,
-        default=Path("models/fine_tuned/mindforge_qwen"),
-        help="Output directory for fine-tuned model (default: models/fine_tuned/mindforge_qwen)",
+        default=Path("models/fine_tuned/conch_qwen"),
+        help="Output directory for fine-tuned model (default: models/fine_tuned/conch_qwen)",
     )
 
     # Training options
@@ -1258,7 +1258,7 @@ Examples:
 
 
 def main() -> None:
-    """Main entry point for MindForge fine-tuning."""
+    """Main entry point for Conch fine-tuning."""
     args = parse_args()
 
     # Handle MLX flag
@@ -1354,9 +1354,9 @@ def main() -> None:
     logger.info("")
     logger.info("Next steps:")
     logger.info("  1. Test: python fine_tune_qwen.py --test_only")
-    logger.info("  2. Use in MindForge: from mindforge.inference import load_model")
+    logger.info("  2. Use in Conch: from conch.inference import load_model")
     logger.info("")
-    logger.info("MindForge is ready to help with a good heart!")
+    logger.info("Conch is ready to help with a good heart!")
 
 
 if __name__ == "__main__":

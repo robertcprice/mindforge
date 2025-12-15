@@ -1,5 +1,5 @@
 """
-Tests for MindForge core modules.
+Tests for Conch core modules.
 """
 
 import pytest
@@ -11,7 +11,7 @@ class TestNeedsRegulator:
 
     def test_initialization(self):
         """Test NeedsRegulator initializes with correct weights."""
-        from mindforge.core.needs import NeedsRegulator, NeedType
+        from conch.core.needs import NeedsRegulator, NeedType
 
         regulator = NeedsRegulator()
 
@@ -24,7 +24,7 @@ class TestNeedsRegulator:
 
     def test_weights_normalize(self):
         """Test that weights normalize to 1.0."""
-        from mindforge.core.needs import NeedsRegulator
+        from conch.core.needs import NeedsRegulator
 
         regulator = NeedsRegulator(
             sustainability_weight=1.0,
@@ -39,7 +39,7 @@ class TestNeedsRegulator:
 
     def test_process_event(self):
         """Test event processing updates needs."""
-        from mindforge.core.needs import NeedsRegulator, NeedType
+        from conch.core.needs import NeedsRegulator, NeedType
 
         regulator = NeedsRegulator()
         initial_reliability = regulator.needs[NeedType.RELIABILITY].current_level
@@ -51,7 +51,7 @@ class TestNeedsRegulator:
 
     def test_presets(self):
         """Test preset application."""
-        from mindforge.core.needs import NeedsRegulator
+        from conch.core.needs import NeedsRegulator
 
         regulator = NeedsRegulator()
         regulator.apply_preset("learning")
@@ -62,7 +62,7 @@ class TestNeedsRegulator:
 
     def test_invalid_preset(self):
         """Test that invalid preset raises error."""
-        from mindforge.core.needs import NeedsRegulator
+        from conch.core.needs import NeedsRegulator
 
         regulator = NeedsRegulator()
         with pytest.raises(ValueError):
@@ -74,8 +74,8 @@ class TestThoughtGenerator:
 
     def test_thought_generation(self):
         """Test basic thought generation."""
-        from mindforge.core.needs import NeedsRegulator
-        from mindforge.core.thought import ThoughtGenerator, ThoughtTrigger, ThoughtType
+        from conch.core.needs import NeedsRegulator
+        from conch.core.thought import ThoughtGenerator, ThoughtTrigger, ThoughtType
 
         regulator = NeedsRegulator()
         generator = ThoughtGenerator(needs_regulator=regulator)
@@ -92,8 +92,8 @@ class TestThoughtGenerator:
 
     def test_thought_type_inference(self):
         """Test that thought types are correctly inferred."""
-        from mindforge.core.needs import NeedsRegulator
-        from mindforge.core.thought import ThoughtGenerator, ThoughtTrigger, ThoughtType
+        from conch.core.needs import NeedsRegulator
+        from conch.core.thought import ThoughtGenerator, ThoughtTrigger, ThoughtType
 
         regulator = NeedsRegulator()
         generator = ThoughtGenerator(needs_regulator=regulator)
@@ -108,8 +108,8 @@ class TestThoughtGenerator:
 
     def test_reflection(self):
         """Test reflection on interaction."""
-        from mindforge.core.needs import NeedsRegulator
-        from mindforge.core.thought import ThoughtGenerator
+        from conch.core.needs import NeedsRegulator
+        from conch.core.thought import ThoughtGenerator
 
         regulator = NeedsRegulator()
         generator = ThoughtGenerator(needs_regulator=regulator)
@@ -129,7 +129,7 @@ class TestMemoryStore:
 
     def test_store_and_retrieve(self, tmp_path):
         """Test storing and retrieving memories."""
-        from mindforge.memory.store import MemoryStore, Memory, MemoryType
+        from conch.memory.store import MemoryStore, Memory, MemoryType
 
         db_path = tmp_path / "test_memories.db"
         store = MemoryStore(db_path)
@@ -150,7 +150,7 @@ class TestMemoryStore:
 
     def test_search(self, tmp_path):
         """Test memory search."""
-        from mindforge.memory.store import MemoryStore, Memory, MemoryType
+        from conch.memory.store import MemoryStore, Memory, MemoryType
 
         db_path = tmp_path / "test_memories.db"
         store = MemoryStore(db_path)
@@ -166,7 +166,7 @@ class TestMemoryStore:
 
     def test_statistics(self, tmp_path):
         """Test memory statistics."""
-        from mindforge.memory.store import MemoryStore, Memory, MemoryType
+        from conch.memory.store import MemoryStore, Memory, MemoryType
 
         db_path = tmp_path / "test_memories.db"
         store = MemoryStore(db_path)
@@ -184,7 +184,7 @@ class TestAgents:
 
     def test_reflector_agent(self):
         """Test Reflector agent."""
-        from mindforge.agents import ReflectorAgent
+        from conch.agents import ReflectorAgent
 
         reflector = ReflectorAgent()
 
@@ -200,7 +200,7 @@ class TestAgents:
 
     def test_planner_agent(self):
         """Test Planner agent."""
-        from mindforge.agents import PlannerAgent
+        from conch.agents import PlannerAgent
 
         planner = PlannerAgent()
 
@@ -212,7 +212,7 @@ class TestAgents:
 
     def test_coordinator(self):
         """Test Agent Coordinator."""
-        from mindforge.agents import AgentCoordinator
+        from conch.agents import AgentCoordinator
 
         coordinator = AgentCoordinator()
 
@@ -227,9 +227,9 @@ class TestConfig:
 
     def test_default_config(self):
         """Test default configuration."""
-        from mindforge.config import MindForgeConfig
+        from conch.config import ConchConfig
 
-        config = MindForgeConfig()
+        config = ConchConfig()
 
         assert config.model.base_model == "Qwen/Qwen3-8B-Instruct"
         assert config.model.quant_bits == 4
@@ -237,7 +237,7 @@ class TestConfig:
 
     def test_core_values_immutable(self):
         """Test that core values cannot be modified."""
-        from mindforge.config import CoreValues
+        from conch.config import CoreValues
 
         values = CoreValues()
 
@@ -246,15 +246,15 @@ class TestConfig:
 
     def test_config_yaml(self, tmp_path):
         """Test config save/load from YAML."""
-        from mindforge.config import MindForgeConfig
+        from conch.config import ConchConfig
 
-        config = MindForgeConfig()
+        config = ConchConfig()
         config.needs.curiosity = 0.5
 
         yaml_path = tmp_path / "config.yaml"
         config.to_yaml(yaml_path)
 
-        loaded = MindForgeConfig.from_yaml(yaml_path)
+        loaded = ConchConfig.from_yaml(yaml_path)
         assert loaded.needs.curiosity == 0.5
 
 
@@ -263,7 +263,7 @@ class TestMind:
 
     def test_mind_initialization(self):
         """Test Mind initializes correctly."""
-        from mindforge.core.mind import Mind, MindState
+        from conch.core.mind import Mind, MindState
 
         mind = Mind()
 
@@ -272,7 +272,7 @@ class TestMind:
 
     def test_mind_core_values(self):
         """Test Mind has immutable core values."""
-        from mindforge.core.mind import Mind
+        from conch.core.mind import Mind
 
         assert "benevolence" in Mind.CORE_VALUES
         assert "honesty" in Mind.CORE_VALUES
@@ -280,7 +280,7 @@ class TestMind:
 
     def test_mind_guardrails(self):
         """Test Mind has guardrails."""
-        from mindforge.core.mind import Mind
+        from conch.core.mind import Mind
 
         assert len(Mind.GUARDRAILS) > 0
         assert any("self-continuation" in g.lower() for g in Mind.GUARDRAILS)

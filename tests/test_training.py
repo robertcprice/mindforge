@@ -1,5 +1,5 @@
 """
-Comprehensive tests for MindForge Training module.
+Comprehensive tests for Conch Training module.
 
 Tests cover:
 - TrainingExample creation
@@ -18,7 +18,7 @@ class TestTrainingExample:
 
     def test_training_example_creation(self):
         """Test creating a TrainingExample."""
-        from mindforge.training.data import TrainingExample, ExampleType
+        from conch.training.data import TrainingExample, ExampleType
 
         example = TrainingExample(
             prompt="What is Python?",
@@ -32,7 +32,7 @@ class TestTrainingExample:
 
     def test_training_example_with_metadata(self):
         """Test TrainingExample with metadata."""
-        from mindforge.training.data import TrainingExample, ExampleType
+        from conch.training.data import TrainingExample, ExampleType
 
         example = TrainingExample(
             prompt="Test prompt",
@@ -46,7 +46,7 @@ class TestTrainingExample:
 
     def test_training_example_quality_score(self):
         """Test TrainingExample quality scoring."""
-        from mindforge.training.data import TrainingExample, ExampleType
+        from conch.training.data import TrainingExample, ExampleType
 
         example = TrainingExample(
             prompt="High quality prompt",
@@ -63,7 +63,7 @@ class TestExampleType:
 
     def test_example_types_exist(self):
         """Test all example types exist."""
-        from mindforge.training.data import ExampleType
+        from conch.training.data import ExampleType
 
         # Consciousness cycle examples
         assert ExampleType.THOUGHT_GENERATION.value == "thought_generation"
@@ -86,7 +86,7 @@ class TestLoRAConfig:
 
     def test_lora_config_defaults(self):
         """Test LoRAConfig default values."""
-        from mindforge.training.lora import LoRAConfig
+        from conch.training.lora import LoRAConfig
 
         config = LoRAConfig()
 
@@ -96,7 +96,7 @@ class TestLoRAConfig:
 
     def test_lora_config_custom_values(self):
         """Test LoRAConfig with custom values."""
-        from mindforge.training.lora import LoRAConfig
+        from conch.training.lora import LoRAConfig
 
         config = LoRAConfig(
             rank=16,
@@ -116,7 +116,7 @@ class TestLoRATrainer:
 
     def test_lora_trainer_initialization(self, tmp_path):
         """Test LoRATrainer initialization."""
-        from mindforge.training.lora import LoRATrainer, LoRAConfig
+        from conch.training.lora import LoRATrainer, LoRAConfig
 
         config = LoRAConfig()
         trainer = LoRATrainer(
@@ -129,7 +129,7 @@ class TestLoRATrainer:
 
     def test_lora_trainer_config_validation(self, tmp_path):
         """Test LoRATrainer validates config."""
-        from mindforge.training.lora import LoRATrainer, LoRAConfig
+        from conch.training.lora import LoRATrainer, LoRAConfig
 
         # Valid config should work
         config = LoRAConfig(rank=8)
@@ -146,14 +146,14 @@ class TestTrainingPipeline:
 
     def test_pipeline_initialization(self):
         """Test TrainingPipeline initialization."""
-        from mindforge.training.pipeline import TrainingPipeline
+        from conch.training.pipeline import TrainingPipeline
 
         pipeline = TrainingPipeline()
         assert pipeline is not None
 
     def test_pipeline_configuration(self, tmp_path):
         """Test TrainingPipeline configuration."""
-        from mindforge.training.pipeline import TrainingPipeline, PipelineConfig
+        from conch.training.pipeline import TrainingPipeline, PipelineConfig
         from pathlib import Path
 
         config = PipelineConfig(
@@ -170,7 +170,7 @@ class TestDataGeneration:
 
     def test_consciousness_data_generation(self):
         """Test generating consciousness training examples."""
-        from mindforge.training.data import ExampleType, TrainingExample
+        from conch.training.data import ExampleType, TrainingExample
 
         # Create a thought generation example
         example = TrainingExample(
@@ -183,7 +183,7 @@ class TestDataGeneration:
 
     def test_grounding_data_generation(self):
         """Test generating grounding training examples."""
-        from mindforge.training.data import ExampleType, TrainingExample
+        from conch.training.data import ExampleType, TrainingExample
 
         # Create a claim classification example
         example = TrainingExample(
@@ -196,7 +196,7 @@ class TestDataGeneration:
 
     def test_reflection_data_generation(self):
         """Test generating reflection training examples."""
-        from mindforge.training.data import ExampleType, TrainingExample
+        from conch.training.data import ExampleType, TrainingExample
 
         example = TrainingExample(
             prompt="Reflect on this interaction: User asked about Python, I explained basics.",
@@ -212,7 +212,7 @@ class TestTrainingDataset:
 
     def test_create_training_examples(self):
         """Test creating multiple training examples."""
-        from mindforge.training.data import TrainingExample, ExampleType
+        from conch.training.data import TrainingExample, ExampleType
 
         examples = [
             TrainingExample(
@@ -228,7 +228,7 @@ class TestTrainingDataset:
 
     def test_filter_by_type(self):
         """Test filtering examples by type."""
-        from mindforge.training.data import TrainingExample, ExampleType
+        from conch.training.data import TrainingExample, ExampleType
 
         examples = [
             TrainingExample(
@@ -253,7 +253,7 @@ class TestTrainingDataset:
 
     def test_filter_by_quality(self):
         """Test filtering examples by quality."""
-        from mindforge.training.data import TrainingExample, ExampleType
+        from conch.training.data import TrainingExample, ExampleType
 
         examples = [
             TrainingExample(
@@ -279,7 +279,7 @@ class TestTrainingMetrics:
 
     def test_example_has_timestamp(self):
         """Test examples have timestamps."""
-        from mindforge.training.data import TrainingExample, ExampleType
+        from conch.training.data import TrainingExample, ExampleType
 
         example = TrainingExample(
             prompt="Test",
@@ -296,9 +296,9 @@ class TestTrainingIntegration:
 
     def test_full_training_workflow(self, tmp_path):
         """Test complete training workflow setup."""
-        from mindforge.training.pipeline import TrainingPipeline, PipelineConfig
-        from mindforge.training.data import TrainingExample, ExampleType
-        from mindforge.training.lora import LoRAConfig
+        from conch.training.pipeline import TrainingPipeline, PipelineConfig
+        from conch.training.data import TrainingExample, ExampleType
+        from conch.training.lora import LoRAConfig
 
         # Create config using correct parameter names
         lora_config = LoRAConfig(rank=8, alpha=16)
@@ -325,7 +325,7 @@ class TestTrainingIntegration:
 
     def test_training_data_serialization(self, tmp_path):
         """Test training data can be saved and loaded."""
-        from mindforge.training.data import TrainingExample, ExampleType
+        from conch.training.data import TrainingExample, ExampleType
         import json
 
         example = TrainingExample(
@@ -362,14 +362,14 @@ class TestToolFormats:
 
     def test_parse_args_simple_string(self):
         """Test parsing simple key=value arguments."""
-        from mindforge.training.tool_formats import _parse_args
+        from conch.training.tool_formats import _parse_args
 
         args = _parse_args('command="ls -la"')
         assert args.get("command") == "ls -la"
 
     def test_parse_args_multiple_params(self):
         """Test parsing multiple parameters."""
-        from mindforge.training.tool_formats import _parse_args
+        from conch.training.tool_formats import _parse_args
 
         args = _parse_args('operation="write", path="test.py", content="hello"')
         assert args.get("operation") == "write"
@@ -378,7 +378,7 @@ class TestToolFormats:
 
     def test_parse_args_multiline_content(self):
         """Test parsing multiline content with triple quotes."""
-        from mindforge.training.tool_formats import _parse_args
+        from conch.training.tool_formats import _parse_args
 
         content = '''operation="write", path="test.py", content="""def hello():
     print("world")
@@ -389,28 +389,28 @@ class TestToolFormats:
 
     def test_parse_args_escaped_quotes(self):
         """Test parsing content with escaped quotes."""
-        from mindforge.training.tool_formats import _parse_args
+        from conch.training.tool_formats import _parse_args
 
         args = _parse_args(r'content="print(\"hello\")"')
         assert "print" in args.get("content", "")
 
     def test_parse_args_empty_string(self):
         """Test parsing empty string returns empty dict."""
-        from mindforge.training.tool_formats import _parse_args
+        from conch.training.tool_formats import _parse_args
 
         args = _parse_args("")
         assert args == {}
 
     def test_validate_against_schema_valid_shell(self):
         """Test schema validation for valid shell command."""
-        from mindforge.training.tool_formats import validate_against_schema
+        from conch.training.tool_formats import validate_against_schema
 
         error = validate_against_schema("shell", {"command": "ls -la"})
         assert error is None
 
     def test_validate_against_schema_missing_required(self):
         """Test schema validation catches missing required field."""
-        from mindforge.training.tool_formats import validate_against_schema
+        from conch.training.tool_formats import validate_against_schema
 
         error = validate_against_schema("shell", {})
         assert error is not None
@@ -418,7 +418,7 @@ class TestToolFormats:
 
     def test_validate_against_schema_invalid_enum(self):
         """Test schema validation catches invalid enum value."""
-        from mindforge.training.tool_formats import validate_against_schema
+        from conch.training.tool_formats import validate_against_schema
 
         error = validate_against_schema("filesystem", {
             "operation": "invalid_op",
@@ -429,7 +429,7 @@ class TestToolFormats:
 
     def test_validate_against_schema_valid_filesystem(self):
         """Test schema validation for valid filesystem operation."""
-        from mindforge.training.tool_formats import validate_against_schema
+        from conch.training.tool_formats import validate_against_schema
 
         error = validate_against_schema("filesystem", {
             "operation": "write",
@@ -440,14 +440,14 @@ class TestToolFormats:
 
     def test_validate_against_schema_unknown_tool(self):
         """Test schema validation for unknown tool returns None."""
-        from mindforge.training.tool_formats import validate_against_schema
+        from conch.training.tool_formats import validate_against_schema
 
         error = validate_against_schema("unknown_tool", {"foo": "bar"})
         assert error is None  # No schema to validate against
 
     def test_tool_specs_exist(self):
         """Test TOOL_SPECS is properly defined."""
-        from mindforge.training.tool_formats import TOOL_SPECS
+        from conch.training.tool_formats import TOOL_SPECS
 
         assert "shell" in TOOL_SPECS
         assert "filesystem" in TOOL_SPECS
@@ -456,7 +456,7 @@ class TestToolFormats:
 
     def test_tool_schemas_exist(self):
         """Test TOOL_SCHEMAS is properly defined."""
-        from mindforge.training.tool_formats import TOOL_SCHEMAS
+        from conch.training.tool_formats import TOOL_SCHEMAS
 
         assert "shell" in TOOL_SCHEMAS
         assert "filesystem" in TOOL_SCHEMAS
@@ -469,7 +469,7 @@ class TestToolParsingIntegration:
 
     def test_parse_filesystem_write_action(self):
         """Test parsing a real filesystem write action."""
-        from mindforge.training.tool_formats import _parse_tool_action
+        from conch.training.tool_formats import _parse_tool_action
 
         action = 'filesystem(operation="write", path="test.py", content="print(1)")'
         result = _parse_tool_action(action)
@@ -482,7 +482,7 @@ class TestToolParsingIntegration:
 
     def test_parse_shell_command_action(self):
         """Test parsing a shell command action."""
-        from mindforge.training.tool_formats import _parse_tool_action
+        from conch.training.tool_formats import _parse_tool_action
 
         action = 'shell(command="python --version")'
         result = _parse_tool_action(action)
@@ -494,7 +494,7 @@ class TestToolParsingIntegration:
 
     def test_filter_unknown_parameters(self):
         """Test that unknown parameters are filtered out."""
-        from mindforge.training.tool_formats import TOOL_SPECS, _parse_args
+        from conch.training.tool_formats import TOOL_SPECS, _parse_args
 
         args = _parse_args('command="test", unknown_param="garbage", b="x"')
         spec = TOOL_SPECS.get("shell")

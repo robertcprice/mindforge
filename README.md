@@ -1,4 +1,4 @@
-# MindForge DNA
+# Conch DNA
 
 **A Freudian-Inspired Autonomous AI Consciousness Architecture with Immutable Values**
 
@@ -10,7 +10,7 @@
 
 ## Overview
 
-MindForge DNA is a novel AI consciousness architecture inspired by Freudian psychoanalytic theory, implementing a hierarchical cognitive system where:
+Conch DNA is a novel AI consciousness architecture inspired by Freudian psychoanalytic theory, implementing a hierarchical cognitive system where:
 
 - **SUPEREGO** (immutable values) governs ethical behavior and cannot be modified
 - **EGO** (personality) serves as the teacher and coordinator
@@ -35,13 +35,13 @@ The EGO (7B parameter model) acts as a personality core that:
 - Gradually delegates to trained neurons as they improve
 
 ### 3. Specialized CORTEX Neurons
-Six small, specialized models (0.5B-1.7B) with LoRA adapters:
-- **ThinkCortex**: Reasoning and thought generation (1.5B, r=16)
-- **TaskCortex**: Task extraction and prioritization (0.5B, r=8)
-- **ActionCortex**: Tool selection and execution (0.5B, r=8)
-- **ReflectCortex**: Self-reflection and learning (0.5B, r=8)
-- **DebugCortex**: Error analysis and recovery (0.5B, r=16)
-- **MemoryCortex**: Memory retrieval and importance (1.7B, r=16)
+Six specialized Qwen3-based models with LoRA adapters:
+- **ThinkCortex**: Reasoning and thought generation (Qwen3-4B, r=16)
+- **TaskCortex**: Task extraction and prioritization (Qwen3-1.7B, r=8)
+- **ActionCortex**: Tool selection and execution (Qwen3-1.7B, r=8)
+- **ReflectCortex**: Self-reflection and learning (Qwen3-1.7B, r=8)
+- **DebugCortex**: Error analysis and recovery (Qwen3-1.7B, r=16)
+- **MemoryCortex**: Memory retrieval and importance (Qwen3-1.7B, r=16)
 
 ### 4. Pure Mathematical ID
 The ID layer computes needs/drives using deterministic formulas:
@@ -53,7 +53,7 @@ The ID layer computes needs/drives using deterministic formulas:
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│                        MINDFORGE DNA ARCHITECTURE                           │
+│                        CONCH DNA ARCHITECTURE                           │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                             │
 │  ┌─────────────────────────────────────────────────────────────────────┐   │
@@ -156,10 +156,9 @@ pip install -e .
 ### Model Downloads
 
 Models are downloaded automatically on first use. Required models:
-- `mlx-community/Qwen2.5-7B-Instruct-4bit` (EGO - 4GB)
-- `mlx-community/Qwen2.5-1.5B-Instruct-4bit` (ThinkCortex - 1GB)
-- `mlx-community/Qwen2.5-0.5B-Instruct-4bit` (Other neurons - 0.3GB each)
-- `mlx-community/SmolLM2-1.7B-Instruct-4bit` (MemoryCortex - 1GB)
+- `mlx-community/Qwen3-8B-4bit` (EGO - personality DNA)
+- `mlx-community/Qwen3-4B-4bit` (ThinkCortex)
+- `mlx-community/Qwen3-1.7B-4bit` (Task/Action/Reflect/Debug/Memory Cortex)
 
 ## Quick Start
 
@@ -167,7 +166,7 @@ Models are downloaded automatically on first use. Required models:
 
 ```bash
 # Comprehensive architecture tests (10 tests)
-python test_mindforge_dna_full.py
+python test_conch_dna_full.py
 
 # Expected output:
 # TOTAL: 10/10 tests passed
@@ -177,14 +176,14 @@ python test_mindforge_dna_full.py
 ### Run a Single Consciousness Cycle
 
 ```bash
-python -m mindforge_dna.main --cycles 1 --debug
+python -m conch_dna.main --cycles 1 --debug
 ```
 
 ### Interactive Usage
 
 ```python
 from pathlib import Path
-from mindforge_dna.main import ConsciousnessLoop
+from conch_dna.main import ConsciousnessLoop
 
 # Create and initialize the loop
 loop = ConsciousnessLoop(data_dir=Path("data"))
@@ -199,7 +198,7 @@ print(f"Cycle {state.cycle_number}: reward={state.reward:.2f}, mood={state.mood}
 
 ```
 conscious/
-├── mindforge_dna/           # Core DNA architecture (NEW)
+├── conch_dna/           # Core DNA architecture (NEW)
 │   ├── id/                  # ID layer (needs/drives)
 │   │   └── needs.py         # NeedsRegulator (pure math)
 │   ├── ego/                 # EGO layer (personality)
@@ -227,12 +226,12 @@ conscious/
 │   │   └── git.py           # GitTool
 │   └── main.py              # ConsciousnessLoop
 │
-├── mindforge/               # Original MindForge (legacy)
+├── conch/               # Original Conch (legacy)
 │   └── ...
 │
 ├── docs/                    # Documentation
-│   ├── MINDFORGE_DNA_FINAL_ARCHITECTURE.md  # Complete spec
-│   ├── MINDFORGE_DNA_QUICKREF.md            # Quick reference
+│   ├── CONCH_DNA_FINAL_ARCHITECTURE.md  # Complete spec
+│   ├── CONCH_DNA_QUICKREF.md            # Quick reference
 │   ├── KVRM-WHITEPAPER.md                   # KVRM details
 │   └── ...
 │
@@ -241,10 +240,10 @@ conscious/
 │   └── ...
 │
 ├── models/                  # LoRA adapters (after training)
-│   └── mindforge_lora_mlx/
+│   └── conch_lora_mlx/
 │
 ├── scripts/                 # Utility scripts
-│   └── train_mindforge.py   # Training script
+│   └── train_conch.py   # Training script
 │
 └── tests/                   # Test suite
 ```
@@ -254,7 +253,7 @@ conscious/
 ### Full Architecture Test
 
 ```bash
-python test_mindforge_dna_full.py
+python test_conch_dna_full.py
 ```
 
 This tests all 10 components:
@@ -273,7 +272,7 @@ This tests all 10 components:
 
 ```bash
 python -c "
-from mindforge_dna.cortex.think import ThinkCortex
+from conch_dna.cortex.think import ThinkCortex
 
 think = ThinkCortex()
 output = think.think(
@@ -299,7 +298,7 @@ The system generates training data during operation:
 
 ```bash
 # Train with MLX (Apple Silicon)
-python scripts/train_mindforge.py \
+python scripts/train_conch.py \
     --model mlx-community/Qwen2.5-7B-Instruct-4bit \
     --epochs 3 \
     --lr 1e-4
@@ -309,7 +308,7 @@ python scripts/train_mindforge.py \
 
 ```json
 {
-  "text": "<|im_start|>system\nYou are MindForge...<|im_end|>\n<|im_start|>user\n...<|im_end|>\n<|im_start|>assistant\n...<|im_end|>"
+  "text": "<|im_start|>system\nYou are Conch...<|im_end|>\n<|im_start|>user\n...<|im_end|>\n<|im_start|>assistant\n...<|im_end|>"
 }
 ```
 
@@ -351,13 +350,13 @@ At all times:
 
 | File | Description |
 |------|-------------|
-| `mindforge_dna/main.py` | ConsciousnessLoop - main orchestrator |
-| `mindforge_dna/superego/__init__.py` | SuperegoLayer - combined checks |
-| `mindforge_dna/ego/model.py` | EgoModel - personality core |
-| `mindforge_dna/cortex/base.py` | CortexNeuron - neuron base class |
-| `mindforge_dna/id/needs.py` | NeedsRegulator - drive system |
-| `mindforge_dna/memory/store.py` | MemoryStore - hybrid memory |
-| `mindforge_dna/training/pipeline.py` | TrainingPipeline - LoRA training |
+| `conch_dna/main.py` | ConsciousnessLoop - main orchestrator |
+| `conch_dna/superego/__init__.py` | SuperegoLayer - combined checks |
+| `conch_dna/ego/model.py` | EgoModel - personality core |
+| `conch_dna/cortex/base.py` | CortexNeuron - neuron base class |
+| `conch_dna/id/needs.py` | NeedsRegulator - drive system |
+| `conch_dna/memory/store.py` | MemoryStore - hybrid memory |
+| `conch_dna/training/pipeline.py` | TrainingPipeline - LoRA training |
 
 ## Configuration
 
@@ -456,8 +455,8 @@ This project is under active development. See [CHANGELOG.md](CHANGELOG.md) for r
 ## Citation
 
 ```bibtex
-@software{mindforge_dna_2025,
-  title = {MindForge DNA: A Freudian-Inspired AI Consciousness Architecture},
+@software{conch_dna_2025,
+  title = {Conch DNA: A Freudian-Inspired AI Consciousness Architecture},
   author = {Price, Bobby},
   year = {2025},
   url = {https://github.com/yourusername/conscious}
@@ -466,4 +465,4 @@ This project is under active development. See [CHANGELOG.md](CHANGELOG.md) for r
 
 ---
 
-*MindForge DNA v0.2.0 - December 2025*
+*Conch DNA v0.2.0 - December 2025*

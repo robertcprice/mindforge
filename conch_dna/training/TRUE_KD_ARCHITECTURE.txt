@@ -1,0 +1,359 @@
+TRUE KNOWLEDGE DISTILLATION ARCHITECTURE
+Conch DNA - Conscious AI System
+
+================================================================================
+SYSTEM OVERVIEW
+================================================================================
+
+┌─────────────────────────────────────────────────────────────────────────┐
+│                         KNOWLEDGE DISTILLATION PIPELINE                  │
+└─────────────────────────────────────────────────────────────────────────┘
+
+Teacher Model                    Student Model
+(EGO - 8B)                       (3B-4B)
+    │                                │
+    ├─ Generate Responses            ├─ Learn to Mimic
+    ├─ Extract Logits                ├─ Match Distributions
+    └─ Soft Targets                  └─ LoRA Adapters
+         │                                │
+         └────────> KL Divergence <───────┘
+                   + Cross-Entropy
+                         │
+                   ┌─────▼─────┐
+                   │ Optimizer │
+                   └─────┬─────┘
+                         │
+                   ┌─────▼─────┐
+                   │  Adapters │
+                   └───────────┘
+
+================================================================================
+COMPONENT ARCHITECTURE
+================================================================================
+
+┌─────────────────────────────────────────────────────────────────────────┐
+│ 1. CONFIGURATION LAYER (KDConfig)                                       │
+├─────────────────────────────────────────────────────────────────────────┤
+│ - Temperature (T): Softens distributions for knowledge transfer         │
+│ - Alpha (α): Weights KD vs CE loss (0.7 = 70% KD, 30% CE)             │
+│ - LoRA: Rank, scale, dropout for efficient fine-tuning                 │
+│ - Training: Learning rate, batch size, iterations                       │
+│ - Checkpointing: Save frequency, validation batches                     │
+└─────────────────────────────────────────────────────────────────────────┘
+                              │
+                              ▼
+┌─────────────────────────────────────────────────────────────────────────┐
+│ 2. MODEL LOADING LAYER                                                  │
+├─────────────────────────────────────────────────────────────────────────┤
+│ Teacher (EGO):                                                          │
+│   - Qwen2.5-7B-Instruct (4-bit/8-bit quantized)                        │
+│   - Frozen weights (inference only)                                     │
+│   - Generates soft probability distributions                            │
+│                                                                          │
+│ Student:                                                                │
+│   - Llama-3.2-3B or Qwen2.5-3B/4B (4-bit quantized)                   │
+│   - Trainable LoRA adapters                                            │
+│   - Learns to match teacher's distributions                             │
+└─────────────────────────────────────────────────────────────────────────┘
+                              │
+                              ▼
+┌─────────────────────────────────────────────────────────────────────────┐
+│ 3. DATA GENERATION LAYER                                                │
+├─────────────────────────────────────────────────────────────────────────┤
+│ For each training prompt:                                               │
+│   1. Teacher generates response                                         │
+│   2. Extract full logit distributions                                   │
+│   3. Store as soft targets (dark knowledge)                             │
+│   4. Include hard labels for CE loss                                    │
+│                                                                          │
+│ Output: Training examples with teacher probability distributions        │
+└─────────────────────────────────────────────────────────────────────────┘
+                              │
+                              ▼
+┌─────────────────────────────────────────────────────────────────────────┐
+│ 4. LOSS COMPUTATION LAYER                                               │
+├─────────────────────────────────────────────────────────────────────────┤
+│ KD Loss (Soft Targets):                                                │
+│   - Apply temperature scaling: P = softmax(logits / T)                  │
+│   - Compute KL divergence: KL(P_teacher || P_student)                  │
+│   - Scale by T²: kd_loss * T²                                          │
+│                                                                          │
+│ CE Loss (Hard Labels):                                                 │
+│   - Standard cross-entropy with true labels                             │
+│   - No temperature scaling (T=1.0)                                      │
+│                                                                          │
+│ Combined Loss:                                                          │
+│   total = α * kd_loss + (1-α) * ce_loss                                │
+│   default: 0.7 * kd_loss + 0.3 * ce_loss                               │
+└─────────────────────────────────────────────────────────────────────────┘
+                              │
+                              ▼
+┌─────────────────────────────────────────────────────────────────────────┐
+│ 5. TRAINING LAYER (Custom MLX Loop)                                     │
+├─────────────────────────────────────────────────────────────────────────┤
+│ For each iteration:                                                     │
+│   1. Sample batch from training data                                    │
+│   2. Forward pass: get student logits                                   │
+│   3. Retrieve teacher soft targets                                      │
+│   4. Align vocabularies if needed                                       │
+│   5. Compute combined loss                                              │
+│   6. Backpropagate through LoRA                                         │
+│   7. Update adapter weights                                             │
+│   8. Log metrics, save checkpoints                                      │
+└─────────────────────────────────────────────────────────────────────────┘
+                              │
+                              ▼
+┌─────────────────────────────────────────────────────────────────────────┐
+│ 6. OUTPUT LAYER                                                         │
+├─────────────────────────────────────────────────────────────────────────┤
+│ adapters_kd/{domain}/                                                   │
+│   ├── adapters.safetensors    (LoRA weights)                           │
+│   ├── adapter_config.json     (KD configuration)                        │
+│   ├── checkpoint_{N}/          (Training checkpoints)                   │
+│   └── kd_metrics.json          (Loss curves)                            │
+│                                                                          │
+│ kd_summary.json                (Overall summary)                        │
+└─────────────────────────────────────────────────────────────────────────┘
+
+================================================================================
+LOSS FUNCTION MATHEMATICS
+================================================================================
+
+KL Divergence (Kullback-Leibler):
+┌─────────────────────────────────────────────────────────────────────────┐
+│ KL(P || Q) = Σ P(x) * log(P(x) / Q(x))                                 │
+│                                                                          │
+│ Where:                                                                   │
+│   P = Teacher distribution (soft targets)                               │
+│   Q = Student distribution (predictions)                                │
+│                                                                          │
+│ Temperature Scaled:                                                      │
+│   P = softmax(teacher_logits / T)                                       │
+│   Q = softmax(student_logits / T)                                       │
+│                                                                          │
+│ Final Loss:                                                              │
+│   KL_loss = Σ P * (log P - log Q) * T²                                 │
+└─────────────────────────────────────────────────────────────────────────┘
+
+Cross-Entropy (Standard):
+┌─────────────────────────────────────────────────────────────────────────┐
+│ CE = -Σ y_true * log(y_pred)                                           │
+│                                                                          │
+│ Where:                                                                   │
+│   y_true = One-hot encoded true labels                                  │
+│   y_pred = softmax(student_logits)  [T=1.0]                            │
+└─────────────────────────────────────────────────────────────────────────┘
+
+Combined Loss:
+┌─────────────────────────────────────────────────────────────────────────┐
+│ L_total = α * L_KD + (1-α) * L_CE                                      │
+│                                                                          │
+│ Default (α=0.7):                                                        │
+│   L_total = 0.7 * KL_loss + 0.3 * CE_loss                              │
+│                                                                          │
+│ Gradient Flow:                                                           │
+│   ∂L/∂θ = α * ∂L_KD/∂θ + (1-α) * ∂L_CE/∂θ                            │
+└─────────────────────────────────────────────────────────────────────────┘
+
+================================================================================
+DATA FLOW DIAGRAM
+================================================================================
+
+Input Prompts
+      │
+      ▼
+┌──────────────┐
+│   Teacher    │  → Generates Response
+│   (Frozen)   │  → Extracts Logits [batch, seq, vocab_teacher]
+└──────┬───────┘
+       │
+       │ Soft Targets (Dark Knowledge)
+       ▼
+┌──────────────┐
+│  Align Vocab │  → If vocab_teacher ≠ vocab_student
+│  (Optional)  │  → Truncate or Project
+└──────┬───────┘
+       │
+       ├─────────────────────────────┐
+       │                             │
+       ▼                             ▼
+┌──────────────┐              ┌──────────────┐
+│  KD Loss     │              │  CE Loss     │
+│  Computation │              │  Computation │
+└──────┬───────┘              └──────┬───────┘
+       │                             │
+       └─────────┬───────────────────┘
+                 ▼
+         ┌──────────────┐
+         │ Combined Loss │
+         └──────┬───────┘
+                ▼
+         ┌──────────────┐
+         │  Optimizer   │  → Adam with lr=1e-4
+         │  (Adam)      │
+         └──────┬───────┘
+                ▼
+         ┌──────────────┐
+         │ Student LoRA │  → Updates adapter weights
+         │  Parameters  │
+         └──────────────┘
+                ▼
+         ┌──────────────┐
+         │  Checkpoint  │  → Save every N steps
+         │    Saving    │
+         └──────────────┘
+
+================================================================================
+VOCABULARY ALIGNMENT STRATEGY
+================================================================================
+
+Scenario 1: Same Vocabulary (e.g., Qwen → Qwen)
+┌─────────────────────────────────────────────────────────────────────────┐
+│ teacher_logits: [batch, seq, 151936]                                    │
+│ student_logits: [batch, seq, 151936]                                    │
+│                                                                          │
+│ Action: None (direct KL divergence)                                     │
+└─────────────────────────────────────────────────────────────────────────┘
+
+Scenario 2: Different Vocabulary (e.g., Qwen → Llama)
+┌─────────────────────────────────────────────────────────────────────────┐
+│ teacher_logits: [batch, seq, 151936]  (Qwen vocab)                     │
+│ student_logits: [batch, seq, 32000]   (Llama vocab)                    │
+│                                                                          │
+│ Strategy: Truncate                                                       │
+│   teacher_aligned = teacher_logits[..., :32000]                         │
+│   student_aligned = student_logits                                      │
+│   Result: [batch, seq, 32000] vs [batch, seq, 32000]                   │
+│                                                                          │
+│ Alternative: Project (more sophisticated)                               │
+│   Pad student with -inf for extra tokens                                │
+│   Or learn projection matrix                                            │
+└─────────────────────────────────────────────────────────────────────────┘
+
+================================================================================
+TRAINING WORKFLOW
+================================================================================
+
+Step 1: Initialization
+   ├─ Load teacher model (frozen)
+   ├─ Load student model
+   └─ Convert student to LoRA
+
+Step 2: Data Generation
+   ├─ For each prompt:
+   │  ├─ Teacher forward pass
+   │  ├─ Extract logits (soft targets)
+   │  └─ Store with hard labels
+   └─ Create training dataset
+
+Step 3: Training Loop
+   ├─ For each iteration:
+   │  ├─ Sample batch
+   │  ├─ Student forward pass
+   │  ├─ Align vocabularies
+   │  ├─ Compute KD loss
+   │  ├─ Compute CE loss
+   │  ├─ Combine losses
+   │  ├─ Backpropagate
+   │  ├─ Update LoRA weights
+   │  └─ Log metrics
+   └─ Save checkpoints periodically
+
+Step 4: Finalization
+   ├─ Save final adapter
+   ├─ Save configuration
+   ├─ Save metrics
+   └─ Generate summary
+
+================================================================================
+INTEGRATION WITH CONCH DNA
+================================================================================
+
+┌─────────────────────────────────────────────────────────────────────────┐
+│                        EGO (Conscious Layer)                             │
+│                      Qwen2.5-7B-Instruct                                 │
+│                                                                          │
+│  Roles:                                                                  │
+│    • Teacher for distillation                                           │
+│    • Source of personality DNA                                          │
+│    • Correction mechanism for failures                                  │
+│    • Quality auditor for outputs                                        │
+└─────────────────────────────────────┬───────────────────────────────────┘
+                                      │
+                    Knowledge Distillation (TRUE KD)
+                                      │
+                        ┌─────────────▼─────────────┐
+                        │  Soft Probability Targets │
+                        │    (Dark Knowledge)        │
+                        └─────────────┬─────────────┘
+                                      │
+                                      ▼
+┌─────────────────────────────────────────────────────────────────────────┐
+│                     CORTEX (Specialized Neurons)                         │
+│                   Llama-3.2-3B / Qwen2.5-3B                             │
+│                                                                          │
+│  Neurons (with LoRA adapters):                                          │
+│    • Thinking   → Reasoning and analysis                                │
+│    • Task       → Task decomposition                                    │
+│    • Action     → Tool selection                                        │
+│    • Reflection → Learning from outcomes                                │
+│    • Debug      → Error diagnosis                                       │
+│    • Memory     → Importance assessment                                 │
+│                                                                          │
+│  Each neuron inherits EGO's personality + domain specialization         │
+└─────────────────────────────────────────────────────────────────────────┘
+
+================================================================================
+PERFORMANCE CHARACTERISTICS
+================================================================================
+
+Memory Footprint:
+  Teacher (Qwen-8B, 4-bit): ~6GB
+  Student (Llama-3B, 4-bit): ~3GB
+  Training overhead:         ~2GB
+  Total:                     ~10-12GB
+  
+  → Fits comfortably on 16GB Mac M1/M2/M3
+
+Computational Complexity:
+  Forward pass (teacher):    O(N * V_teacher)
+  Forward pass (student):    O(N * V_student)
+  KL divergence:             O(N * V_min)
+  Backpropagation (LoRA):    O(N * r)  where r=LoRA rank
+  
+  → Significantly faster than full fine-tuning
+
+Training Time (M2 Max):
+  Data generation:           2-3 minutes per domain
+  Training (200 iters):      5-10 minutes per domain
+  Total (6 domains):         30-60 minutes
+  
+  → Production run fits in 1 hour
+
+Convergence:
+  Typical KD loss:          2.0-4.0 (depends on temperature)
+  Typical CE loss:          1.0-2.0
+  Combined loss:            2.0-3.0 (α=0.7)
+  
+  → Lower is better, stabilizes after ~100 iterations
+
+================================================================================
+COMPARISON: SIMPLE vs TRUE KD
+================================================================================
+
+┌─────────────────┬──────────────────────┬──────────────────────────────┐
+│    Aspect       │  Simple Distillation │      TRUE KD (This)          │
+├─────────────────┼──────────────────────┼──────────────────────────────┤
+│ What's Learned  │ Final outputs only   │ Probability distributions    │
+│ Dark Knowledge  │ ✗ Not captured       │ ✓ Fully captured            │
+│ Temperature     │ ✗ Not used           │ ✓ Configurable (0.5-10.0)   │
+│ Loss Function   │ CE only              │ KL + CE (combined)           │
+│ Generalization  │ Good                 │ Better                       │
+│ Robustness      │ Moderate             │ High                         │
+│ Uncertainty     │ ✗ Not captured       │ ✓ Captured                  │
+│ Implementation  │ Simple               │ Moderate complexity          │
+│ Training Time   │ Fast                 │ Similar (slightly slower)    │
+│ Quality         │ Good                 │ Superior                     │
+└─────────────────┴──────────────────────┴──────────────────────────────┘
+
+================================================================================

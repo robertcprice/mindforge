@@ -1,5 +1,5 @@
 """
-Comprehensive tests for MindForge Agents module.
+Comprehensive tests for Conch Agents module.
 
 Tests cover:
 - Agent base class
@@ -18,7 +18,7 @@ class TestAgentBase:
 
     def test_agent_core_values(self):
         """Test agents have core values."""
-        from mindforge.agents.base import Agent
+        from conch.agents.base import Agent
 
         # Core values should be class attribute
         assert hasattr(Agent, "CORE_VALUES")
@@ -27,7 +27,7 @@ class TestAgentBase:
 
     def test_agent_message_creation(self):
         """Test creating agent messages."""
-        from mindforge.agents.base import AgentMessage
+        from conch.agents.base import AgentMessage
 
         msg = AgentMessage(
             sender="reflector",
@@ -46,14 +46,14 @@ class TestReflectorAgent:
 
     def test_reflector_initialization(self):
         """Test ReflectorAgent initializes correctly."""
-        from mindforge.agents import ReflectorAgent
+        from conch.agents import ReflectorAgent
 
         reflector = ReflectorAgent()
         assert reflector.name == "reflector"
 
     def test_reflector_process(self):
         """Test ReflectorAgent processes interactions."""
-        from mindforge.agents import ReflectorAgent
+        from conch.agents import ReflectorAgent
 
         reflector = ReflectorAgent()
 
@@ -69,7 +69,7 @@ class TestReflectorAgent:
 
     def test_reflector_empty_input(self):
         """Test ReflectorAgent handles empty input."""
-        from mindforge.agents import ReflectorAgent
+        from conch.agents import ReflectorAgent
 
         reflector = ReflectorAgent()
 
@@ -82,14 +82,14 @@ class TestPlannerAgent:
 
     def test_planner_initialization(self):
         """Test PlannerAgent initializes correctly."""
-        from mindforge.agents import PlannerAgent
+        from conch.agents import PlannerAgent
 
         planner = PlannerAgent()
         assert planner.name == "planner"
 
     def test_planner_creates_plan(self):
         """Test PlannerAgent creates plans."""
-        from mindforge.agents import PlannerAgent
+        from conch.agents import PlannerAgent
 
         planner = PlannerAgent()
 
@@ -101,7 +101,7 @@ class TestPlannerAgent:
 
     def test_planner_plan_has_steps(self):
         """Test plans have actionable steps."""
-        from mindforge.agents import PlannerAgent
+        from conch.agents import PlannerAgent
 
         planner = PlannerAgent()
 
@@ -117,7 +117,7 @@ class TestAgentCoordinator:
 
     def test_coordinator_initialization(self):
         """Test AgentCoordinator initializes with default agents."""
-        from mindforge.agents import AgentCoordinator
+        from conch.agents import AgentCoordinator
 
         coordinator = AgentCoordinator()
 
@@ -128,8 +128,8 @@ class TestAgentCoordinator:
 
     def test_coordinator_register_agent(self):
         """Test registering custom agents."""
-        from mindforge.agents import AgentCoordinator
-        from mindforge.agents.base import Agent
+        from conch.agents import AgentCoordinator
+        from conch.agents.base import Agent
 
         class CustomAgent(Agent):
             def __init__(self):
@@ -150,8 +150,8 @@ class TestAgentCoordinator:
 
     def test_coordinator_unregister_agent(self):
         """Test unregistering agents."""
-        from mindforge.agents import AgentCoordinator
-        from mindforge.agents.base import Agent
+        from conch.agents import AgentCoordinator
+        from conch.agents.base import Agent
 
         class TempAgent(Agent):
             def __init__(self):
@@ -174,7 +174,7 @@ class TestAgentCoordinator:
 
     def test_coordinator_get_agent(self):
         """Test getting specific agent."""
-        from mindforge.agents import AgentCoordinator
+        from conch.agents import AgentCoordinator
 
         coordinator = AgentCoordinator()
 
@@ -184,7 +184,7 @@ class TestAgentCoordinator:
 
     def test_coordinator_get_nonexistent_agent(self):
         """Test getting nonexistent agent returns None."""
-        from mindforge.agents import AgentCoordinator
+        from conch.agents import AgentCoordinator
 
         coordinator = AgentCoordinator()
 
@@ -193,8 +193,8 @@ class TestAgentCoordinator:
 
     def test_coordinator_send_message(self):
         """Test sending messages between agents."""
-        from mindforge.agents import AgentCoordinator
-        from mindforge.agents.base import MessageType
+        from conch.agents import AgentCoordinator
+        from conch.agents.base import MessageType
 
         coordinator = AgentCoordinator()
 
@@ -210,7 +210,7 @@ class TestAgentCoordinator:
 
     def test_coordinator_collective_status(self):
         """Test collective status reporting."""
-        from mindforge.agents import AgentCoordinator
+        from conch.agents import AgentCoordinator
 
         coordinator = AgentCoordinator()
 
@@ -226,7 +226,7 @@ class TestAgentWorkflows:
 
     def test_reflection_workflow(self):
         """Test reflection workflow."""
-        from mindforge.agents import AgentCoordinator
+        from conch.agents import AgentCoordinator
 
         coordinator = AgentCoordinator()
 
@@ -245,7 +245,7 @@ class TestAgentWorkflows:
 
     def test_planning_workflow(self):
         """Test planning workflow."""
-        from mindforge.agents import AgentCoordinator
+        from conch.agents import AgentCoordinator
 
         coordinator = AgentCoordinator()
 
@@ -262,7 +262,7 @@ class TestAgentMessaging:
 
     def test_message_serialization(self):
         """Test message serialization."""
-        from mindforge.agents.base import AgentMessage, MessageType
+        from conch.agents.base import AgentMessage, MessageType
 
         msg = AgentMessage(
             sender="agent1",
@@ -284,7 +284,7 @@ class TestAgentMessaging:
 
     def test_message_timestamp(self):
         """Test messages have timestamps."""
-        from mindforge.agents.base import AgentMessage, MessageType
+        from conch.agents.base import AgentMessage, MessageType
 
         msg = AgentMessage(
             sender="agent1",
@@ -301,7 +301,7 @@ class TestAgentPlans:
 
     def test_plan_structure(self):
         """Test plan data structure."""
-        from mindforge.agents import PlannerAgent
+        from conch.agents import PlannerAgent
 
         planner = PlannerAgent()
         plan = planner.process("Create a database schema")
@@ -312,7 +312,7 @@ class TestAgentPlans:
 
     def test_plan_steps_have_order(self):
         """Test plan steps maintain order."""
-        from mindforge.agents import PlannerAgent
+        from conch.agents import PlannerAgent
 
         planner = PlannerAgent()
         plan = planner.process("Build a multi-step process")
@@ -330,7 +330,7 @@ class TestReflection:
 
     def test_reflection_structure(self):
         """Test reflection data structure."""
-        from mindforge.agents import ReflectorAgent
+        from conch.agents import ReflectorAgent
 
         reflector = ReflectorAgent()
         reflection = reflector.process({
@@ -343,7 +343,7 @@ class TestReflection:
 
     def test_reflection_insights(self):
         """Test reflections produce insights."""
-        from mindforge.agents import ReflectorAgent
+        from conch.agents import ReflectorAgent
 
         reflector = ReflectorAgent()
         reflection = reflector.process({

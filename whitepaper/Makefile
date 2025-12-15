@@ -1,6 +1,6 @@
-# Makefile for MindForge DNA Whitepaper
+# Makefile for Conch DNA Whitepaper
 
-PAPER = mindforge_dna
+PAPER = conch_dna
 LATEX = pdflatex
 BIBTEX = bibtex
 

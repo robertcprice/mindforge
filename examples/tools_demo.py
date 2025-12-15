@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-MindForge DNA - Tools Layer Demonstration
+Conch DNA - Tools Layer Demonstration
 
 Comprehensive example showing all tool capabilities and usage patterns.
 """
@@ -9,10 +9,10 @@ import sys
 import tempfile
 from pathlib import Path
 
-# Add mindforge_dna to path
+# Add conch_dna to path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from mindforge_dna.tools import (
+from conch_dna.tools import (
     create_default_registry,
     create_restricted_registry,
     ToolStatus,
@@ -30,7 +30,7 @@ def demo_shell_tool():
 
     # Safe command execution
     print("\n1. Safe Command Execution:")
-    result = registry.execute("shell", command="echo 'Hello, MindForge!'")
+    result = registry.execute("shell", command="echo 'Hello, Conch!'")
     print(f"   Status: {result.status.value}")
     print(f"   Output: {result.output.strip()}")
 
@@ -72,7 +72,7 @@ def demo_filesystem_tool():
             "filesystem",
             operation="write",
             path=str(test_file),
-            content="MindForge DNA\nTools Layer\nProduction Ready"
+            content="Conch DNA\nTools Layer\nProduction Ready"
         )
         print(f"   Status: {result.status.value}")
         print(f"   {result.output}")
@@ -336,7 +336,7 @@ def demo_error_handling():
 
 
 def demo_integration_example():
-    """Demonstrate integration with other MindForge components."""
+    """Demonstrate integration with other Conch components."""
     print("\n" + "=" * 70)
     print("INTEGRATION EXAMPLE")
     print("=" * 70)
@@ -365,7 +365,7 @@ def demo_integration_example():
 def main():
     """Run all demonstrations."""
     print("\n" + "=" * 70)
-    print("MINDFORGE DNA - TOOLS LAYER COMPREHENSIVE DEMONSTRATION")
+    print("CONCH DNA - TOOLS LAYER COMPREHENSIVE DEMONSTRATION")
     print("=" * 70)
 
     try:

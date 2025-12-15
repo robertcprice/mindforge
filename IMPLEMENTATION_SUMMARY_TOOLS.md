@@ -1,11 +1,11 @@
-# MindForge DNA - Tools Layer Implementation Summary
+# Conch DNA - Tools Layer Implementation Summary
 
 **Date**: 2025-12-11
 **Status**: ✓ Complete and Production-Ready
 
 ## Overview
 
-Implemented the Tools layer for MindForge DNA, providing a secure, extensible framework for executing operations across different domains with comprehensive security validation, error handling, and logging.
+Implemented the Tools layer for Conch DNA, providing a secure, extensible framework for executing operations across different domains with comprehensive security validation, error handling, and logging.
 
 ## Files Implemented
 
@@ -190,7 +190,7 @@ All tests passing: 100%
 
 ### Basic Usage
 ```python
-from mindforge_dna.tools import create_default_registry
+from conch_dna.tools import create_default_registry
 
 registry = create_default_registry()
 
@@ -209,7 +209,7 @@ else:
 
 ### Restricted Registry
 ```python
-from mindforge_dna.tools import create_restricted_registry
+from conch_dna.tools import create_restricted_registry
 
 registry = create_restricted_registry(
     allowed_operations={
@@ -229,12 +229,12 @@ for name, tool_stats in stats['tools'].items():
     print(f"{name}: {tool_stats['success_rate']:.1%} success rate")
 ```
 
-## Integration with MindForge DNA
+## Integration with Conch DNA
 
 ### ID Layer (Needs)
 ```python
-from mindforge_dna.id import create_regulator
-from mindforge_dna.tools import create_default_registry
+from conch_dna.id import create_regulator
+from conch_dna.tools import create_default_registry
 
 regulator = create_regulator("balanced")
 registry = create_default_registry()
@@ -289,7 +289,7 @@ result = registry.execute(
 ## File Locations
 
 ```
-/Users/bobbyprice/projects/conscious/mindforge_dna/tools/
+/Users/bobbyprice/projects/conscious/conch_dna/tools/
 ├── __init__.py          (266 lines) - Public API and registry factories
 ├── base.py              (299 lines) - Base classes and registry
 ├── filesystem.py        (493 lines) - Filesystem operations
@@ -352,4 +352,4 @@ The Tools layer is **production-ready** with:
 ✓ 100% test coverage
 ✓ Zero external dependencies
 
-The implementation provides a solid foundation for safe, extensible tool execution within the MindForge DNA consciousness system.
+The implementation provides a solid foundation for safe, extensible tool execution within the Conch DNA consciousness system.

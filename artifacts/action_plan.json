@@ -1,0 +1,7 @@
+{
+  "action_type": "tool_call",
+  "tool_name": "list_files",
+  "arguments": {
+    "path": "docs/"
+  }
+}

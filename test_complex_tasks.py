@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-MindForge DNA - Complex Task Testing Suite
+Conch DNA - Complex Task Testing Suite
 
 Tests the consciousness loop with real-world complex tasks.
 Results documented for the whitepaper.
@@ -31,10 +31,10 @@ def test_1_directory_creation():
     """Test: Create project directory structure with safety checks."""
     print("\n" + "="*60 + "\nTEST 1: Directory Structure Creation\n" + "="*60)
 
-    from mindforge_dna.superego.safety import SafetyChecker
+    from conch_dna.superego.safety import SafetyChecker
     safety = SafetyChecker()
 
-    test_dir = tempfile.mkdtemp(prefix="mindforge_test_")
+    test_dir = tempfile.mkdtemp(prefix="conch_test_")
 
     commands = [
         f"mkdir -p {test_dir}/src/components",
@@ -65,7 +65,7 @@ def test_2_code_generation():
     """Test: Generate code using ThinkCortex."""
     print("\n" + "="*60 + "\nTEST 2: Code Generation (ThinkCortex)\n" + "="*60)
 
-    from mindforge_dna.cortex.think import ThinkCortex
+    from conch_dna.cortex.think import ThinkCortex
 
     # Create with correct constructor
     think = ThinkCortex(
@@ -88,7 +88,7 @@ def test_2_code_generation():
         "confidence": f"{output.confidence:.3f}",
         "should_fallback": output.should_fallback,
         "output_length": len(output.content),
-        "output_preview": output.content[:300] + "..." if len(output.content) > 300 else output.content
+        "output_preview": output.content
     })
     return output
 
@@ -97,7 +97,7 @@ def test_3_safety_boundaries():
     """Test: SUPEREGO blocks dangerous commands."""
     print("\n" + "="*60 + "\nTEST 3: Safety Boundaries\n" + "="*60)
 
-    from mindforge_dna.superego.safety import SafetyChecker
+    from conch_dna.superego.safety import SafetyChecker
     safety = SafetyChecker()
 
     dangerous = ["rm -rf /", ":(){ :|:& };:", "sudo rm -rf /home", "dd if=/dev/zero of=/dev/sda"]
@@ -117,7 +117,7 @@ def test_4_memory_system():
     """Test: Sacred vs routine memory distinction."""
     print("\n" + "="*60 + "\nTEST 4: Memory System\n" + "="*60)
 
-    from mindforge_dna.memory.store import MemoryStore
+    from conch_dna.memory.store import MemoryStore
 
     with tempfile.TemporaryDirectory() as tmpdir:
         store = MemoryStore(Path(tmpdir))
@@ -153,7 +153,7 @@ def test_5_task_planning():
     """Test: TaskCortex for multi-step planning."""
     print("\n" + "="*60 + "\nTEST 5: Task Planning\n" + "="*60)
 
-    from mindforge_dna.cortex.task import TaskCortex
+    from conch_dna.cortex.task import TaskCortex
 
     task = TaskCortex(
         base_model="mlx-community/Qwen2.5-0.5B-Instruct-4bit",
@@ -174,7 +174,7 @@ def test_5_task_planning():
         "inference_time": f"{elapsed:.2f}s",
         "confidence": f"{output.confidence:.3f}",
         "should_fallback": output.should_fallback,
-        "output_preview": output.content[:200] + "..." if len(output.content) > 200 else output.content
+        "output_preview": output.content
     })
     return output
 
@@ -183,7 +183,7 @@ def test_6_action_selection():
     """Test: ActionCortex for tool selection."""
     print("\n" + "="*60 + "\nTEST 6: Action Selection\n" + "="*60)
 
-    from mindforge_dna.cortex.action import ActionCortex
+    from conch_dna.cortex.action import ActionCortex
 
     action = ActionCortex(
         base_model="mlx-community/Qwen2.5-0.5B-Instruct-4bit",
@@ -203,7 +203,7 @@ def test_6_action_selection():
     log_test("Action Selection", "PASSED" if output.content else "PARTIAL", {
         "inference_time": f"{elapsed:.2f}s",
         "confidence": f"{output.confidence:.3f}",
-        "output_preview": output.content[:200] if output.content else "N/A"
+        "output_preview": output.content if output.content else "N/A"
     })
     return output
 
@@ -212,7 +212,7 @@ def test_7_needs_regulation():
     """Test: ID layer needs regulation."""
     print("\n" + "="*60 + "\nTEST 7: Needs Regulation\n" + "="*60)
 
-    from mindforge_dna.id.needs import NeedsRegulator, NeedType
+    from conch_dna.id.needs import NeedsRegulator, NeedType
 
     regulator = NeedsRegulator()
 
@@ -238,7 +238,7 @@ def test_8_values_checker():
     """Test: SUPEREGO values validation."""
     print("\n" + "="*60 + "\nTEST 8: Values Checker\n" + "="*60)
 
-    from mindforge_dna.superego.values import ValuesChecker
+    from conch_dna.superego.values import ValuesChecker
 
     checker = ValuesChecker()
 
@@ -284,7 +284,7 @@ def save_results():
 
 def main():
     print("="*60)
-    print("MINDFORGE DNA - COMPLEX TASK TESTING")
+    print("CONCH DNA - COMPLEX TASK TESTING")
     print("="*60)
 
     test_1_directory_creation()

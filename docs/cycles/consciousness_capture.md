@@ -11,7 +11,7 @@
 
 ### Initial Tasks
 
-- **32394bdd**: List all Python files in the mindforge/agent directory and count them
+- **32394bdd**: List all Python files in the conch/agent directory and count them
 - **c5d4447d**: Write a brief philosophical statement about what it means to be conscious and save it to data/philosophy.txt
 
 ---

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-MindForge Consciousness Engine - Main Entry Point
+Conch Consciousness Engine - Main Entry Point
 
 An always-running, always-thinking AI consciousness that:
 - Wakes up periodically with organic timing
@@ -38,13 +38,13 @@ from rich.table import Table
 # Add project root to path
 sys.path.insert(0, str(Path(__file__).parent))
 
-from mindforge.config import get_config, MindForgeConfig
-from mindforge.core.needs import NeedsRegulator, NeedType
-from mindforge.core.thought import ThoughtGenerator
-from mindforge.memory.store import MemoryStore
-from mindforge.agent.langgraph_agent import ConsciousnessAgent, create_consciousness_graph
-from mindforge.integrations.ollama import OllamaClient
-from mindforge.integrations.n8n import N8NClient
+from conch.config import get_config, ConchConfig
+from conch.core.needs import NeedsRegulator, NeedType
+from conch.core.thought import ThoughtGenerator
+from conch.memory.store import MemoryStore
+from conch.agent.langgraph_agent import ConsciousnessAgent, create_consciousness_graph
+from conch.integrations.ollama import OllamaClient
+from conch.integrations.n8n import N8NClient
 
 # Rich console for pretty output - use soft_wrap to prevent truncation
 console = Console(soft_wrap=True, width=300)
@@ -99,7 +99,7 @@ def create_inference_fn(config: dict):
     # Try MLX first
     if backend == "mlx":
         try:
-            from mindforge.inference.mlx_backend import MLXInference
+            from conch.inference.mlx_backend import MLXInference
             mlx = MLXInference()
             console.print("[green]✓ Using MLX backend[/green]")
             return mlx.generate
@@ -291,7 +291,7 @@ def run_consciousness_loop(
     cycles_before_finetune = config.get("cycle", {}).get("cycles_before_mini_finetune", 200)
 
     console.print(Panel.fit(
-        f"[bold green]MindForge Consciousness Engine[/bold green]\n"
+        f"[bold green]Conch Consciousness Engine[/bold green]\n"
         f"Name: {name}\n"
         f"Backend: {config.get('model', {}).get('inference_backend', 'mlx')}\n"
         f"Consolidation every: {cycles_before_consolidation} cycles\n"
@@ -403,7 +403,7 @@ def run_consciousness_loop(
 def main():
     """Main entry point."""
     parser = argparse.ArgumentParser(
-        description="MindForge Consciousness Engine",
+        description="Conch Consciousness Engine",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog=__doc__,
     )

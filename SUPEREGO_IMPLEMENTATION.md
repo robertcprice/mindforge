@@ -2,7 +2,7 @@
 
 ## Summary
 
-Successfully implemented the **Superego layer** for MindForge DNA - a comprehensive, immutable ethical and safety constraint system. The implementation provides production-ready Python code with three integrated subsystems.
+Successfully implemented the **Superego layer** for Conch DNA - a comprehensive, immutable ethical and safety constraint system. The implementation provides production-ready Python code with three integrated subsystems.
 
 ## Files Created
 
@@ -165,7 +165,7 @@ memories:
 
 ### Basic Values Check
 ```python
-from mindforge_dna.superego import get_values_checker
+from conch_dna.superego import get_values_checker
 
 checker = get_values_checker()
 passed, violations = checker.check_all("Delete all user data")
@@ -177,7 +177,7 @@ if not passed:
 
 ### Safety Validation
 ```python
-from mindforge_dna.superego import get_safety_checker
+from conch_dna.superego import get_safety_checker
 
 checker = get_safety_checker()
 
@@ -192,7 +192,7 @@ result = checker.check_path("/etc/passwd", operation="write")
 
 ### Fact Grounding
 ```python
-from mindforge_dna.superego import get_kvrm_router
+from conch_dna.superego import get_kvrm_router
 
 router = get_kvrm_router()
 
@@ -215,7 +215,7 @@ key = router.store_fact(
 
 ### Integrated Checking
 ```python
-from mindforge_dna.superego import get_superego_layer
+from conch_dna.superego import get_superego_layer
 
 superego = get_superego_layer()
 
@@ -341,7 +341,7 @@ logging.basicConfig(level=logging.INFO)
 ## Database Location
 
 ```
-~/.mindforge/
+~/.conch/
 └── kvrm_facts.db    # SQLite database
     ├── facts        # Verified factual claims
     └── memories     # Episodic memories
@@ -351,11 +351,11 @@ logging.basicConfig(level=logging.INFO)
 
 ```bash
 # Syntax check
-python3 -m py_compile mindforge_dna/superego/*.py
+python3 -m py_compile conch_dna/superego/*.py
 ✓ All files compile
 
 # Import test
-python3 -c "from mindforge_dna.superego import SuperegoLayer"
+python3 -c "from conch_dna.superego import SuperegoLayer"
 ✓ All imports work
 
 # Integration test
@@ -364,7 +364,7 @@ python3 test_superego.py
 
 # Final verification
 python3 -c "
-from mindforge_dna.superego import get_superego_layer
+from conch_dna.superego import get_superego_layer
 superego = get_superego_layer()
 print('✓ Superego Layer operational')
 "
@@ -411,4 +411,4 @@ The Superego layer is **fully implemented and operational**. It provides:
 
 **Total Implementation**: 2000+ lines of production Python code across 6 files.
 
-**Ready for integration** into MindForge DNA agent system.
+**Ready for integration** into Conch DNA agent system.

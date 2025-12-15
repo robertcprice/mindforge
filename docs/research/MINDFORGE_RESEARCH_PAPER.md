@@ -1,16 +1,16 @@
-# MindForge: A Multi-Step Reasoning Consciousness Agent
+# Conch: A Multi-Step Reasoning Consciousness Agent
 
 **Research Documentation for Academic Publication**
 
 ## Abstract
 
-MindForge is an autonomous consciousness agent that demonstrates emergent reasoning capabilities through a novel architecture combining LangGraph state machines, persistent memory systems, hierarchical task management, and self-reflective learning loops. This document presents empirical evidence of the agent's ability to complete complex multi-step tasks, generate creative outputs, and exhibit self-directed behavior.
+Conch is an autonomous consciousness agent that demonstrates emergent reasoning capabilities through a novel architecture combining LangGraph state machines, persistent memory systems, hierarchical task management, and self-reflective learning loops. This document presents empirical evidence of the agent's ability to complete complex multi-step tasks, generate creative outputs, and exhibit self-directed behavior.
 
 ## 1. Introduction
 
 ### 1.1 Research Motivation
 
-The development of artificial agents capable of autonomous reasoning and self-directed task completion represents a significant frontier in AI research. MindForge addresses this challenge through a unified architecture that enables:
+The development of artificial agents capable of autonomous reasoning and self-directed task completion represents a significant frontier in AI research. Conch addresses this challenge through a unified architecture that enables:
 
 - **Persistent Memory**: Cross-session learning and context retention
 - **Hierarchical Task Management**: Automatic task decomposition and prioritization
@@ -186,7 +186,7 @@ Current limitations include:
 
 ## 7. Conclusion
 
-MindForge demonstrates that a carefully architected consciousness loop can achieve autonomous multi-step task completion with an 80% success rate on complex challenges. The emergence of creative capabilities and self-directed behavior suggests promising directions for future research in artificial consciousness.
+Conch demonstrates that a carefully architected consciousness loop can achieve autonomous multi-step task completion with an 80% success rate on complex challenges. The emergence of creative capabilities and self-directed behavior suggests promising directions for future research in artificial consciousness.
 
 ## Appendix A: Complete Cycle Logs
 
@@ -206,4 +206,4 @@ MindForge demonstrates that a carefully architected consciousness loop can achie
 ---
 
 *Document generated: December 10, 2025*
-*MindForge Consciousness Agent v0.1*
+*Conch Consciousness Agent v0.1*

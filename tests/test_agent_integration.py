@@ -8,7 +8,7 @@ from unittest.mock import MagicMock, patch
 import tempfile
 from pathlib import Path
 
-from mindforge.agent.langgraph_agent import ConsciousnessAgent
+from conch.agent.langgraph_agent import ConsciousnessAgent
 
 
 class TestMoodInference:
@@ -18,7 +18,7 @@ class TestMoodInference:
     def mock_agent(self, tmp_path):
         """Create a mock agent for testing mood inference."""
         with patch.multiple(
-            'mindforge.agent.langgraph_agent.ConsciousnessAgent',
+            'conch.agent.langgraph_agent.ConsciousnessAgent',
             _init_task_list=MagicMock(),
             _init_journal=MagicMock(),
             _build_graph=MagicMock(),
@@ -155,7 +155,7 @@ class TestTaskIdentificationPrompt:
 
     def test_prompt_includes_technical_category(self):
         """Verify Technical/Operational category is in the prompt."""
-        from mindforge.agent.langgraph_agent import ConsciousnessAgent
+        from conch.agent.langgraph_agent import ConsciousnessAgent
 
         # Read the source file to check the prompt
         import inspect
@@ -169,7 +169,7 @@ class TestTaskIdentificationPrompt:
 
     def test_prompt_includes_learning_category(self):
         """Verify Learning & Research category is in the prompt."""
-        from mindforge.agent.langgraph_agent import ConsciousnessAgent
+        from conch.agent.langgraph_agent import ConsciousnessAgent
 
         import inspect
         source = inspect.getsourcefile(ConsciousnessAgent)
@@ -182,7 +182,7 @@ class TestTaskIdentificationPrompt:
 
     def test_prompt_includes_creative_category(self):
         """Verify Creative & Expressive category is in the prompt."""
-        from mindforge.agent.langgraph_agent import ConsciousnessAgent
+        from conch.agent.langgraph_agent import ConsciousnessAgent
 
         import inspect
         source = inspect.getsourcefile(ConsciousnessAgent)
@@ -195,7 +195,7 @@ class TestTaskIdentificationPrompt:
 
     def test_prompt_includes_experiential_category(self):
         """Verify Experiential category is in the prompt."""
-        from mindforge.agent.langgraph_agent import ConsciousnessAgent
+        from conch.agent.langgraph_agent import ConsciousnessAgent
 
         import inspect
         source = inspect.getsourcefile(ConsciousnessAgent)
@@ -208,7 +208,7 @@ class TestTaskIdentificationPrompt:
 
     def test_prompt_includes_self_improvement_category(self):
         """Verify Self-Improvement category is in the prompt."""
-        from mindforge.agent.langgraph_agent import ConsciousnessAgent
+        from conch.agent.langgraph_agent import ConsciousnessAgent
 
         import inspect
         source = inspect.getsourcefile(ConsciousnessAgent)
@@ -289,13 +289,13 @@ class TestTaskListIntegration:
 
     def test_task_deduplication_method_exists(self):
         """Verify _is_similar_task method exists in PersistentTaskList."""
-        from mindforge.agent.task_list import PersistentTaskList
+        from conch.agent.task_list import PersistentTaskList
         assert hasattr(PersistentTaskList, '_is_similar_task')
 
     def test_task_list_uses_memory_store(self):
         """Verify PersistentTaskList uses MemoryStore."""
         import inspect
-        from mindforge.agent.task_list import PersistentTaskList
+        from conch.agent.task_list import PersistentTaskList
         source = inspect.getsourcefile(PersistentTaskList)
         with open(source) as f:
             content = f.read()

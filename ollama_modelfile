@@ -1,4 +1,4 @@
-# MindForge Echo Assistant Modelfile
+# Conch Echo Assistant Modelfile
 # This creates a custom Ollama model for the consciousness engine
 #
 # Usage:
@@ -41,7 +41,7 @@ PARAMETER top_p 0.9
 PARAMETER top_k 40
 PARAMETER repeat_penalty 1.1
 PARAMETER num_ctx 4096
-PARAMETER num_predict 512
+PARAMETER num_predict -1
 
 # Stop sequences to keep responses focused
 PARAMETER stop "<|im_end|>"
@@ -61,7 +61,7 @@ TEMPLATE """{{ if .System }}<|im_start|>system
 
 # License
 LICENSE """
-MindForge Consciousness Engine
+Conch Consciousness Engine
 MIT License - Created for personal use and learning
 
 This model is designed for autonomous operation with safety guardrails.

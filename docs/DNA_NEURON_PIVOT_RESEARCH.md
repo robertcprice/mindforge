@@ -1,8 +1,10 @@
 # DNA Neuron Architecture: Pivot Research Document
 
-**Document Purpose**: Research and architectural analysis for pivoting MindForge to a micro-LLM "DNA" architecture with CLaRa compression
+**Document Purpose**: Research and architectural analysis for pivoting Conch to a micro-LLM "DNA" architecture with CLaRa compression
 **Date**: December 11, 2025
 **Status**: Research / Proposal
+
+> Historical note: This file captures exploratory research and may reference legacy model baselines. Current production architecture runs Qwen3 models (8B EGO, 4B Think, 1.7B Task/Action/Reflect/Debug/Memory); keep this document for timeline context, not as the live spec.
 
 ---
 
@@ -14,7 +16,7 @@ This document explores a proposed architectural pivot from the current monolithi
 - **CLaRa compression** (Apple's 32x-64x latent embedding compression)
 - **Expert specialization** via LoRA adapters for tasks, skills, and memories
 
-This approach addresses MindForge's critical latency problem (5-20 min/cycle) while enabling persistent learning through compressed memory systems.
+This approach addresses Conch's critical latency problem (5-20 min/cycle) while enabling persistent learning through compressed memory systems.
 
 ---
 
@@ -154,10 +156,10 @@ The "DNA" metaphor: Just as biological DNA encodes the base instructions for cel
 │  │                    BASE NEURON (Micro-LLM "DNA")                    │ │
 │  │                                                                     │ │
 │  │  Candidate Models:                                                  │ │
-│  │  - Qwen2.5-0.5B (500M params, fast)                                │ │
+│  │  - Qwen3-1.7B (500M params, fast)                                │ │
 │  │  - Phi-3-mini (3.8B params, strong reasoning)                      │ │
 │  │  - Gemma-2-2B (2B params, balanced)                                │ │
-│  │  - SmolLM2-1.7B (1.7B params, instruction-tuned)                   │ │
+│  │  - Qwen3-1.7B (1.7B params, instruction-tuned)                   │ │
 │  │                                                                     │ │
 │  │  Contains:                                                          │ │
 │  │  - Base cognitive patterns (reasoning, language understanding)     │ │
@@ -248,7 +250,7 @@ The "DNA" metaphor: Just as biological DNA encodes the base instructions for cel
 | Approach | Inference Time | Notes |
 |----------|---------------|-------|
 | Current (Qwen3:8B + thinking) | 2-3 minutes | Unusable |
-| Qwen2.5-7B (no thinking) | 15-30 seconds | Better but still slow |
+| Qwen3-8B (no thinking) | 15-30 seconds | Better but still slow |
 | Micro-LLM (0.5B-2B) | 1-5 seconds | Practical for real-time |
 | Specialized LoRA routing | 2-8 seconds | Multiple neurons if needed |
 
@@ -256,15 +258,15 @@ The "DNA" metaphor: Just as biological DNA encodes the base instructions for cel
 
 ---
 
-## 4. Integration Options with MindForge
+## 4. Integration Options with Conch
 
 ### 4.1 Option A: External Factor (Recommended Start)
 
-Build the DNA/Neuron system as a **separate module** that MindForge calls.
+Build the DNA/Neuron system as a **separate module** that Conch calls.
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────┐
-│                         MINDFORGE (Orchestrator)                         │
+│                         CONCH (Orchestrator)                         │
 ├─────────────────────────────────────────────────────────────────────────┤
 │                                                                          │
 │   Current Flow:                                                          │
@@ -285,14 +287,14 @@ Build the DNA/Neuron system as a **separate module** that MindForge calls.
 ```
 
 **Implementation Steps**:
-1. Create `mindforge/neurons/` directory
+1. Create `conch/neurons/` directory
 2. Implement base neuron class with LoRA loading
 3. Add router that classifies incoming requests
 4. Modify `langgraph_agent.py` to use router instead of direct Ollama calls
 5. Keep Ollama as fallback for complex/novel situations
 
 **Advantages**:
-- Preserves existing MindForge architecture
+- Preserves existing Conch architecture
 - Can swap/test neurons independently
 - Gradual migration path
 - Easy rollback if issues arise
@@ -352,7 +354,7 @@ async def _think_node(self, state: ConsciousnessState) -> ConsciousnessState:
 Use CLaRa specifically as the **memory compression backend** for the existing KVRM system.
 
 ```python
-# Current KVRM KeyStore (mindforge/kvrm/key_store.py)
+# Current KVRM KeyStore (conch/kvrm/key_store.py)
 class FactKeyStore(KeyStore):
     def resolve(self, key: str) -> Optional[ResolvedContent]:
         # SQLite lookup - returns text
@@ -411,13 +413,13 @@ class CLaRaFactKeyStore(KeyStore):
 ```
 Phase 1 (Week 1-2): CLaRa Memory Integration
 ├── Implement CLaRaKeyStore for KVRM
-├── Train CLaRa encoder/decoder on MindForge memories
+├── Train CLaRa encoder/decoder on Conch memories
 ├── Benchmark compression vs accuracy tradeoff
 └── Validate zero-hallucination properties maintained
 
 Phase 2 (Week 3-4): Fast Task Neuron
 ├── Train 0.5B-2B model on tool selection task
-├── Create LoRA adapter for MindForge tool vocabulary
+├── Create LoRA adapter for Conch tool vocabulary
 ├── Integrate as fast-path for simple tool decisions
 └── Keep Ollama fallback for complex reasoning
 
@@ -442,8 +444,8 @@ Phase 4 (Week 7-8): Full Integration
 
 | Model | Params | Speed (M1 Pro) | Quality | Recommendation |
 |-------|--------|----------------|---------|----------------|
-| Qwen2.5-0.5B | 500M | ~50 tok/s | Moderate | Task neurons |
-| SmolLM2-1.7B | 1.7B | ~25 tok/s | Good | Skill neurons |
+| Qwen3-1.7B | 500M | ~50 tok/s | Moderate | Task neurons |
+| Qwen3-1.7B | 1.7B | ~25 tok/s | Good | Skill neurons |
 | Phi-3-mini | 3.8B | ~12 tok/s | Excellent | Complex reasoning fallback |
 | Gemma-2-2B | 2B | ~20 tok/s | Good | Balanced option |
 
@@ -561,7 +563,7 @@ class NeuronRouter:
 
 ## 6. Training Data Requirements
 
-### 6.1 From Existing MindForge Data
+### 6.1 From Existing Conch Data
 
 | Source | Data Type | Neuron Target |
 |--------|-----------|---------------|
@@ -685,7 +687,7 @@ def generate_tool_selection_data(num_samples: int = 1000):
 
 ### 9.2 Implementation Questions
 
-1. **Base Model Choice**: Qwen2.5-0.5B vs. SmolLM2 vs. Phi-3-mini?
+1. **Base Model Choice**: Qwen3-1.7B vs. SmolLM2 vs. Phi-3-mini?
 
 2. **Training Infrastructure**: Local (M1/M2) vs. cloud (CUDA)?
 
@@ -703,7 +705,7 @@ def generate_tool_selection_data(num_samples: int = 1000):
 
 ## 10. Conclusion
 
-The DNA Neuron architecture represents a significant evolution from MindForge's current monolithic LLM approach. By combining:
+The DNA Neuron architecture represents a significant evolution from Conch's current monolithic LLM approach. By combining:
 
 - **Micro-LLMs** for speed (10-100x faster)
 - **CLaRa compression** for memory efficiency (32-64x smaller)
