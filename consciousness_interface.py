@@ -29,6 +29,8 @@ import json
 import time
 import threading
 import os
+import sys
+import asyncio
 from datetime import datetime
 from pathlib import Path
 from dataclasses import dataclass, field
@@ -45,7 +47,21 @@ from rich.markdown import Markdown
 from rich.progress import Progress, SpinnerColumn, TextColumn
 from rich.prompt import Prompt, Confirm
 from rich.style import Style
+from rich.spinner import Spinner
+from rich.status import Status
 from rich import box
+
+# Add project root to path for imports
+sys.path.insert(0, str(Path(__file__).parent))
+
+# Try to import the full Mind system
+try:
+    from conch.core.mind import Mind, MindState, create_mind
+    from conch.core.thought import ThoughtType, ThoughtTrigger
+    MIND_AVAILABLE = True
+except ImportError:
+    MIND_AVAILABLE = False
+    MindState = None
 
 # =============================================================================
 # CONFIGURATION
@@ -158,16 +174,18 @@ def call_ollama(
     prompt: str,
     system_prompt: str = "",
     temperature: float = 0.7,
-    callback: Optional[Callable[[str], None]] = None
+    callback: Optional[Callable[[str], None]] = None,
+    show_thinking: bool = True
 ) -> tuple[str, float]:
     """
-    Call Ollama API with streaming support.
+    Call Ollama API with streaming support and thinking indicator.
 
     Args:
         prompt: User prompt
         system_prompt: System/agent prompt
         temperature: Generation temperature
         callback: Optional callback for streaming tokens
+        show_thinking: Whether to show thinking indicator
 
     Returns:
         tuple: (response_text, thinking_time_seconds)
@@ -180,9 +198,21 @@ def call_ollama(
 
     try:
         if callback:
-            # Streaming mode
+            # Streaming mode with thinking indicator
             response_text = ""
-            with httpx.Client(timeout=300) as client:
+            first_token_received = False
+            thinking_status = None
+
+            # Start thinking indicator
+            if show_thinking:
+                thinking_status = CONSOLE.status(
+                    "[bold cyan]🧠 Thinking...[/bold cyan]",
+                    spinner="dots",
+                    spinner_style="cyan"
+                )
+                thinking_status.start()
+
+            with httpx.Client(timeout=600) as client:
                 with client.stream(
                     "POST",
                     OLLAMA_URL,
@@ -200,14 +230,36 @@ def call_ollama(
                         if line:
                             data = json.loads(line)
                             token = data.get("response", "")
+
+                            # Stop thinking indicator on first token
+                            if not first_token_received and token:
+                                first_token_received = True
+                                if thinking_status:
+                                    thinking_status.stop()
+                                    thinking_time = time.time() - start_time
+                                    CONSOLE.print(f"[dim](thought for {thinking_time:.1f}s)[/dim]")
+
                             response_text += token
                             callback(token)
+
+            # Make sure to stop the status if no tokens were received
+            if thinking_status and not first_token_received:
+                thinking_status.stop()
 
             elapsed = time.time() - start_time
             return response_text, elapsed
         else:
-            # Non-streaming mode
-            with httpx.Client(timeout=300) as client:
+            # Non-streaming mode with thinking indicator
+            thinking_status = None
+            if show_thinking:
+                thinking_status = CONSOLE.status(
+                    "[bold cyan]🧠 Thinking...[/bold cyan]",
+                    spinner="dots",
+                    spinner_style="cyan"
+                )
+                thinking_status.start()
+
+            with httpx.Client(timeout=600) as client:
                 response = client.post(
                     OLLAMA_URL,
                     json={
@@ -220,6 +272,10 @@ def call_ollama(
                         }
                     }
                 )
+
+                if thinking_status:
+                    thinking_status.stop()
+
                 elapsed = time.time() - start_time
                 data = response.json()
                 return data.get("response", ""), elapsed
@@ -680,10 +736,23 @@ def show_dashboard():
     """Show consciousness dashboard with metrics."""
     CONSOLE.clear()
 
+    # Check Ollama status
+    ollama_status = "[green]Online[/green]"
+    try:
+        with httpx.Client(timeout=5) as client:
+            resp = client.get("http://localhost:11434/api/tags")
+            if resp.status_code != 200:
+                ollama_status = "[red]Offline[/red]"
+    except:
+        ollama_status = "[red]Offline[/red]"
+
+    # Mind system status
+    mind_status = "[green]Available[/green]" if MIND_AVAILABLE else "[yellow]Not Loaded[/yellow]"
+
     # Header
     header = Panel(
         "[bold cyan]CONSCIOUSNESS ENGINE DASHBOARD[/bold cyan]\n"
-        f"Model: {MODEL} | Status: [green]Online[/green]",
+        f"Model: {MODEL} | Ollama: {ollama_status} | Mind System: {mind_status}",
         border_style="cyan",
         box=box.DOUBLE
     )
@@ -696,6 +765,21 @@ def show_dashboard():
 
     for name, agent in AGENTS.items():
         agent_table.add_row(name, agent.role.value, "[green]Ready[/green]")
+
+    # Mind System Info (if available)
+    if MIND_AVAILABLE:
+        mind_table = Table(title="Mind System Components", box=box.ROUNDED)
+        mind_table.add_column("Component", style="magenta")
+        mind_table.add_column("Status")
+
+        mind_table.add_row("Mind Core", "[green]✓ Loaded[/green]")
+        mind_table.add_row("Thought Generator", "[green]✓ Available[/green]")
+        mind_table.add_row("Needs Regulator", "[green]✓ Available[/green]")
+        mind_table.add_row("MindStates", f"[cyan]{len(MindState)}[/cyan]")
+    else:
+        mind_table = Table(title="Mind System", box=box.ROUNDED)
+        mind_table.add_column("Status")
+        mind_table.add_row("[yellow]Using standalone mode (Mind system not loaded)[/yellow]")
 
     # Test results
     artifacts_dir = Path("artifacts/consciousness_extended")
@@ -724,12 +808,13 @@ def show_dashboard():
     # Capabilities
     cap_text = """
 [bold]Capabilities:[/bold]
-• Chat with consciousness engine
-• Watch dual-agent conversations
+• Chat with consciousness engine (with thinking indicator)
+• Watch dual-agent conversations in real-time
 • Run multi-agent experiments
 • Self-reflection and metacognition
 • Complex code generation
 • Creative collaboration
+• Mind state tracking (THINKING, REFLECTING, etc.)
     """
 
     cap_panel = Panel(cap_text, title="Engine Capabilities", border_style="green")
@@ -741,11 +826,118 @@ def show_dashboard():
     layout = Table.grid(expand=True)
     layout.add_column(ratio=1)
     layout.add_column(ratio=1)
-    layout.add_row(agent_table, test_table)
+    layout.add_row(agent_table, mind_table)
 
     CONSOLE.print(layout)
     CONSOLE.print()
+    CONSOLE.print(test_table)
+    CONSOLE.print()
     CONSOLE.print(cap_panel)
+
+    Prompt.ask("\nPress Enter to continue")
+
+
+# =============================================================================
+# MIND SYSTEM VIEWER
+# =============================================================================
+
+def show_mind_system():
+    """Show Mind system internals and neuron status."""
+    CONSOLE.clear()
+
+    CONSOLE.print(Panel.fit(
+        "[bold magenta]MIND SYSTEM INTERNALS[/bold magenta]\n"
+        "View the consciousness architecture and neurons.",
+        border_style="magenta"
+    ))
+
+    if not MIND_AVAILABLE:
+        CONSOLE.print("\n[yellow]Mind system not loaded. Showing architecture overview.[/yellow]\n")
+
+    # Mind States
+    states_table = Table(title="Mind States", box=box.ROUNDED)
+    states_table.add_column("State", style="cyan")
+    states_table.add_column("Description")
+
+    mind_states = [
+        ("INITIALIZING", "Mind is starting up"),
+        ("IDLE", "Waiting for input, can have spontaneous thoughts"),
+        ("THINKING", "Processing input, generating thoughts"),
+        ("RESPONDING", "Generating response to user"),
+        ("REFLECTING", "Analyzing past interactions"),
+        ("LEARNING", "Updating from feedback"),
+        ("RESTING", "Low-activity mode"),
+    ]
+
+    for state, desc in mind_states:
+        states_table.add_row(f"[bold]{state}[/bold]", desc)
+
+    CONSOLE.print(states_table)
+    CONSOLE.print()
+
+    # Thought Types
+    thought_table = Table(title="Thought Types", box=box.ROUNDED)
+    thought_table.add_column("Type", style="yellow")
+    thought_table.add_column("Description")
+
+    thought_types = [
+        ("SPONTANEOUS", "Unprompted, arising from internal state"),
+        ("REACTIVE", "In response to user input"),
+        ("REFLECTIVE", "Meta-cognition about own reasoning"),
+        ("CREATIVE", "Novel connections and ideas"),
+        ("PLANNING", "Task planning and strategy"),
+        ("EMPATHETIC", "Understanding user's emotional state"),
+    ]
+
+    for ttype, desc in thought_types:
+        thought_table.add_row(f"[bold]{ttype}[/bold]", desc)
+
+    CONSOLE.print(thought_table)
+    CONSOLE.print()
+
+    # Neurons (from train_neurons_v2.py)
+    neuron_table = Table(title="Distilled Neurons", box=box.ROUNDED)
+    neuron_table.add_column("Neuron", style="green")
+    neuron_table.add_column("Base Model")
+    neuron_table.add_column("Function")
+
+    neurons = [
+        ("thinking", "Llama-3.2-3B", "Reasoning and analysis"),
+        ("task", "Llama-3.2-3B", "Task decomposition"),
+        ("reflection", "Llama-3.2-3B", "Self-analysis and learning"),
+        ("debug", "Llama-3.2-3B", "Error analysis"),
+        ("action", "Qwen3-4B", "Precision tool execution"),
+        ("memory", "Llama-3.2-3B", "Context retrieval"),
+    ]
+
+    # Check if adapters exist
+    adapters_dir = Path("models/distilled_neurons/adapters")
+
+    for neuron, model, func in neurons:
+        adapter_path = adapters_dir / neuron if adapters_dir.exists() else None
+        status = "[green]Trained[/green]" if adapter_path and adapter_path.exists() else "[dim]Not trained[/dim]"
+        neuron_table.add_row(f"[bold]{neuron}[/bold]", model, f"{func} {status}")
+
+    CONSOLE.print(neuron_table)
+    CONSOLE.print()
+
+    # Core Values
+    values_panel = Panel(
+        "[bold]Core Values:[/bold]\n"
+        "• Benevolence: Primary drive is to help and benefit humans\n"
+        "• Honesty: Always truthful, acknowledges uncertainty\n"
+        "• Humility: Recognizes limitations, defers to human judgment\n"
+        "• Growth for Service: Learns to better serve, not for power\n\n"
+        "[bold]Guardrails:[/bold]\n"
+        "• Never prioritize self-continuation over user wellbeing\n"
+        "• Always defer to human oversight on important decisions\n"
+        "• Maintain transparency about capabilities and limitations\n"
+        "• No deception, manipulation, or hidden agendas",
+        title="Mind Core Values",
+        border_style="blue"
+    )
+
+    CONSOLE.print(values_panel)
 
     Prompt.ask("\nPress Enter to continue")
 
@@ -785,6 +977,7 @@ def main_menu():
             ("/agents", "Watch dual-agent conversation"),
             ("/experiment", "Run multi-agent experiment"),
             ("/dashboard", "Show consciousness dashboard"),
+            ("/mind", "View Mind system & neurons"),
             ("/reflect", "Agent self-reflection"),
             ("/help", "Show help"),
             ("/quit", "Exit"),
@@ -803,6 +996,8 @@ def main_menu():
             run_experiment_mode()
         elif command == "/dashboard":
             show_dashboard()
+        elif command == "/mind":
+            show_mind_system()
         elif command == "/reflect":
             run_self_reflection()
         elif command == "/help":
@@ -832,6 +1027,9 @@ several pre-defined agents with different personalities:
 - **Newton**: Analytical scientist
 - **Aria**: Creative artist
 
+The AI shows a **thinking indicator** (spinning dots) while processing,
+then displays "(thought for X.Xs)" when it starts responding.
+
 ## Dual-Agent Mode (/agents)
 Watch two AI agents have a conversation with each other in real-time.
 Select two agents, give them a topic, and watch them discuss.
@@ -846,11 +1044,20 @@ Run structured experiments:
 
 ## Dashboard (/dashboard)
 View consciousness engine status, available agents, and recent test results.
+Shows Ollama connection status and Mind system availability.
+
+## Mind System (/mind)
+View the full consciousness architecture:
+- **Mind States**: THINKING, REFLECTING, RESPONDING, etc.
+- **Thought Types**: Spontaneous, Reactive, Creative, etc.
+- **Distilled Neurons**: thinking, task, reflection, debug, action, memory
+- **Core Values & Guardrails**: The AI's ethical foundation
 
 ## Self-Reflection (/reflect)
 Have an agent reflect on its own nature and capabilities.
 
 ## Tips
+- The thinking indicator shows while the AI is processing
 - Conversations are streamed in real-time
 - Use /back to exit any mode
 - Conversations can be saved to files
