@@ -13,6 +13,12 @@ Phase 1 Core Loop Components:
 - TaskRouter: Multi-tier model routing for optimal resource usage
 - GoalManager: Goal generation, decomposition, and lifecycle management
 
+Phase 2 Intelligence Generation Components:
+- OpportunityScout: Advanced opportunity detection with multiple scanners
+- AntiGoalGenerator: Prevention-focused goal generation
+- DecisionEngine: Multi-criteria decision making and planning
+- TemporalIntelligence: Time-based optimization and scheduling
+
 Usage:
     from autonomy import (
         get_safety_controller,
@@ -22,6 +28,8 @@ Usage:
         get_autonomous_loop,
         get_task_router,
         get_goal_manager,
+        create_decision_engine,
+        create_temporal_intelligence,
         is_safe_to_operate,
         emergency_stop,
     )
@@ -192,6 +200,74 @@ from .goal_manager import (
     init_goal_manager,
 )
 
+# =========================================================================
+# Phase 2: Intelligence Generation Components
+# =========================================================================
+
+# Opportunity Scout
+from .opportunity_scout import (
+    OpportunityType,
+    ScanResult,
+    OpportunityScout,
+    TodoScanner,
+    TestCoverageScanner,
+    DocGapScanner,
+    CodeSmellScanner,
+    TypeAnnotationScanner,
+    create_opportunity_scout,
+)
+
+# Anti-Goal Generator
+from .anti_goal_generator import (
+    AntiGoalType,
+    TriggerSeverity,
+    AntiGoalTrigger,
+    AntiGoal,
+    AntiGoalDetector,
+    TechDebtDetector,
+    TestBrittlenessDetector,
+    DocDriftDetector,
+    SecurityRegressionDetector,
+    PerformanceDegradationDetector,
+    AntiGoalGenerator,
+    get_anti_goal_generator,
+    init_anti_goal_generator,
+)
+
+# Decision Engine
+from .decision_engine import (
+    RiskLevel,
+    DecisionConfidence,
+    ExecutionStrategy,
+    ExecutionStep,
+    ExecutionPlan,
+    RiskAssessment,
+    CriteriaScore,
+    Decision,
+    CriteriaEvaluator,
+    ExecutionPlanner,
+    RiskAnalyzer,
+    DecisionEngine,
+    create_decision_engine,
+)
+
+# Temporal Intelligence
+from .temporal_intelligence import (
+    TimeWindow,
+    ActivityLevel,
+    DayPart,
+    TimeSlot,
+    Deadline,
+    TemporalPattern,
+    ScheduleRecommendation,
+    ActivityTracker,
+    DeadlineManager,
+    ScheduleOptimizer,
+    TemporalIntelligence,
+    create_temporal_intelligence,
+    get_day_part,
+)
+
 __all__ = [
     # Config Manager
     "ConfigChangeType",
@@ -330,7 +406,63 @@ __all__ = [
     "GoalManager",
     "get_goal_manager",
     "init_goal_manager",
+
+    # Opportunity Scout
+    "OpportunityType",
+    "ScanResult",
+    "OpportunityScout",
+    "TodoScanner",
+    "TestCoverageScanner",
+    "DocGapScanner",
+    "CodeSmellScanner",
+    "TypeAnnotationScanner",
+    "create_opportunity_scout",
+
+    # Anti-Goal Generator
+    "AntiGoalType",
+    "TriggerSeverity",
+    "AntiGoalTrigger",
+    "AntiGoal",
+    "AntiGoalDetector",
+    "TechDebtDetector",
+    "TestBrittlenessDetector",
+    "DocDriftDetector",
+    "SecurityRegressionDetector",
+    "PerformanceDegradationDetector",
+    "AntiGoalGenerator",
+    "get_anti_goal_generator",
+    "init_anti_goal_generator",
+
+    # Decision Engine
+    "RiskLevel",
+    "DecisionConfidence",
+    "ExecutionStrategy",
+    "ExecutionStep",
+    "ExecutionPlan",
+    "RiskAssessment",
+    "CriteriaScore",
+    "Decision",
+    "CriteriaEvaluator",
+    "ExecutionPlanner",
+    "RiskAnalyzer",
+    "DecisionEngine",
+    "create_decision_engine",
+
+    # Temporal Intelligence
+    "TimeWindow",
+    "ActivityLevel",
+    "DayPart",
+    "TimeSlot",
+    "Deadline",
+    "TemporalPattern",
+    "ScheduleRecommendation",
+    "ActivityTracker",
+    "DeadlineManager",
+    "ScheduleOptimizer",
+    "TemporalIntelligence",
+    "create_temporal_intelligence",
+    "get_day_part",
 ]
 
-__version__ = "0.2.0"  # Phase 1 complete
+__version__ = "0.3.0"  # Phase 2 complete
 __author__ = "PM-1000 Autonomous System"
